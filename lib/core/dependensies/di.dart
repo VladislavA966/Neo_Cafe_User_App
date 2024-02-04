@@ -15,14 +15,15 @@ void setupDependensies() {
   getIt.registerSingleton<DioSettings>(
     DioSettings(),
   );
-  signInDependensies();
+  signInDependensy();
+  signUpDependency();
 }
 
-void signUpDependencies() {
-  getIt.registerSingleton<SignUpRemoteImpl>(
+void signUpDependency() {
+  getIt.registerSingleton<SignUpRemote>(
     SignUpRemoteImpl(dio: getIt<DioSettings>().dio),
   );
-  getIt.registerSingleton<SignUpRepoImpl>(
+  getIt.registerSingleton<SignUpRepo>(
     SignUpRepoImpl(
       remote: getIt<SignUpRemote>(),
     ),
@@ -34,13 +35,13 @@ void signUpDependencies() {
   );
 }
 
-void signInDependensies() {
-  getIt.registerSingleton<SignInRemoteImpl>(
+void signInDependensy() {
+  getIt.registerSingleton<SignInRemote>(
     SignInRemoteImpl(
       dio: getIt<DioSettings>().dio,
     ),
   );
-  getIt.registerSingleton<SignInRepositotyImpl>(
+  getIt.registerSingleton<SignInRepo>(
     SignInRepositotyImpl(
       remote: getIt<SignInRemote>(),
     ),
