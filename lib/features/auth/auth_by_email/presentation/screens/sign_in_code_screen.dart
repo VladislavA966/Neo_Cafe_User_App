@@ -148,6 +148,12 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
   Pinput _buildPinPut(PinTheme defaultPinTheme, PinTheme focusedPinTheme,
       PinTheme submittedPinTheme) {
     return Pinput(
+      cursor: Container(
+        width: 20,
+        height: 2,
+        color: Colors.black,
+        margin: const EdgeInsets.only(top: 30),
+      ),
       defaultPinTheme: defaultPinTheme,
       focusedPinTheme: focusedPinTheme,
       submittedPinTheme: submittedPinTheme,

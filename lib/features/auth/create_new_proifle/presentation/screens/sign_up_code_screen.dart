@@ -150,10 +150,10 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
       PinTheme submittedPinTheme) {
     return Pinput(
       cursor: Container(
-        width: 20, // Ширина курсора
-        height: 2, // Высота курсора
-        color: Colors.black, // Цвет курсора
-        margin: EdgeInsets.symmetric(horizontal: 1.5), // Отступ, если нужен
+        width: 20,
+        height: 2,
+        color: Colors.black,
+        margin: const EdgeInsets.only(top: 30),
       ),
       defaultPinTheme: defaultPinTheme,
       focusedPinTheme: focusedPinTheme,
