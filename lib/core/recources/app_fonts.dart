@@ -19,4 +19,22 @@ abstract class AppFonts {
     height: 0.04,
     letterSpacing: -0.32,
   );
+  static const TextStyle s16w400 = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 0.04,
+    letterSpacing: -0.32,
+  );
+  static const TextStyle s14w600 = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    height: 0.09,
+    letterSpacing: -0.14,
+  );
+  static const TextStyle s12w400 = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    height: 0.10,
+    letterSpacing: -0.12,
+  );
 }

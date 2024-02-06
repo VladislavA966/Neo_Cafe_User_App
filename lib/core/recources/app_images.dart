@@ -9,4 +9,7 @@ abstract class AppImages {
   static const String emailSymbol = 'assets/images/email_symbol.png';
   static const String nameIcon = 'assets/images/name_icon.png';
   static const String calendarIcon = 'assets/images/calendar_icon.png';
+  static const String menuImage = 'assets/images/menu_image.png';
+  static const String caceImage = 'assets/images/cace_image.png';
+  static const String item = 'assets/images/item.png';
 }

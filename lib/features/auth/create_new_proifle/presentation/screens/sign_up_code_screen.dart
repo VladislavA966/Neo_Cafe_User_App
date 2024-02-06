@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
-import 'package:neo_cafe_24/core/recources/app_images.dart';
+import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -54,46 +54,8 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
     );
   }
 
-  PreferredSize _buildAppBar() {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(140.0),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(8),
-        ),
-        child: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(AppImages.coffeeBeans),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: AppBar(
-                automaticallyImplyLeading: false,
-                backgroundColor: AppColors.mainColors,
-                elevation: 0,
-                title: Text(
-                  'Регистрация',
-                  style: AppFonts.s32w600.copyWith(color: AppColors.textWhite),
-                ),
-                centerTitle: true,
-              ),
-            ),
-            Positioned(
-              right: 10,
-              child: Image.asset(AppImages.appBarBeanTop),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 10,
-              child: Image.asset(AppImages.appBarBeanBottom),
-            ),
-          ],
-        ),
-      ),
-    );
+  MyAppBar _buildAppBar() {
+    return const MyAppBar(title: 'Регистрация');
   }
 
   Padding _buildBody(PinTheme defaultPinTheme, PinTheme focusedPinTheme,
@@ -186,6 +148,9 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
           labels: const ['Войти', 'Регистрация'],
           radiusStyle: true,
           onToggle: (index) {},
+          cancelToggle: (index) {
+            return Future(() => true);
+          },
         ),
       ),
     );

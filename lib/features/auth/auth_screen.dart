@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
-import 'package:neo_cafe_24/core/recources/app_fonts.dart';
-import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/presentation/screens/sign_in_body.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/presentation/screens/sign_up_body.dart';
+import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -25,46 +24,8 @@ class _AuthScreenState extends State<AuthScreen> {
     return Stack(
       children: [
         Scaffold(
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(140.0),
-            child: ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(bottom: Radius.circular(16)),
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(AppImages.coffeeBeans),
-                      ),
-                    ),
-                    child: AppBar(
-                      automaticallyImplyLeading: false,
-                      backgroundColor: AppColors.mainColors,
-                      elevation: 0,
-                      title: Text(
-                        currentIndex == 0 ? 'Вход' : 'Регистрация',
-                        style: AppFonts.s32w600.copyWith(
-                          color: AppColors.textWhite,
-                        ),
-                      ),
-                      centerTitle: true,
-                    ),
-                  ),
-                  Positioned(
-                    right: 10,
-                    child: Image.asset(AppImages.appBarBeanTop),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 10,
-                    child: Image.asset(
-                      AppImages.appBarBeanBottom,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          appBar: MyAppBar(
+            title: currentIndex == 0 ? 'Вход' : 'Регистрация',
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -101,6 +62,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 currentIndex = index;
                 setState(() {});
               },
+             
             ),
           ),
         ),
