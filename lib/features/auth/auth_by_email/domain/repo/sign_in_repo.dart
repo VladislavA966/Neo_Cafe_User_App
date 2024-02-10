@@ -1,4 +1,6 @@
+import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/entity/token_entity.dart';
+
 abstract class SignInRepo {
   Future<void> sendEmail(String email);
-  Future<void> sendCode(String code);
+  Future<TokenEntity> sendCode(String email, String code);
 }

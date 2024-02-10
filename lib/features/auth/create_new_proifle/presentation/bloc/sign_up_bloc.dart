@@ -1,13 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:neo_cafe_24/core/services/validation.dart';
+import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
+import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/entity/token_entity.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/use_case/sign_up_use_case.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
-class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
+class SignUpBloc extends Bloc<SignUpEvent, SignUpState>
+    with EmailValidatorMixin {
+  final LocalDataSource localDataSource;
   final SignUpUseCase useCase;
-  SignUpBloc(this.useCase) : super(SignUpInitial()) {
+  SignUpBloc(this.useCase, this.localDataSource) : super(SignUpInitial()) {
     sendNewUserDataEvent();
     sendSignUpCode();
   }
@@ -15,18 +20,20 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   void sendNewUserDataEvent() {
     return on<SendNewUserDataEvent>(
       (event, emit) async {
+        if (!isValidEmail(event.email)) {
+          emit(
+            ValidationError(errorText: 'Неверный формат почты'),
+          );
+          return;
+        }
         emit(SignUpLoading());
         try {
-          await useCase.sendNewUserDataCall(
-              event.name, event.email, event.date);
-          emit(
-            SignUpLoaded(),
-          );
+          await useCase.sendNewUserDataCall(event.email);
+          emit(SignUpLoaded());
         } catch (e) {
           emit(
             SignUpError(
-              errorText: e.toString(),
-            ),
+                errorText: 'Пользователь с такой почтой уже зарегистрирован'),
           );
         }
       },
@@ -38,10 +45,12 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       (event, emit) async {
         emit(SignUpLoading());
         try {
-          await useCase.sendSignUpCode(event.code);
+          final token = await useCase.sendSignUpCode(event.email, event.code);
+
           emit(
-            SignUpLoaded(),
+            CodeSended(/*token: token*/),
           );
+          // await localDataSource.saveToken(token.token);
         } catch (e) {
           emit(
             SignUpError(

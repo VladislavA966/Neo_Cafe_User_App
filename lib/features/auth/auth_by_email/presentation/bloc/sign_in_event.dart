@@ -3,14 +3,15 @@ part of 'sign_in_bloc.dart';
 @immutable
 sealed class SignInEvent {}
 
-class SendEmailEvent extends SignInEvent {
+class SendEmailForSingInEvent extends SignInEvent {
   final String email;
 
-  SendEmailEvent({required this.email});
+  SendEmailForSingInEvent({required this.email});
 }
 
-class SendCodeEvent extends SignInEvent {
+class SendCodeForSingInEvent extends SignInEvent {
+  final String email;
   final String code;
 
-  SendCodeEvent({required this.code});
+  SendCodeForSingInEvent(this.email, {required this.code});
 }

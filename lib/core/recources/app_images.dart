@@ -12,4 +12,5 @@ abstract class AppImages {
   static const String menuImage = 'assets/images/menu_image.png';
   static const String caceImage = 'assets/images/cace_image.png';
   static const String item = 'assets/images/item.png';
+  static const String appBarBigImage = 'assets/images/app_bar_big_image.png';
 }

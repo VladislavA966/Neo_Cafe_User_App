@@ -13,10 +13,6 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final signInEmailController = TextEditingController();
-  final signUpEmailController = TextEditingController();
-  final nameController = TextEditingController();
-  final dateController = TextEditingController();
   int? currentIndex = 0;
 
   @override
@@ -29,14 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: currentIndex == 0
-                ? SignInBody(
-                    signInEmailController: signInEmailController,
-                  )
-                : SignUpBody(
-                    nameController: nameController,
-                    signUpEmailController: signUpEmailController,
-                    dateController: dateController),
+            child: currentIndex == 0 ? const SignInBody() : const SignUpBody(),
           ),
         ),
         Positioned(
@@ -62,7 +51,6 @@ class _AuthScreenState extends State<AuthScreen> {
                 currentIndex = index;
                 setState(() {});
               },
-             
             ),
           ),
         ),

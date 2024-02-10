@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:neo_cafe_24/core/services/dio_settings.dart';
-import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/remote_data_source.dart';
+import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
+import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/sign_in_remote.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/data/repository_impl/sign_in_repo_impl.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/domain/repo/sign_in_repo.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/domain/use_case/sign_in_use_case.dart';
@@ -12,16 +13,17 @@ import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/use_case/sig
 final getIt = GetIt.instance;
 
 void setupDependensies() {
-  getIt.registerSingleton<DioSettings>(
-    DioSettings(),
-  );
+  getIt.registerSingleton<DioSettings>(DioSettings());
+  getIt.registerSingleton<LocalDataSource>(LocalDataSource());
   signInDependensy();
   signUpDependency();
 }
 
 void signUpDependency() {
   getIt.registerSingleton<SignUpRemote>(
-    SignUpRemoteImpl(dio: getIt<DioSettings>().dio),
+    SignUpRemote(
+      getIt<DioSettings>().dio,
+    ),
   );
   getIt.registerSingleton<SignUpRepo>(
     SignUpRepoImpl(
@@ -37,8 +39,8 @@ void signUpDependency() {
 
 void signInDependensy() {
   getIt.registerSingleton<SignInRemote>(
-    SignInRemoteImpl(
-      dio: getIt<DioSettings>().dio,
+    SignInRemote(
+      getIt<DioSettings>().dio,
     ),
   );
   getIt.registerSingleton<SignInRepo>(

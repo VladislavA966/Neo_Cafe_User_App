@@ -1,32 +1,37 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:neo_cafe_24/core/services/validation.dart';
+import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/domain/use_case/sign_in_use_case.dart';
+import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/entity/token_entity.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 
-class SignInBloc extends Bloc<SignInEvent, SignInState> {
+class SignInBloc extends Bloc<SignInEvent, SignInState>
+    with EmailValidatorMixin {
   final SignInUseCase useCase;
-  SignInBloc(this.useCase) : super(SignInInitial()) {
+  final LocalDataSource localData;
+  SignInBloc(this.useCase, this.localData) : super(SignInInitial()) {
     _sendEmailEvent();
-    _sendCodeEvent();
+    _sendSignInCodeEvent();
   }
 
   void _sendEmailEvent() {
-    return on<SendEmailEvent>(
+    return on<SendEmailForSingInEvent>(
       (event, emit) async {
-        emit(
-          SignInLoading(),
-        );
+        if (!isValidEmail(event.email)) {
+          emit(SignInValidationError(errorText: 'Неверный формат почты'));
+          return;
+        }
+        emit(SignInLoading());
         try {
           await useCase.sendEmailCall(event.email);
-          emit(
-            SignInLoaded(),
-          );
+          emit(SignInLoaded());
         } catch (e) {
           emit(
             SignInError(
-              errorText: e.toString(),
+              errorText: 'Пользователя с такой почтой не существует',
             ),
           );
         }
@@ -34,16 +39,17 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     );
   }
 
-  void _sendCodeEvent() {
-    return on<SendCodeEvent>((event, emit) async {
+  void _sendSignInCodeEvent() {
+    return on<SendCodeForSingInEvent>((event, emit) async {
       emit(
         SignInLoading(),
       );
       try {
-        await useCase.sendCodeCall(event.code);
+        final model = await useCase.sendCodeCall(event.email, event.code);
         emit(
-          SignInLoaded(),
+          SendCodeLoaded(token: model),
         );
+        await localData.saveToken(model.token);
       } catch (e) {
         emit(
           SignInError(

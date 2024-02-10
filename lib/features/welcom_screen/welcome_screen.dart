@@ -64,7 +64,7 @@ class WelcomeScreen extends StatelessWidget {
       height: 54,
       title: 'Вперед!',
       onPressed: () {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const AuthScreen(),

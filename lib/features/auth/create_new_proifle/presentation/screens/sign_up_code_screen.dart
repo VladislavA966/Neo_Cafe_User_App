@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
+import 'package:neo_cafe_24/features/auth/create_new_proifle/presentation/bloc/sign_up_bloc.dart';
+import 'package:neo_cafe_24/features/main_screen/presentation/screens/main_screen.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class SingUpCodeScreen extends StatefulWidget {
-  const SingUpCodeScreen({super.key});
+  final String emailController;
+  const SingUpCodeScreen({super.key, required this.emailController});
 
   @override
   State<SingUpCodeScreen> createState() => _SingUpCodeScreenState();
 }
 
 class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
+  final controllerPin = TextEditingController();
   final int _currentToggleIndex = 1;
   @override
   Widget build(BuildContext context) {
@@ -47,7 +52,11 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
         Scaffold(
           backgroundColor: Colors.white,
           appBar: _buildAppBar(),
-          body: _buildBody(defaultPinTheme, focusedPinTheme, submittedPinTheme),
+          body: _buildBody(
+            defaultPinTheme,
+            focusedPinTheme,
+            submittedPinTheme,
+          ),
         ),
         _buildToggleSwitch(),
       ],
@@ -78,10 +87,51 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
             const SizedBox(
               height: 36,
             ),
-            CustomButton(
-              title: 'Подтвердить',
-              onPressed: () {},
-              height: 48,
+            BlocListener<SignUpBloc, SignUpState>(
+              listener: (context, state) {
+                if (state is SignUpLoaded) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MainScreen(),
+                    ),
+                  );
+                } else if (state is CodeError) {
+                  print(state);
+                }
+              },
+              child: CustomButton(
+                title: 'Подтвердить',
+                onPressed: () {
+                  BlocProvider.of<SignUpBloc>(context).add(
+                    SendSignUpCodeEvent(
+                        email: widget.emailController,
+                        code: controllerPin.text),
+                  );
+                },
+                height: 48,
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            BlocBuilder<SignUpBloc, SignUpState>(
+              builder: (context, state) {
+                if (state is SignUpError) {
+                  return TextButton(
+                    onPressed: () {
+                      BlocProvider.of<SignUpBloc>(context).add(
+                        SendNewUserDataEvent(email: widget.emailController),
+                      );
+                    },
+                    child: Text(
+                      'Отправить еще раз',
+                      style: AppFonts.s16w600.copyWith(color: AppColors.orange),
+                    ),
+                  );
+                }
+                return const Text('Отправить еще раз');
+              },
             ),
             const Spacer()
           ],
@@ -90,27 +140,49 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
     );
   }
 
-  Column _buildTextInfo() {
-    return const Column(
-      children: [
-        Text(
-          'Введите 4-х значный код,',
-          style: AppFonts.s16w600,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Text(
-          'отправленный на example@gmail.com',
-          style: AppFonts.s16w600,
-        ),
-      ],
+  BlocBuilder _buildTextInfo() {
+    return BlocBuilder<SignUpBloc, SignUpState>(
+      builder: (context, state) {
+        if (state is SignUpError) {
+          return Column(
+            children: [
+              Text(
+                'Код введен неверно,',
+                style: AppFonts.s16w600.copyWith(color: Colors.red),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                'попробуйте еще раз',
+                style: AppFonts.s16w600.copyWith(color: Colors.red),
+              ),
+            ],
+          );
+        }
+        return Column(
+          children: [
+            const Text(
+              'Введите 4-х значный код,',
+              style: AppFonts.s16w600,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              'отправленный на ${widget.emailController}',
+              style: AppFonts.s16w600,
+            ),
+          ],
+        );
+      },
     );
   }
 
   Pinput _buildPinPut(PinTheme defaultPinTheme, PinTheme focusedPinTheme,
       PinTheme submittedPinTheme) {
     return Pinput(
+      controller: controllerPin,
       cursor: Container(
         width: 20,
         height: 2,
@@ -120,7 +192,6 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
       defaultPinTheme: defaultPinTheme,
       focusedPinTheme: focusedPinTheme,
       submittedPinTheme: submittedPinTheme,
-      validator: (s) => s == '2222' ? null : 'Pin is incorrect',
       pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
       showCursor: true,
       onCompleted: (pin) => print(pin),

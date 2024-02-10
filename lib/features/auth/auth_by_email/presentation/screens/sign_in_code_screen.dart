@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
+import 'package:neo_cafe_24/features/auth/auth_by_email/presentation/bloc/sign_in_bloc.dart';
+import 'package:neo_cafe_24/features/main_screen/presentation/screens/main_screen.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class SingInCodeScreen extends StatefulWidget {
-  const SingInCodeScreen({super.key});
+  final String email;
+  const SingInCodeScreen({super.key, required this.email});
 
   @override
   State<SingInCodeScreen> createState() => _SingInCodeScreenState();
 }
 
 class _SingInCodeScreenState extends State<SingInCodeScreen> {
+  final controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
@@ -46,7 +51,11 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
         Scaffold(
           backgroundColor: Colors.white,
           appBar: _buildAppBar(),
-          body: _buildBody(defaultPinTheme, focusedPinTheme, submittedPinTheme),
+          body: _buildBody(
+            defaultPinTheme,
+            focusedPinTheme,
+            submittedPinTheme,
+          ),
         ),
         _buildToggleSwitch(),
       ],
@@ -77,10 +86,26 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
             const SizedBox(
               height: 36,
             ),
-            CustomButton(
-              title: 'Подтвердить',
-              onPressed: () {},
-              height: 48,
+            BlocListener<SignInBloc, SignInState>(
+              listener: (context, state) {
+                if (state is SendCodeLoaded) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MainScreen(),
+                    ),
+                  );
+                }
+              },
+              child: CustomButton(
+                title: 'Подтвердить',
+                onPressed: () {
+                  BlocProvider.of<SignInBloc>(context).add(
+                    SendCodeForSingInEvent(widget.email, code: controller.text),
+                  );
+                },
+                height: 48,
+              ),
             ),
             const Spacer()
           ],
@@ -90,17 +115,17 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
   }
 
   Column _buildTextInfo() {
-    return const Column(
+    return Column(
       children: [
-        Text(
+        const Text(
           'Введите 4-х значный код,',
           style: AppFonts.s16w600,
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Text(
-          'отправленный на example@gmail.com',
+          'отправленный на ${widget.email}',
           style: AppFonts.s16w600,
         ),
       ],
@@ -119,7 +144,7 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
       defaultPinTheme: defaultPinTheme,
       focusedPinTheme: focusedPinTheme,
       submittedPinTheme: submittedPinTheme,
-      validator: (s) => s == '2222' ? null : 'Pin is incorrect',
+      controller: controller,
       pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
       showCursor: true,
       onCompleted: (pin) => print(pin),
@@ -147,9 +172,9 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
           labels: const ['Войти', 'Регистрация'],
           radiusStyle: true,
           onToggle: (index) {},
-           cancelToggle: (index) {
-                return Future(() => true);
-              },
+          cancelToggle: (index) {
+            return Future(() => true);
+          },
         ),
       ),
     );

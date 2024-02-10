@@ -10,7 +10,7 @@ class DioSettings {
 
   final Dio dio = Dio(
     BaseOptions(
- 
+      baseUrl: 'https://tokyo-backender.org.kg',
       connectTimeout: const Duration(seconds: 20),
       receiveTimeout: const Duration(seconds: 20),
     ),

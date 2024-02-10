@@ -3,20 +3,40 @@ import 'package:flutter/material.dart';
 class RegistrationTextField extends StatelessWidget {
   final String prefixImage;
   final String hintText;
+  final TextEditingController controller;
+  final String? errorText;
   const RegistrationTextField(
-      {super.key, required this.hintText, required this.prefixImage});
+      {super.key,
+      this.errorText,
+      required this.hintText,
+      required this.prefixImage,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 48,
+      height: 80,
       child: TextField(
-        controller: TextEditingController(),
+        controller: controller,
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           hintText: hintText,
-          prefixIcon: Image.asset(prefixImage),
+          hintStyle:
+              TextStyle(color: errorText != null ? Colors.red : Colors.grey),
+          prefixIcon: Image.asset(
+            prefixImage,
+            color: errorText != null ? Colors.red : Colors.grey,
+          ),
+          errorText: errorText,
+          errorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                16,
+              ),
+            ),
+          ),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(

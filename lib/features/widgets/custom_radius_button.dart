@@ -18,6 +18,10 @@ class CustomRadiusButton extends StatelessWidget {
           borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
         ),
       ),
+      child: const Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
     );
   }
 }

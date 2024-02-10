@@ -4,16 +4,14 @@ part of 'sign_up_bloc.dart';
 sealed class SignUpEvent {}
 
 class SendNewUserDataEvent extends SignUpEvent {
-  final String name;
   final String email;
-  final String date;
 
-  SendNewUserDataEvent(
-      {required this.name, required this.email, required this.date});
+  SendNewUserDataEvent({required this.email});
 }
 
 class SendSignUpCodeEvent extends SignUpEvent {
+  final String email;
   final String code;
 
-  SendSignUpCodeEvent({required this.code});
+  SendSignUpCodeEvent({required this.email, required this.code});
 }
