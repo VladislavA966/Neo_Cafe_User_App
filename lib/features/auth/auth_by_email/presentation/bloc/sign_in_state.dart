@@ -16,13 +16,13 @@ final class SignInError extends SignInState {
 }
 
 final class SignInValidationError extends SignInState {
-   final String errorText;
+  final String errorText;
 
   SignInValidationError({required this.errorText});
 }
 
 final class SendCodeLoaded extends SignInState {
-  final TokenEntity token;
+  // final TokenEntity token;
 
-  SendCodeLoaded({required this.token});
+  // SendCodeLoaded({required this.token});
 }

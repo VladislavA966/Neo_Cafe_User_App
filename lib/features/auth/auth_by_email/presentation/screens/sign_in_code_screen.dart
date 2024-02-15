@@ -95,6 +95,8 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
                       builder: (context) => const MainScreen(),
                     ),
                   );
+                } else if (state is SignInError) {
+                  print(state.errorText);
                 }
               },
               child: CustomButton(
@@ -103,6 +105,20 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
                   BlocProvider.of<SignInBloc>(context).add(
                     SendCodeForSingInEvent(widget.email, code: controller.text),
                   );
+                  // final dio = Dio();
+                  // final responce = await dio.post(
+                  //   'https://tokyo-backender.org.kg/customer/register/',
+                  //   data: {
+                  //     "email": 'v.afonin.1996@icloud.com',
+
+                  //   },
+                  // );
+                  // if (responce.statusCode == 201 ||
+                  //     responce.statusCode == 200) {
+                  //   print('Регистратия прошла успешно');
+                  // } else if (responce.statusCode == 400) {
+                  //   print("Ошибка ${responce.statusCode}");
+                  // }
                 },
                 height: 48,
               ),

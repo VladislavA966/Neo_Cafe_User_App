@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
-import 'package:neo_cafe_24/features/item_info.dart/presentation/screens/item_info_screen.dart';
+import 'package:neo_cafe_24/features/menu_screen/presentation/screens/item_info_screen.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/branches_screen.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/main_screen_text_field.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/menu_container.dart';
@@ -88,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ItemInfoScreen(),
+                  builder: (context) => const ItemInfoScreen(id: 0),
                 ),
               );
             },

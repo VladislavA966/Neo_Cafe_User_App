@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:neo_cafe_24/core/services/validation.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
-import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/entity/token_entity.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/use_case/sign_up_use_case.dart';
 
 part 'sign_up_event.dart';
@@ -45,12 +44,11 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState>
       (event, emit) async {
         emit(SignUpLoading());
         try {
-          final token = await useCase.sendSignUpCode(event.email, event.code);
+          await useCase.sendSignUpCode(event.email, event.code);
 
           emit(
-            CodeSended(/*token: token*/),
+            CodeSended(),
           );
-          // await localDataSource.saveToken(token.token);
         } catch (e) {
           emit(
             SignUpError(

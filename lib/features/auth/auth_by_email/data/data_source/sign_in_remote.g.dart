@@ -44,14 +44,15 @@ class _SignInRemote implements SignInRemote {
   }
 
   @override
-  Future<TokenModel> confirmLoginCode(Map<String, dynamic> data) async {
+  Future<AuthenticationResponse> confirmLoginCode(
+      Map<String, dynamic> data) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data);
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<TokenModel>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<AuthenticationResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -67,7 +68,7 @@ class _SignInRemote implements SignInRemote {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = TokenModel.fromJson(_result.data!);
+    final value = AuthenticationResponse.fromJson(_result.data!);
     return value;
   }
 

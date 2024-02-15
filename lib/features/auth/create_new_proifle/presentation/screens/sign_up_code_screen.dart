@@ -102,7 +102,7 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
               },
               child: CustomButton(
                 title: 'Подтвердить',
-                onPressed: () {
+                onPressed: () async {
                   BlocProvider.of<SignUpBloc>(context).add(
                     SendSignUpCodeEvent(
                         email: widget.emailController,

@@ -1,10 +1,10 @@
-import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
 
 class DioSettings {
-  DioSettings() {
+  final LocalDataSource _storage;
+  DioSettings(this._storage) {
     setup();
   }
 
@@ -15,6 +15,8 @@ class DioSettings {
       receiveTimeout: const Duration(seconds: 20),
     ),
   );
+
+  bool _isRefreshingToken = false;
 
   Future<void> setup() async {
     final interceptors = dio.interceptors;
@@ -31,8 +33,7 @@ class DioSettings {
     interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         if (options.extra['requiresToken'] == true) {
-          final prefs = await SharedPreferences.getInstance();
-          final token = prefs.getString('TOKEN_KEY');
+          final token = await _storage.getAccessToken();
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
@@ -42,7 +43,37 @@ class DioSettings {
       onResponse: (response, handler) {
         return handler.next(response);
       },
-      onError: (DioError error, handler) {
+      onError: (DioError error, handler) async {
+        if (error.response?.statusCode == 401 && !_isRefreshingToken) {
+          _isRefreshingToken = true;
+          final refreshToken = await _storage.getRefreshToken();
+          if (refreshToken != null) {
+            try {
+              final response = await dio.post('/token/refresh/',
+                  data: {'refresh': refreshToken});
+              final newAccessToken = response.data['access'];
+              final newRefreshToken = response.data['refresh'];
+
+              await _storage.saveToken(newAccessToken, newRefreshToken);
+
+              _isRefreshingToken = false;
+
+              final opts = error.requestOptions;
+              opts.headers['Authorization'] = 'Bearer $newAccessToken';
+
+              final clonedRequest = await dio.request(opts.path,
+                  options: Options(method: opts.method, headers: opts.headers),
+                  data: opts.data,
+                  queryParameters: opts.queryParameters);
+              return handler.resolve(clonedRequest);
+            } catch (e) {
+              _isRefreshingToken = false;
+              return handler.reject(error);
+            }
+          } else {
+            _isRefreshingToken = false;
+          }
+        }
         return handler.next(error);
       },
     ));

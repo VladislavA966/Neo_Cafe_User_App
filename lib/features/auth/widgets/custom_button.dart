@@ -5,13 +5,14 @@ import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 class CustomButton extends StatelessWidget {
   final double height;
   final double? width;
-  final void Function() onPressed;
+  final Function() onPressed;
   final String title;
   const CustomButton({
     super.key,
     required this.title,
     required this.onPressed,
-    required this.height, this.width,
+    required this.height,
+    this.width,
   });
 
   @override

@@ -1,31 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/popular_manu_container.dart';
+import 'package:neo_cafe_24/features/menu_screen/presentation/controller/item_bloc/item_bloc.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/circle_button.dart';
 
 class ItemInfoScreen extends StatefulWidget {
-  const ItemInfoScreen({super.key});
+  const ItemInfoScreen({super.key, required this.id});
+  final int id;
 
   @override
   State<ItemInfoScreen> createState() => _ItemInfoScreenState();
 }
 
 class _ItemInfoScreenState extends State<ItemInfoScreen> {
-  void setCounter() {
-    if (counter >= 1) {
-      counter--;
-      setState(() {});
-    }
-    {
-      null;
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<ItemBloc>(context).add(
+      GetItemEvent(id: widget.id),
+    );
+  }
+
+  int summ = 0;
+  int price = 0;
+  int counter = 1;
+  void incrementCounter() {
+    setState(() {
+      counter++;
+      summ = price * counter;
+    });
+  }
+
+  void decrementCounter() {
+    if (counter > 1) {
+      setState(() {
+        counter--;
+        summ = price * counter;
+      });
     }
   }
 
-  int counter = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +97,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
       children: [
         CircleButton(
           onTap: () {
-            setCounter();
+            decrementCounter();
           },
           color: AppColors.grey,
           icon: Icons.remove,
@@ -96,7 +115,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
           color: AppColors.orange,
           icon: Icons.add,
           onTap: () {
-            counter++;
+            incrementCounter();
             setState(() {});
           },
         ),
@@ -114,17 +133,24 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
     );
   }
 
-  Row _buildTotalPrice() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const SizedBox(),
-        Text(
-          '140 c',
-          textAlign: TextAlign.end,
-          style: AppFonts.s20w600.copyWith(color: AppColors.orange),
-        ),
-      ],
+  BlocBuilder _buildTotalPrice() {
+    return BlocBuilder<ItemBloc, ItemState>(
+      builder: (context, state) {
+        if (state is ItemLoaded) {
+          price = state.item.pricePerUnit;
+          if (counter == 1) {
+            summ = price;
+          }
+
+          return Text(
+            '$summ c',
+            textAlign: TextAlign.end,
+            style: AppFonts.s20w600.copyWith(color: AppColors.orange),
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
     );
   }
 
@@ -137,19 +163,36 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
     );
   }
 
-  Text _buildDescreption() {
-    return Text(
-      'Латте — шоколадное пирожное коричневого цвета, прямоугольные куски нарезанного шоколадного пирога.',
-      style: AppFonts.s16w400.copyWith(color: AppColors.black),
+  BlocBuilder _buildDescreption() {
+    return BlocBuilder<ItemBloc, ItemState>(
+      builder: (context, state) {
+        if (state is ItemLoaded) {
+          return Text(
+            state.item.description,
+            style: AppFonts.s16w400.copyWith(color: AppColors.black),
+          );
+        }
+        return Text(
+          'Латте — шоколадное пирожное коричневого цвета, прямоугольные куски нарезанного шоколадного пирога.',
+          style: AppFonts.s16w400.copyWith(color: AppColors.black),
+        );
+      },
     );
   }
 
-  Text _buildTitle() {
-    return Text(
-      'Латте',
-      style: AppFonts.s24w600.copyWith(
-        color: AppColors.black,
-      ),
+  BlocBuilder _buildTitle() {
+    return BlocBuilder<ItemBloc, ItemState>(
+      builder: (context, state) {
+        if (state is ItemLoaded) {
+          return Text(
+            state.item.name,
+            style: AppFonts.s24w600.copyWith(
+              color: AppColors.black,
+            ),
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 
@@ -183,9 +226,13 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
               ),
             ),
             Positioned.fill(
-              child: Image.asset(
-                AppImages.appBarBigImage,
-                fit: BoxFit.cover,
+              child: BlocBuilder<ItemBloc, ItemState>(
+                builder: (context, state) {
+                  return Image.asset(
+                    AppImages.appBarBigImage,
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
             ),
           ],

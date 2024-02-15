@@ -40,21 +40,27 @@ class BranchesWindow extends StatelessWidget {
           Positioned(
             top: 0,
             right: 0,
-            child: Container(
-              width: 56,
-              height: 40,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              clipBehavior: Clip.antiAlias,
-              decoration: const ShapeDecoration(
-                color: Color(0xFFF35555),
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.only(bottomLeft: Radius.circular(20)),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                width: 56,
+                height: 40,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                clipBehavior: Clip.antiAlias,
+                decoration: const ShapeDecoration(
+                  color: Color(0xFFF35555),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(20)),
+                  ),
                 ),
-              ),
-              child: const Icon(
-                Icons.close,
-                color: AppColors.textWhite,
+                child: const Icon(
+                  Icons.close,
+                  color: AppColors.textWhite,
+                ),
               ),
             ),
           ),
