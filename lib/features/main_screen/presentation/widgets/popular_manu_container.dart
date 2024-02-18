@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
-import 'package:neo_cafe_24/features/menu_screen/presentation/screens/item_info_screen.dart';
-import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 
 class PopularMenuContainer extends StatelessWidget {
   final void Function()? onTap;
-  const PopularMenuContainer({super.key, required this.onTap});
+
+  final Widget buttonWidget;
+  const PopularMenuContainer(
+      {super.key, required this.onTap, required this.buttonWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class PopularMenuContainer extends StatelessWidget {
           onTap: onTap,
           child: Container(
             width: double.infinity,
-            height: 86,
+            height: 99,
             clipBehavior: Clip.antiAlias,
             decoration: ShapeDecoration(
               color: Colors.white,
@@ -47,7 +48,8 @@ class PopularMenuContainer extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                     image: const DecorationImage(
-                      image: NetworkImage("https://via.placeholder.com/80x86"),
+                      image:
+                          NetworkImage("https://via.placeholder.com/80x86  "),
                       fit: BoxFit.fill,
                     ),
                     shape: RoundedRectangleBorder(
@@ -65,20 +67,23 @@ class PopularMenuContainer extends StatelessWidget {
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Карамельный раф',
+                        'Карамельный раф,',
                         style: AppFonts.s14w600.copyWith(
                           color: AppColors.black,
                         ),
                       ),
+                      const SizedBox(
+                        height: 6,
+                      ),
                       Text(
-                        'Большой кокосовое молоко',
+                        'Большой кокосовое молоко,',
                         style: AppFonts.s12w400.copyWith(
                           color: AppColors.black,
                         ),
                       ),
+                      const Spacer(),
                       Text(
                         '270 c',
                         style: AppFonts.s14w600.copyWith(
@@ -92,11 +97,16 @@ class PopularMenuContainer extends StatelessWidget {
             ),
           ),
         ),
-        const Positioned(
-          right: 0,
-          bottom: 0,
-          child: CustomRadiusButton(),
-        ),
+        buttonWidget,
+        // Positioned(
+        //   right: 0,
+        //   bottom: 0,
+        //   child: CustomRadiusButton(
+        //     onPressed: () {
+        //       print('ddobavleno');
+        //     },
+        //   ),
+        // ),
       ],
     );
   }

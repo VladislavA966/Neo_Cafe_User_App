@@ -4,11 +4,17 @@ class CircleButton extends StatelessWidget {
   final Color color;
   final IconData icon;
   final Function()? onTap;
+  final double height;
+  final double width;
+  final double iconSize;
   const CircleButton({
     super.key,
     required this.color,
     required this.icon,
     required this.onTap,
+    required this.height,
+    required this.width,
+    required this.iconSize,
   });
 
   @override
@@ -16,8 +22,8 @@ class CircleButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 40,
-        height: 40,
+        width: width,
+        height: height,
         padding: const EdgeInsets.all(8),
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
@@ -26,7 +32,10 @@ class CircleButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(100),
           ),
         ),
-        child: Icon(icon),
+        child: Icon(
+          icon,
+          size: iconSize,
+        ),
       ),
     );
   }

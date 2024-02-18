@@ -4,10 +4,13 @@ import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
+import 'package:neo_cafe_24/features/main_screen/presentation/widgets/menu_container.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/popular_manu_container.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/item_bloc/item_bloc.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/view/cart_screen.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/circle_button.dart';
+import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 
 class ItemInfoScreen extends StatefulWidget {
   const ItemInfoScreen({super.key, required this.id});
@@ -73,14 +76,52 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
           _buildSecondTitle(),
           const SizedBox(height: 16),
           PopularMenuContainer(
+            buttonWidget: counter == 0
+                ? Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: CustomRadiusButton(
+                      onPressed: () {
+                        print('ddobavleno');
+                      },
+                    ),
+                  )
+                : ButtonsRow(
+                    counter: counter, onMinusTap: () {}, onPlusTap: () {}),
             onTap: () {},
           ),
           const SizedBox(height: 12),
           PopularMenuContainer(
+            buttonWidget: counter == 0
+                ? Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: CustomRadiusButton(
+                      onPressed: () {
+                        print('ddobavleno');
+                      },
+                    ),
+                  )
+                : ButtonsRow(
+                    counter: counter, onMinusTap: () {}, onPlusTap: () {}),
             onTap: () {},
           ),
           const SizedBox(height: 12),
-          PopularMenuContainer(onTap: () {}),
+          PopularMenuContainer(
+            buttonWidget: counter == 0
+                ? Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: CustomRadiusButton(
+                      onPressed: () {
+                        print('ddobavleno');
+                      },
+                    ),
+                  )
+                : ButtonsRow(
+                    counter: counter, onMinusTap: () {}, onPlusTap: () {}),
+            onTap: () {},
+          ),
           const SizedBox(height: 16),
           _buildTotalPrice(),
           const SizedBox(
@@ -96,6 +137,9 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
     return Row(
       children: [
         CircleButton(
+          height: 40,
+          width: 40,
+          iconSize: 24,
           onTap: () {
             decrementCounter();
           },
@@ -112,6 +156,9 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
           ),
         ),
         CircleButton(
+          height: 40,
+          width: 40,
+          iconSize: 24,
           color: AppColors.orange,
           icon: Icons.add,
           onTap: () {
@@ -125,7 +172,14 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
         Expanded(
           child: CustomButton(
             title: 'В корзину',
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (counter) => const CartScreen(),
+                ),
+              );
+            },
             height: 55,
           ),
         )
@@ -213,14 +267,6 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
                 ),
               ),
               child: AppBar(
-                leading: AppBarButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
                 backgroundColor: AppColors.mainColors,
                 elevation: 0,
               ),
@@ -235,6 +281,18 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
                 },
               ),
             ),
+            Positioned(
+              top: 38,
+              left: 32,
+              child: AppBarButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+            )
           ],
         ),
       ),

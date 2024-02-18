@@ -10,6 +10,7 @@ import 'package:neo_cafe_24/features/main_screen/presentation/widgets/popular_ma
 import 'package:neo_cafe_24/features/menu_screen/presentation/screens/menu_screen.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
+import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -36,6 +37,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   final controller = TextEditingController();
+  int counter = 0;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -84,6 +86,31 @@ class _MainScreenState extends State<MainScreen> {
         itemBuilder: (BuildContext context, index) => Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: PopularMenuContainer(
+            buttonWidget: counter == 0
+                ? Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: CustomRadiusButton(
+                      onPressed: () {
+                        counter = 1;
+                        setState(() {});
+                      },
+                    ),
+                  )
+                : Positioned(
+                  bottom: 5,
+                  right: 0,
+                  child: ButtonsRow(
+                      counter: counter,
+                      onMinusTap: () {
+                        counter--;
+                        setState(() {});
+                      },
+                      onPlusTap: () {
+                        counter++;
+                        setState(() {});
+                      }),
+                ),
             onTap: () {
               Navigator.push(
                 context,

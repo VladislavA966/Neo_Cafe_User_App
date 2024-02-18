@@ -138,14 +138,25 @@ class _MenuScreenState extends State<MenuScreen> {
                       setState(() {});
                     },
                     child: Container(
-                      color: buttonColor,
+                      decoration: BoxDecoration(
+                        color: buttonColor,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            const Icon(
-                              Icons.circle,
-                              color: Colors.white,
+                            Container(
+                              width: 28,
+                              height: 28,
+                              padding: const EdgeInsets.all(4),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: ShapeDecoration(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                              ),
                             ),
                             const SizedBox(
                               width: 8,
@@ -249,7 +260,11 @@ class MenuItem extends StatelessWidget {
                   Text('$price c',
                       style:
                           AppFonts.s14w600.copyWith(color: AppColors.orange)),
-                  const CustomRadiusButton()
+                   CustomRadiusButton(
+                    onPressed: () {
+                      print('Добавлено');
+                    },
+                  )
                 ],
               ),
             ),

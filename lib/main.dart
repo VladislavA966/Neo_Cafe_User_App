@@ -8,7 +8,6 @@ import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/model/cart_m
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveSetup.initHive();
-
   final cartBox = await Hive.openBox<CartModel>('cartBox');
   getIt.registerSingleton<Box<CartModel>>(cartBox);
   setupDependensies();

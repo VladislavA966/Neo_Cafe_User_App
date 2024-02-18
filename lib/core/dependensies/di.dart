@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:neo_cafe_24/core/dependensies/hive.dart';
 import 'package:neo_cafe_24/core/services/dio_settings.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/sign_in_remote.dart';

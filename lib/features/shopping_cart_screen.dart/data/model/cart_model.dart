@@ -17,30 +17,7 @@ class CartModel extends HiveObject {
 
   Map<String, dynamic> toJson() => _$CartModelToJson(this);
 
-  void addItem(ItemModel item) {
-    items.add(item);
-    save();
-  }
+  
 
-  void removeItemAt(int index) {
-    if (index >= 0 && index < items.length) {
-      items.removeAt(index);
-      save();
-    }
-  }
-
-  void removeItemById(int id) {
-    items.removeWhere((item) => item.id == id);
-    save();
-  }
-
-  void clearCart() {
-    items.clear();
-    save();
-  }
-
-  int getTotalPrice() {
-    return items.fold(
-        0, (total, current) => total + (current.pricePerUnit ?? 0));
-  }
+  
 }

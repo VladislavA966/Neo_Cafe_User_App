@@ -13,11 +13,6 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
   final Box<CartModel> cartBox;
 
   CartLocalDataSourceImpl(this.cartBox);
-  @override
-  Future<void> addItem(ItemModel item) async {
-    final cart = await getOrCreateCart();
-    cart.addItem(item);
-  }
 
   @override
   Future<void> removeItemAt(int index) async {
@@ -43,5 +38,11 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
   Future<List<ItemModel>> getItems() async {
     final cart = await getOrCreateCart();
     return cart.items;
+  }
+  
+  @override
+  Future<void> addItem(ItemModel item) {
+    
+    throw UnimplementedError();
   }
 }
