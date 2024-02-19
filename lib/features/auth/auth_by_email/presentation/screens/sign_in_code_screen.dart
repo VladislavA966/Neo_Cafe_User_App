@@ -6,6 +6,7 @@ import 'package:neo_cafe_24/features/auth/auth_by_email/presentation/bloc/sign_i
 import 'package:neo_cafe_24/features/main_screen/presentation/screens/main_screen.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
+import 'package:neo_cafe_24/features/widgets/navigation_bar.dart';
 import 'package:pinput/pinput.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -92,7 +93,7 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const MainScreen(),
+                      builder: (context) => const HomePage(),
                     ),
                   );
                 } else if (state is SignInError) {

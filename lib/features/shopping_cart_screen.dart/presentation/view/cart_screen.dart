@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
+import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/menu_container.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/popular_manu_container.dart';
+import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -47,7 +49,10 @@ class _CartScreenState extends State<CartScreen> {
             const SizedBox(height: 41),
             _buildSummaryText(context),
             const SizedBox(height: 12),
-            _buildOrderButton()
+            _buildOrderButton(),
+            const SizedBox(
+              height: 12,
+            )
           ],
         ),
       ),
@@ -125,18 +130,25 @@ class _CartScreenState extends State<CartScreen> {
                     bottom: 0,
                     child: CustomRadiusButton(
                       onPressed: () {
-                        counter++;
+                        counter = 1;
+                        setState(() {});
                       },
                     ),
                   )
-                : ButtonsRow(
-                    counter: counter,
-                    onMinusTap: () {
-                      counter--;
-                    },
-                    onPlusTap: () {
-                      counter++;
-                    }),
+                : Positioned(
+                    bottom: 5,
+                    right: 0,
+                    child: ButtonsRow(
+                        counter: counter,
+                        onMinusTap: () {
+                          counter--;
+                          setState(() {});
+                        },
+                        onPlusTap: () {
+                          counter++;
+                          setState(() {});
+                        }),
+                  ),
             onTap: () {},
           ),
         ),
@@ -145,7 +157,13 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   MyAppBar _buildAppBar() {
-    return const MyAppBar(
+    return MyAppBar(
+      actions: [
+        AppBarButton(
+          icon: Image.asset(AppImages.clipBoard),
+          onPressed: () {},
+        )
+      ],
       title: 'Корзина',
       centerTitle: false,
     );

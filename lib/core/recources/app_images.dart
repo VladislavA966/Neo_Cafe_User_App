@@ -13,4 +13,9 @@ abstract class AppImages {
   static const String caceImage = 'assets/images/cace_image.png';
   static const String item = 'assets/images/item.png';
   static const String appBarBigImage = 'assets/images/app_bar_big_image.png';
+  static const String homeTap = 'assets/images/home_bar.png';
+  static const String cartTap = 'assets/images/cart_bar.png';
+  static const String branchTap = 'assets/images/branch_bar.png';
+  static const String profileTap = 'assets/images/profile_bar.png';
+  static const String clipBoard = 'assets/images/clipboard.png';
 }

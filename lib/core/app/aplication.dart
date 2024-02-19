@@ -14,8 +14,7 @@ import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/menu_items_use
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/category_bloc/category_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/item_bloc/item_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/menu_item/menu_item_bloc.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/view/cart_screen.dart';
-import 'package:neo_cafe_24/features/welcom_screen/welcome_screen.dart';
+import 'package:neo_cafe_24/features/widgets/navigation_bar.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

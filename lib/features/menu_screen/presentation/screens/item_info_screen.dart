@@ -51,7 +51,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context),
+      appBar: _buildAppBar(),
       body: _buildBody(),
     );
   }
@@ -75,54 +75,12 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
           ),
           _buildSecondTitle(),
           const SizedBox(height: 16),
-          PopularMenuContainer(
-            buttonWidget: counter == 0
-                ? Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: CustomRadiusButton(
-                      onPressed: () {
-                        print('ddobavleno');
-                      },
-                    ),
-                  )
-                : ButtonsRow(
-                    counter: counter, onMinusTap: () {}, onPlusTap: () {}),
-            onTap: () {},
-          ),
+          _buildFirstPopular(),
           const SizedBox(height: 12),
-          PopularMenuContainer(
-            buttonWidget: counter == 0
-                ? Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: CustomRadiusButton(
-                      onPressed: () {
-                        print('ddobavleno');
-                      },
-                    ),
-                  )
-                : ButtonsRow(
-                    counter: counter, onMinusTap: () {}, onPlusTap: () {}),
-            onTap: () {},
-          ),
-          const SizedBox(height: 12),
-          PopularMenuContainer(
-            buttonWidget: counter == 0
-                ? Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: CustomRadiusButton(
-                      onPressed: () {
-                        print('ddobavleno');
-                      },
-                    ),
-                  )
-                : ButtonsRow(
-                    counter: counter, onMinusTap: () {}, onPlusTap: () {}),
-            onTap: () {},
-          ),
+          _buildSecondPopular(),
           const SizedBox(height: 16),
+          _buildThirdPopular(),
+          const SizedBox(height: 12),
           _buildTotalPrice(),
           const SizedBox(
             height: 11,
@@ -130,6 +88,102 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
           _buildBtuttons()
         ],
       ),
+    );
+  }
+
+  PopularMenuContainer _buildThirdPopular() {
+    return PopularMenuContainer(
+      buttonWidget: counter == 0
+          ? Positioned(
+              right: 0,
+              bottom: 0,
+              child: CustomRadiusButton(
+                onPressed: () {
+                  counter = 1;
+                  setState(() {});
+                },
+              ),
+            )
+          : Positioned(
+              bottom: 5,
+              right: 0,
+              child: ButtonsRow(
+                counter: counter,
+                onMinusTap: () {
+                  counter--;
+                  setState(() {});
+                },
+                onPlusTap: () {
+                  counter++;
+                  setState(() {});
+                },
+              ),
+            ),
+      onTap: () {},
+    );
+  }
+
+  PopularMenuContainer _buildSecondPopular() {
+    return PopularMenuContainer(
+      buttonWidget: counter == 0
+          ? Positioned(
+              right: 0,
+              bottom: 0,
+              child: CustomRadiusButton(
+                onPressed: () {
+                  counter = 1;
+                  setState(() {});
+                },
+              ),
+            )
+          : Positioned(
+              bottom: 5,
+              right: 0,
+              child: ButtonsRow(
+                counter: counter,
+                onMinusTap: () {
+                  counter--;
+                  setState(() {});
+                },
+                onPlusTap: () {
+                  counter++;
+                  setState(() {});
+                },
+              ),
+            ),
+      onTap: () {},
+    );
+  }
+
+  PopularMenuContainer _buildFirstPopular() {
+    return PopularMenuContainer(
+      buttonWidget: counter == 0
+          ? Positioned(
+              right: 0,
+              bottom: 0,
+              child: CustomRadiusButton(
+                onPressed: () {
+                  counter = 1;
+                  setState(() {});
+                },
+              ),
+            )
+          : Positioned(
+              bottom: 5,
+              right: 0,
+              child: ButtonsRow(
+                counter: counter,
+                onMinusTap: () {
+                  counter--;
+                  setState(() {});
+                },
+                onPlusTap: () {
+                  counter++;
+                  setState(() {});
+                },
+              ),
+            ),
+      onTap: () {},
     );
   }
 
@@ -250,7 +304,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
     );
   }
 
-  PreferredSize _buildAppBar(BuildContext context) {
+  PreferredSize _buildAppBar() {
     return PreferredSize(
       preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.23),
       child: ClipRRect(
