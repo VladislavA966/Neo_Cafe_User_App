@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:neo_cafe_24/features/menu_screen/data/models/category_model.dart';
+import 'package:neo_cafe_24/features/menu_screen/data/models/category/category_model.dart';
 import 'package:neo_cafe_24/features/menu_screen/data/models/menu_all_item_model.dart';
 
 abstract class MenuRemote {

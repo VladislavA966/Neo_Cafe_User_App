@@ -120,6 +120,9 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
               ),
             ),
       onTap: () {},
+      name: 'Крамельный раф',
+      price: 270,
+      quantity: 0,
     );
   }
 
@@ -152,6 +155,9 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
               ),
             ),
       onTap: () {},
+      name: 'Крамельный раф',
+      price: 270,
+      quantity: 0,
     );
   }
 
@@ -184,6 +190,9 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
               ),
             ),
       onTap: () {},
+      name: 'Карамельный раф',
+      price: 270,
+      quantity: 0,
     );
   }
 
@@ -304,9 +313,24 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
     );
   }
 
-  PreferredSize _buildAppBar() {
+  InfoAppBar _buildAppBar() {
+    return InfoAppBar(
+      appBarHeight: MediaQuery.of(context).size.height * 0.23,
+    );
+  }
+}
+
+class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final double appBarHeight;
+  const InfoAppBar({
+    super.key,
+    required this.appBarHeight,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return PreferredSize(
-      preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.23),
+      preferredSize: Size.fromHeight(appBarHeight),
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(
           bottom: Radius.circular(16),
@@ -321,6 +345,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
                 ),
               ),
               child: AppBar(
+                automaticallyImplyLeading: false,
                 backgroundColor: AppColors.mainColors,
                 elevation: 0,
               ),
@@ -336,20 +361,25 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
               ),
             ),
             Positioned(
-              top: 38,
-              left: 32,
+              top: 40,
+              left: 3,
               child: AppBarButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             )
           ],
         ),
       ),
     );
   }
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(appBarHeight);
 }

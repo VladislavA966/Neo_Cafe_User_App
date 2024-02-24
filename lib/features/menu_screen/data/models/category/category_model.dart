@@ -6,7 +6,6 @@ part 'category_model.g.dart';
 class CategoryModel {
   final int? id;
   final String? name;
-  // final String? image;
 
   CategoryModel({
     this.id,
@@ -19,21 +18,5 @@ class CategoryModel {
   CategoryEntity toEntity() => CategoryEntity(
         id: id ?? 0,
         name: name ?? '',
-        // image: image ?? '',
       );
-
-  
 }
-
-// @JsonSerializable()
-// class CategoriesModel {
-//   final List<CategoryModel> categories;
-
-//   CategoriesModel({required this.categories});
-//   factory CategoriesModel.fromJson(Map<String, dynamic> json) =>
-//       _$CategoriesModelFromJson(json);
-//   Map<String, dynamic> toJson() => _$CategoriesModelToJson(this);
-
-//   CategoriesEntity toEntity() => CategoriesEntity(
-//       categories: categories.map((model) => model.toEntity()).toList());
-// }

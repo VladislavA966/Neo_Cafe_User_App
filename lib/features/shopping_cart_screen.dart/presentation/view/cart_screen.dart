@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/menu_container.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/popular_manu_container.dart';
+import 'package:neo_cafe_24/features/menu_screen/presentation/screens/menu_screen.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
@@ -20,20 +23,102 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   int counter = 0;
   int? currentIndex = 0;
+
+  @override
+  void initState() {
+    BlocProvider.of<CartBloc>(context).add(
+      CartItemsRequested(),
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Scaffold(
           appBar: _buildAppBar(),
-          body: _buildBody(context),
+          body: BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartLoadSuccess) {
+                if (state.items.isEmpty) {
+                  return _buildEmptyCartScreen();
+                } else {
+                  return _buildBody(context, state);
+                }
+              } else if (state is CartLoadFailure) {}
+              return _buildEmptyCartScreen();
+            },
+          ),
         ),
-        _buildToggleSwitch(),
+        _buildToggleButtons(),
       ],
     );
   }
 
-  Padding _buildBody(BuildContext context) {
+  Positioned _buildToggleButtons() {
+    return Positioned(
+      top: 156,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ToggleSwitch(
+          minWidth: double.infinity,
+          minHeight: 48,
+          cornerRadius: 100,
+          activeBgColors: const [
+            [AppColors.orange],
+            [AppColors.orange]
+          ],
+          activeFgColor: Colors.white,
+          inactiveBgColor: AppColors.grey,
+          inactiveFgColor: Colors.black,
+          initialLabelIndex: currentIndex,
+          totalSwitches: 2,
+          labels: const ['Возьму с собой', 'В заведении'],
+          radiusStyle: true,
+          onToggle: (index) {
+            currentIndex = index;
+            setState(() {});
+          },
+        ),
+      ),
+    );
+  }
+
+  Center _buildEmptyCartScreen() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            'Ваша корзина пуста',
+            style: AppFonts.s20w600.copyWith(color: AppColors.black),
+          ),
+          Image.asset('assets/images/empty_cart.png'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: CustomButton(
+              title: 'В меню',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (counter) => const MenuScreen(),
+                  ),
+                );
+              },
+              height: 54,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Padding _buildBody(BuildContext context, CartLoadSuccess state) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SafeArea(
@@ -43,7 +128,7 @@ class _CartScreenState extends State<CartScreen> {
             const SizedBox(
               height: 64,
             ),
-            _buildCartList(),
+            _buildCartList(state),
             const SizedBox(height: 20),
             _buildAddMoreButton(),
             const SizedBox(height: 41),
@@ -62,7 +147,9 @@ class _CartScreenState extends State<CartScreen> {
   CustomButton _buildOrderButton() {
     return CustomButton(
       title: 'Заказать',
-      onPressed: () {},
+      onPressed: () {
+        BlocProvider.of<CartBloc>(context).add(CleanCartEvent());
+      },
       height: 54,
     );
   }
@@ -109,22 +196,22 @@ class _CartScreenState extends State<CartScreen> {
         child: Text(
           'Добавить еще',
           style: AppFonts.s16w600.copyWith(
-            color: Colors.orange,
+            color: AppColors.orange,
           ),
         ),
       ),
     );
   }
 
-  Expanded _buildCartList() {
+  Expanded _buildCartList(CartLoadSuccess state) {
     return Expanded(
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: 10,
+        itemCount: state.items.length,
         itemBuilder: (BuildContext context, index) => Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: PopularMenuContainer(
-            buttonWidget: counter == 0
+            buttonWidget: state.items[index].quantity == 0
                 ? Positioned(
                     right: 0,
                     bottom: 0,
@@ -139,62 +226,36 @@ class _CartScreenState extends State<CartScreen> {
                     bottom: 5,
                     right: 0,
                     child: ButtonsRow(
-                        counter: counter,
+                        counter: state.items[index].quantity,
                         onMinusTap: () {
-                          counter--;
+                          state.items[index].quantity--;
                           setState(() {});
                         },
                         onPlusTap: () {
-                          counter++;
+                          state.items[index].quantity++;
                           setState(() {});
                         }),
                   ),
             onTap: () {},
+            name: state.items[index].name,
+            price: state.items[index].price,
+            quantity: state.items[index].quantity,
           ),
         ),
       ),
     );
   }
+}
 
-  MyAppBar _buildAppBar() {
-    return MyAppBar(
-      actions: [
-        AppBarButton(
-          icon: Image.asset(AppImages.clipBoard),
-          onPressed: () {},
-        )
-      ],
-      title: 'Корзина',
-      centerTitle: false,
-    );
-  }
-
-  Positioned _buildToggleSwitch() {
-    return Positioned(
-      top: 156,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ToggleSwitch(
-          minWidth: double.infinity,
-          minHeight: 48,
-          cornerRadius: 100,
-          activeBgColors: const [
-            [AppColors.orange],
-            [AppColors.orange]
-          ],
-          activeFgColor: Colors.white,
-          inactiveBgColor: AppColors.grey,
-          inactiveFgColor: Colors.black,
-          initialLabelIndex: currentIndex,
-          totalSwitches: 2,
-          labels: const ['Возьму с собой', 'В заведении'],
-          radiusStyle: true,
-          onToggle: (index) {
-            currentIndex = index;
-            setState(() {});
-          },
-        ),
-      ),
-    );
-  }
+MyAppBar _buildAppBar() {
+  return MyAppBar(
+    actions: [
+      AppBarButton(
+        icon: Image.asset(AppImages.clipBoard),
+        onPressed: () {},
+      )
+    ],
+    title: 'Корзина',
+    centerTitle: false,
+  );
 }

@@ -1,11 +1,11 @@
-import 'package:neo_cafe_24/features/menu_screen/domain/entity/item_entity.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/entity/cart_item_entity.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/repo/cart_repo.dart';
 
 class CartUseCase {
   final CartRepository repo;
 
   CartUseCase({required this.repo});
-  Future<void> addItemUseCase(ItemEntity item) async {
+  Future<void> addItemUseCase(CartItemEntity item) async {
     await repo.addItem(item);
   }
 
@@ -13,11 +13,15 @@ class CartUseCase {
     await repo.removeItemAt(index);
   }
 
-  Future<bool> getOrCreateCartUseCase() async {
-    return await repo.isCartEmpty();
+  Future<CartEntity> getOrCreateCartUseCase() async {
+    return await repo.getOrCreateCart();
   }
 
-  Future<List<ItemEntity>> getItemsUseCase() async {
+  Future<List<CartItemEntity>> getItemsUseCase() async {
     return await repo.getItems();
+  }
+
+  Future<void> clearCart() async {
+    return await repo.clearCart();
   }
 }

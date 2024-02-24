@@ -18,4 +18,6 @@ abstract class AppImages {
   static const String branchTap = 'assets/images/branch_bar.png';
   static const String profileTap = 'assets/images/profile_bar.png';
   static const String clipBoard = 'assets/images/clipboard.png';
+  static const String bonusImage = 'assets/images/bonus_image.png';
+  static const String logoutIcon = 'assets/images/logout_icon.png';
 }

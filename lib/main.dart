@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:neo_cafe_24/core/app/aplication.dart';
 import 'package:neo_cafe_24/core/dependensies/di.dart';
 import 'package:neo_cafe_24/core/dependensies/hive.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/model/cart_model.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/model/cart_model/cart_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

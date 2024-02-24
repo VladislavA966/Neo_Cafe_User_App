@@ -36,8 +36,8 @@ class _SignUpBodyState extends State<SignUpBody> {
     );
   }
 
-  BlocListener<SignUpBloc, SignUpState> _buildButton(BuildContext context) {
-    return BlocListener<SignUpBloc, SignUpState>(
+  BlocConsumer<SignUpBloc, SignUpState> _buildButton(BuildContext context) {
+    return BlocConsumer<SignUpBloc, SignUpState>(
       listener: (context, state) {
         if (state is SignUpLoaded) {
           Navigator.push(
@@ -54,28 +54,34 @@ class _SignUpBodyState extends State<SignUpBody> {
           controller.clear();
         } else if (state is SignUpError) {
           _errorText = state.errorText;
+          setState(() {});
         }
       },
-      child: CustomButton(
-        title: 'Получить код',
-        onPressed: () async {
-          if (controller.text.isEmpty) {
-            setState(
-              () {
-                _errorText = 'Поле не может быть пустым';
-              },
-            );
-          } else {
-            BlocProvider.of<SignUpBloc>(context).add(
-              SendNewUserDataEvent(email: 'davisa3730@tospage.com'),
-            );
-            setState(() {
-              _errorText = null;
-            });
-          }
-        },
-        height: 48,
-      ),
+      builder: (context, state) {
+        if (state is SignUpLoading) {
+          return const CircularProgressIndicator();
+        }
+        return CustomButton(
+          title: 'Получить код',
+          onPressed: () async {
+            if (controller.text.isEmpty) {
+              setState(
+                () {
+                  _errorText = 'Поле не может быть пустым';
+                },
+              );
+            } else {
+              BlocProvider.of<SignUpBloc>(context).add(
+                SendNewUserDataEvent(email: controller.text),
+              );
+              setState(() {
+                _errorText = null;
+              });
+            }
+          },
+          height: 48,
+        );
+      },
     );
   }
 

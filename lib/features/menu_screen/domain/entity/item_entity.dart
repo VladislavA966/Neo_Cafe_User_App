@@ -1,3 +1,6 @@
+import 'package:neo_cafe_24/features/menu_screen/domain/entity/category_entity.dart';
+import 'package:neo_cafe_24/features/menu_screen/domain/entity/ingredient_entity.dart';
+
 class ItemEntity {
   final int id;
 
@@ -5,29 +8,24 @@ class ItemEntity {
 
   final String description;
 
-  final int category;
+  final int categoryId;
+  final String categoryName;
 
   final String itemImage;
-
-  final String type;
 
   final int pricePerUnit;
 
   final int branch;
+  final List<IngredientEntity> ingredient;
 
   ItemEntity(
       {required this.id,
       required this.name,
       required this.description,
-      required this.category,
+      required this.categoryId,
+      required this.categoryName,
       required this.itemImage,
-      required this.type,
       required this.pricePerUnit,
-      required this.branch});
-}
-
-class ItemsEntity {
-  final List<ItemEntity> items;
-
-  ItemsEntity({required this.items});
+      required this.branch,
+      required this.ingredient});
 }

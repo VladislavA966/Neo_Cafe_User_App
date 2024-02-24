@@ -7,6 +7,8 @@ import 'package:neo_cafe_24/features/menu_screen/presentation/screens/item_info_
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/main_screen_text_field.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/category_bloc/category_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/menu_item/menu_item_bloc.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/entity/cart_item_entity.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 
@@ -26,6 +28,7 @@ class _MenuScreenState extends State<MenuScreen> {
     BlocProvider.of<CategoryBloc>(context).add(
       GetAllCategoriesEvent(),
     );
+    BlocProvider.of<CartBloc>(context).add(CartStarted());
 
     super.initState();
   }
@@ -94,6 +97,17 @@ class _MenuScreenState extends State<MenuScreen> {
               itemCount: state.model.length,
               itemBuilder: (BuildContext context, int index) {
                 return MenuItem(
+                  addTap: () {
+                    final cartItem = CartItemEntity(
+                        id: state.model[index].id,
+                        image: state.model[index].itemImage,
+                        name: state.model[index].name,
+                        price: state.model[index].pricePerUnit,
+                        quantity: 1);
+                    BlocProvider.of<CartBloc>(context).add(
+                      CartItemAdded(cartItem),
+                    );
+                  },
                   name: state.model[index].name,
                   price: state.model[index].pricePerUnit.toString(),
                   onTap: () {
@@ -201,12 +215,14 @@ class MenuItem extends StatelessWidget {
   final Function() onTap;
   final String name;
   final String price;
+  final Function() addTap;
 
   const MenuItem(
       {super.key,
       required this.onTap,
       required this.name,
-      required this.price});
+      required this.price,
+      required this.addTap});
 
   @override
   Widget build(BuildContext context) {
@@ -260,10 +276,8 @@ class MenuItem extends StatelessWidget {
                   Text('$price c',
                       style:
                           AppFonts.s14w600.copyWith(color: AppColors.orange)),
-                   CustomRadiusButton(
-                    onPressed: () {
-                      print('Добавлено');
-                    },
+                  CustomRadiusButton(
+                    onPressed: addTap,
                   )
                 ],
               ),

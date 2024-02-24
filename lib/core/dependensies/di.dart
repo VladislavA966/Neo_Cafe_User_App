@@ -10,20 +10,28 @@ import 'package:neo_cafe_24/features/auth/create_new_proifle/data/data_source/si
 import 'package:neo_cafe_24/features/auth/create_new_proifle/data/repository_impl/sign_up_repository_impl.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/repo/sign_up_repo.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/use_case/sign_up_use_case.dart';
+import 'package:neo_cafe_24/features/branches/data/data/branch_remote_data_source.dart';
+import 'package:neo_cafe_24/features/branches/data/repository_impl/branch_repository_impl.dart';
+import 'package:neo_cafe_24/features/branches/domain/use_case/get_all_branches_use_case.dart';
+import 'package:neo_cafe_24/features/branches/domain/use_case/get_branch.dart';
+import 'package:neo_cafe_24/features/branches/presentation/controller/all_branches_bloc/all_branches_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/data/data_source/menu_remote_data_dource.dart';
 import 'package:neo_cafe_24/features/menu_screen/data/repository_impl/category_repository_impl.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/category_use_case.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/item_use_case.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/menu_items_use_case.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/data_source/local/cart_local_data_source.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/model/cart_model.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/model/cart_model/cart_model.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/repository_impl/cart_repository_impl.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/use_case/cart_use_case.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
 
 final getIt = GetIt.instance;
 
 void setupDependensies() {
+  //Token
   getIt.registerSingleton<LocalDataSource>(LocalDataSource());
+  //DioSettings
   getIt.registerSingleton<DioSettings>(
     DioSettings(
       getIt<LocalDataSource>(),
@@ -34,8 +42,11 @@ void setupDependensies() {
   signUpDependency();
   manuDependency();
   cartDependency();
+  branchesDependency();
+  blocDependencies();
 }
 
+//SignUp
 void signUpDependency() {
   getIt.registerSingleton<SignUpRemote>(
     SignUpRemote(
@@ -54,6 +65,7 @@ void signUpDependency() {
   );
 }
 
+//SignIn
 void signInDependensy() {
   getIt.registerSingleton<SignInRemote>(
     SignInRemote(
@@ -73,6 +85,7 @@ void signInDependensy() {
   );
 }
 
+//Menu
 void manuDependency() {
   getIt.registerSingleton<MenuRemoteImpl>(
       MenuRemoteImpl(dio: getIt<DioSettings>().dio));
@@ -98,20 +111,41 @@ void manuDependency() {
   );
 }
 
+//Cart
 void cartDependency() {
-  getIt.registerSingleton<CartLocalDataSourceImpl>(
-    CartLocalDataSourceImpl(
-      getIt<Box<CartModel>>(),
-    ),
-  );
-  getIt.registerSingleton<CartRepositoryImpl>(
-    CartRepositoryImpl(
-      dataSource: getIt<CartLocalDataSourceImpl>(),
-    ),
-  );
+  getIt.registerSingleton<CartLocalDataSourceImpl>(CartLocalDataSourceImpl(
+    getIt<Box<CartModel>>(),
+  ));
+  getIt.registerSingleton<CartRepositoryImpl>(CartRepositoryImpl(
+    data: getIt<CartLocalDataSourceImpl>(),
+  ));
   getIt.registerSingleton<CartUseCase>(
-    CartUseCase(
-      repo: getIt<CartRepositoryImpl>(),
+    CartUseCase(repo: getIt<CartRepositoryImpl>()),
+  );
+}
+
+//Branches
+void branchesDependency() {
+  getIt.registerSingleton<BranchRemoteImpl>(
+      BranchRemoteImpl(dio: getIt<DioSettings>().dio));
+  getIt.registerSingleton<BranchRepositoryImpl>(
+      BranchRepositoryImpl(remote: getIt<BranchRemoteImpl>()));
+  getIt.registerSingleton<GetAllBranchesUseCase>(
+      GetAllBranchesUseCase(repo: getIt<BranchRepositoryImpl>()));
+  getIt.registerSingleton<BranchUseCase>(
+      BranchUseCase(repo: getIt<BranchRepositoryImpl>()));
+}
+
+//Blocs
+void blocDependencies() {
+  getIt.registerSingleton<AllBranchesBloc>(
+    AllBranchesBloc(
+      getIt<GetAllBranchesUseCase>(),
+    ),
+  );
+  getIt.registerSingleton<CartBloc>(
+    CartBloc(
+      cartUseCase: getIt<CartUseCase>(),
     ),
   );
 }

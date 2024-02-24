@@ -5,15 +5,20 @@ import 'package:neo_cafe_24/core/dependensies/di.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/domain/use_case/sign_in_use_case.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/presentation/bloc/sign_in_bloc.dart';
-import 'package:neo_cafe_24/features/auth/auth_screen.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/use_case/sign_up_use_case.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/presentation/bloc/sign_up_bloc.dart';
+import 'package:neo_cafe_24/features/branches/domain/use_case/get_all_branches_use_case.dart';
+import 'package:neo_cafe_24/features/branches/domain/use_case/get_branch.dart';
+import 'package:neo_cafe_24/features/branches/presentation/controller/all_branches_bloc/all_branches_bloc.dart';
+import 'package:neo_cafe_24/features/branches/presentation/controller/bloc/single_branch_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/category_use_case.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/item_use_case.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/menu_items_use_case.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/category_bloc/category_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/item_bloc/item_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/menu_item/menu_item_bloc.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/use_case/cart_use_case.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
 import 'package:neo_cafe_24/features/widgets/navigation_bar.dart';
 
 class MyApp extends StatelessWidget {
@@ -50,6 +55,21 @@ class MyApp extends StatelessWidget {
             getIt<ItemUseCase>(),
           ),
         ),
+        BlocProvider(
+          create: (context) => CartBloc(
+            cartUseCase: getIt<CartUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => AllBranchesBloc(
+            getIt<GetAllBranchesUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => SingleBranchBloc(
+            getIt<BranchUseCase>(),
+          ),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -58,7 +78,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const AuthScreen(),
+        home: const HomePage(),
       ),
     );
   }

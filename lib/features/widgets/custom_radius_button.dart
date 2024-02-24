@@ -19,7 +19,8 @@ class CustomRadiusButton extends StatelessWidget {
         decoration: const ShapeDecoration(
           color: Color(0xFFF37255),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
           ),
         ),
         child: const Icon(

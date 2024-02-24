@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
+import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 
 class PopularMenuContainer extends StatelessWidget {
+  final String name;
+  final int price;
+  final int quantity;
   final void Function()? onTap;
 
   final Widget buttonWidget;
   const PopularMenuContainer(
-      {super.key, required this.onTap, required this.buttonWidget});
+      {super.key,
+      required this.onTap,
+      required this.buttonWidget,
+      required this.name,
+      required this.price,
+      required this.quantity});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +58,7 @@ class PopularMenuContainer extends StatelessWidget {
                   decoration: ShapeDecoration(
                     image: const DecorationImage(
                       image:
-                          NetworkImage("https://via.placeholder.com/80x86  "),
+                          NetworkImage("https://via.placeholder.com/80x90  "),
                       fit: BoxFit.fill,
                     ),
                     shape: RoundedRectangleBorder(
@@ -98,15 +107,15 @@ class PopularMenuContainer extends StatelessWidget {
           ),
         ),
         buttonWidget,
-        // Positioned(
-        //   right: 0,
-        //   bottom: 0,
-        //   child: CustomRadiusButton(
-        //     onPressed: () {
-        //       print('ddobavleno');
-        //     },
-        //   ),
-        // ),
+        Positioned(
+          right: 0,
+          bottom: 0,
+          child: CustomRadiusButton(
+            onPressed: () {
+              print('ddobavleno');
+            },
+          ),
+        ),
       ],
     );
   }

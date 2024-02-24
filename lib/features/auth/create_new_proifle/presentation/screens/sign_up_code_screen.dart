@@ -144,36 +144,16 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
     return BlocBuilder<SignUpBloc, SignUpState>(
       builder: (context, state) {
         if (state is SignUpError) {
-          return Column(
-            children: [
-              Text(
-                'Код введен неверно,',
-                style: AppFonts.s16w600.copyWith(color: Colors.red),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                'попробуйте еще раз',
-                style: AppFonts.s16w600.copyWith(color: Colors.red),
-              ),
-            ],
+          return Text(
+            'Код введен неверно,\n попробуйте еще раз',
+            textAlign: TextAlign.center,
+            style: AppFonts.s16w600.copyWith(color: Colors.red),
           );
         }
-        return Column(
-          children: [
-            const Text(
-              'Введите 4-х значный код,',
-              style: AppFonts.s16w600,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              'отправленный на ${widget.emailController}',
-              style: AppFonts.s16w600,
-            ),
-          ],
+        return Text(
+          'Введите 4-х значный код,\n отправленный на ${widget.emailController}',
+          textAlign: TextAlign.center,
+          style: AppFonts.s16w600,
         );
       },
     );

@@ -17,7 +17,7 @@ class CartModelAdapter extends TypeAdapter<CartModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CartModel(
-      items: (fields[0] as List).cast<ItemModel>(),
+      items: (fields[0] as List).cast<CartItemModel>(),
     );
   }
 
@@ -46,7 +46,7 @@ class CartModelAdapter extends TypeAdapter<CartModel> {
 
 CartModel _$CartModelFromJson(Map<String, dynamic> json) => CartModel(
       items: (json['items'] as List<dynamic>)
-          .map((e) => ItemModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => CartItemModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

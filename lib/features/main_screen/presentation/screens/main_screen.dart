@@ -86,6 +86,9 @@ class _MainScreenState extends State<MainScreen> {
         itemBuilder: (BuildContext context, index) => Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: PopularMenuContainer(
+            name: 'Крамельный раф',
+            price: 270,
+            quantity: 0,
             buttonWidget: counter == 0
                 ? Positioned(
                     right: 0,
@@ -98,19 +101,19 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   )
                 : Positioned(
-                  bottom: 5,
-                  right: 0,
-                  child: ButtonsRow(
-                      counter: counter,
-                      onMinusTap: () {
-                        counter--;
-                        setState(() {});
-                      },
-                      onPlusTap: () {
-                        counter++;
-                        setState(() {});
-                      }),
-                ),
+                    bottom: 5,
+                    right: 0,
+                    child: ButtonsRow(
+                        counter: counter,
+                        onMinusTap: () {
+                          counter--;
+                          setState(() {});
+                        },
+                        onPlusTap: () {
+                          counter++;
+                          setState(() {});
+                        }),
+                  ),
             onTap: () {
               Navigator.push(
                 context,

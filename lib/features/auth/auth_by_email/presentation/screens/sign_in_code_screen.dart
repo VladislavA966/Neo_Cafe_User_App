@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/presentation/bloc/sign_in_bloc.dart';
-import 'package:neo_cafe_24/features/main_screen/presentation/screens/main_screen.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/widgets/navigation_bar.dart';
@@ -90,7 +89,7 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
             BlocListener<SignInBloc, SignInState>(
               listener: (context, state) {
                 if (state is SendCodeLoaded) {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const HomePage(),
@@ -131,21 +130,11 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
     );
   }
 
-  Column _buildTextInfo() {
-    return Column(
-      children: [
-        const Text(
-          'Введите 4-х значный код,',
-          style: AppFonts.s16w600,
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Text(
-          'отправленный на ${widget.email}',
-          style: AppFonts.s16w600,
-        ),
-      ],
+  Text _buildTextInfo() {
+    return Text(
+      'Введите 4-х значный код,\n отправленный на ${widget.email},',
+      textAlign: TextAlign.center,
+      style: AppFonts.s16w600,
     );
   }
 

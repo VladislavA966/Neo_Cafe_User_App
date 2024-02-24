@@ -38,9 +38,14 @@ class SearchField extends StatelessWidget {
                 child: const Icon(Icons.search, color: Colors.white),
               ),
               border: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.grey),
                 borderRadius: BorderRadius.all(
                   Radius.circular(100),
                 ),
+              ),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.grey),
+                borderRadius: BorderRadius.all(Radius.circular(100)),
               ),
             ),
           ),
