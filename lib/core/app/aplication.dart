@@ -19,6 +19,7 @@ import 'package:neo_cafe_24/features/menu_screen/presentation/controller/item_bl
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/menu_item/menu_item_bloc.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/use_case/cart_use_case.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
+import 'package:neo_cafe_24/features/welcom_screen/welcome_screen.dart';
 import 'package:neo_cafe_24/features/widgets/navigation_bar.dart';
 
 class MyApp extends StatelessWidget {
@@ -78,7 +79,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const HomePage(),
+        home: const WelcomeScreen(),
       ),
     );
   }
