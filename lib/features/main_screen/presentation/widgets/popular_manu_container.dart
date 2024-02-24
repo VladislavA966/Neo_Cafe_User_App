@@ -107,15 +107,6 @@ class PopularMenuContainer extends StatelessWidget {
           ),
         ),
         buttonWidget,
-        Positioned(
-          right: 0,
-          bottom: 0,
-          child: CustomRadiusButton(
-            onPressed: () {
-              print('ddobavleno');
-            },
-          ),
-        ),
       ],
     );
   }

@@ -36,6 +36,17 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  String _getTitleBasedOnTimeOfDay() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Доброе утро!';
+    } else if (hour < 17) {
+      return 'Добрый день!';
+    } else {
+      return 'Добрый вечер!';
+    }
+  }
+
   final controller = TextEditingController();
   int counter = 0;
   @override
@@ -54,26 +65,32 @@ class _MainScreenState extends State<MainScreen> {
   Padding _buildBody(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 36,
+      child: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 36,
+              ),
+              _buildTitleAndMenuButton(context),
+              _buildFirstCategoryRow(),
+              const SizedBox(
+                height: 12,
+              ),
+              _buildSecondCategoryRow(),
+              const SizedBox(
+                height: 24,
+              ),
+              _buildPopularTitle(),
+              const SizedBox(
+                height: 16,
+              ),
+              _buildPopularItemsList(),
+            ],
           ),
-          _buildTitleAndMenuButton(context),
-          _buildFirstCategoryRow(),
-          const SizedBox(
-            height: 12,
-          ),
-          _buildSecondCategoryRow(),
-          const SizedBox(
-            height: 24,
-          ),
-          _buildPopularTitle(),
-          const SizedBox(
-            height: 16,
-          ),
-          _buildPopularItemsList(),
-        ],
+        ),
       ),
     );
   }
@@ -81,8 +98,9 @@ class _MainScreenState extends State<MainScreen> {
   Expanded _buildPopularItemsList() {
     return Expanded(
       child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: 10,
+        itemCount: 3,
         itemBuilder: (BuildContext context, index) => Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: PopularMenuContainer(
@@ -209,7 +227,7 @@ class _MainScreenState extends State<MainScreen> {
 
   MyAppBar _buildAppBar() {
     return MyAppBar(
-      title: 'Доброе утро!',
+      title: _getTitleBasedOnTimeOfDay(),
       centerTitle: false,
       actions: [
         AppBarButton(

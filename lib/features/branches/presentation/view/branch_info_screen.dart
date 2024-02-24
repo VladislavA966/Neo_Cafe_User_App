@@ -10,6 +10,7 @@ import 'package:neo_cafe_24/features/branches/presentation/controller/bloc/singl
 import 'package:neo_cafe_24/features/menu_screen/presentation/screens/item_info_screen.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BranchInfoScreen extends StatefulWidget {
   final int id;
@@ -31,6 +32,26 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
     'Вт: 11:00 – 22:00',
     'Вт: 11:00 – 22:00',
   ];
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (await canLaunchUrl(launchUri)) {
+      await launchUrl(launchUri);
+    } else {
+      throw 'Could not launch $launchUri';
+    }
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      print('Не могу открыть $url');
+    }
+  }
 
   void toggleExpanded() {
     setState(() {
@@ -38,6 +59,8 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
     });
   }
 
+  String phone = '';
+  String url = '';
   @override
   void initState() {
     BlocProvider.of<SingleBranchBloc>(context).add(
@@ -62,12 +85,14 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
             child: CircularProgressIndicator(),
           );
         } else if (state is SingleBranchLoaded) {
+          phone = state.branch.phoneNumber;
+          url = state.branch.link2gis;
           return SingleChildScrollView(
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.71,
+                  height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: [
                       const SizedBox(
@@ -93,7 +118,6 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
                       _buildPopularItemsList(),
                       const SizedBox(height: 48),
                       _buildMenuButton(),
-                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -114,9 +138,11 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
     );
   }
 
-  Expanded _buildPopularItemsList() {
-    return Expanded(
+  Widget _buildPopularItemsList() {
+    return SizedBox(
+      height: 225,
       child: ListView.builder(
+        shrinkWrap: true,
         itemCount: 10,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
@@ -187,12 +213,16 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
           icon: Image.asset(
             'assets/images/mdi_phone-outline.png',
           ),
-          onPressed: () {},
+          onPressed: () {
+            _makePhoneCall(phone);
+          },
         ),
         AppBarButton(
           color: AppColors.orange,
           icon: Image.asset('assets/images/mdi_map-marker-outline.png'),
-          onPressed: () {},
+          onPressed: () {
+            _launchURL(url);
+          },
         ),
         const SizedBox(height: 24),
       ],

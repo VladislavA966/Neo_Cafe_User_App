@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const WelcomeScreen(),
+        home: const HomePage(),
       ),
     );
   }

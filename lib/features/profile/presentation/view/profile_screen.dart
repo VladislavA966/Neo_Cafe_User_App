@@ -28,52 +28,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
           appBar: _buildAppBar(),
           body: _buildBody(),
         ),
-        Positioned(
-          top: 160,
-          left: 16,
-          right: 16,
-          child: Container(
-            padding: const EdgeInsets.only(
-              top: 24,
-              left: 24,
-              right: 20,
-              bottom: 25,
-            ),
-            height: 78,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.lightBlue,
-              borderRadius: BorderRadius.circular(
-                100,
+        _buildNameContainer(context)
+      ],
+    );
+  }
+
+  Positioned _buildNameContainer(BuildContext context) {
+    return Positioned(
+      top: 160,
+      left: 16,
+      right: 16,
+      child: Container(
+        padding: const EdgeInsets.only(
+          top: 24,
+          left: 24,
+          right: 20,
+          bottom: 25,
+        ),
+        height: 78,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: AppColors.lightBlue,
+          borderRadius: BorderRadius.circular(
+            100,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Лаура',
+              style: AppFonts.s24w600.copyWith(
+                color: AppColors.black,
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Лаура',
-                  style: AppFonts.s24w600.copyWith(
-                    color: AppColors.black,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditProfileScreen(),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditProfileScreen(),
-                      ),
-                    );
-                  },
-                  child: Image.asset(
-                    'assets/images/pencil.png',
-                  ),
-                ),
-              ],
+                );
+              },
+              child: Image.asset(
+                'assets/images/pencil.png',
+              ),
             ),
-          ),
-        )
-      ],
+          ],
+        ),
+      ),
     );
   }
 

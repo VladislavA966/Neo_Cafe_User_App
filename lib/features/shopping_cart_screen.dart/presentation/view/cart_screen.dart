@@ -32,6 +32,14 @@ class _CartScreenState extends State<CartScreen> {
     super.initState();
   }
 
+  double calculateTotal(CartLoadSuccess state) {
+    double total = 0;
+    for (var item in state.items) {
+      total += item.price * item.quantity;
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -132,7 +140,7 @@ class _CartScreenState extends State<CartScreen> {
             const SizedBox(height: 20),
             _buildAddMoreButton(),
             const SizedBox(height: 41),
-            _buildSummaryText(context),
+            _buildSummaryText(context, state),
             const SizedBox(height: 12),
             _buildOrderButton(),
             const SizedBox(
@@ -154,7 +162,8 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  RichText _buildSummaryText(BuildContext context) {
+  RichText _buildSummaryText(BuildContext context, CartLoadSuccess state) {
+    double total = calculateTotal(state);
     return RichText(
       text: TextSpan(
         style: DefaultTextStyle.of(context).style,
@@ -166,7 +175,7 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ),
           TextSpan(
-            text: '720 c',
+            text: '${total.toInt()} c',
             style: AppFonts.s20w600.copyWith(
               color: AppColors.orange,
             ),
@@ -211,31 +220,28 @@ class _CartScreenState extends State<CartScreen> {
         itemBuilder: (BuildContext context, index) => Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: PopularMenuContainer(
-            buttonWidget: state.items[index].quantity == 0
-                ? Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: CustomRadiusButton(
-                      onPressed: () {
-                        counter = 1;
-                        setState(() {});
-                      },
-                    ),
-                  )
-                : Positioned(
-                    bottom: 5,
-                    right: 0,
-                    child: ButtonsRow(
-                        counter: state.items[index].quantity,
-                        onMinusTap: () {
-                          state.items[index].quantity--;
-                          setState(() {});
-                        },
-                        onPlusTap: () {
-                          state.items[index].quantity++;
-                          setState(() {});
-                        }),
-                  ),
+            buttonWidget: Positioned(
+              bottom: 5,
+              right: 0,
+              child: ButtonsRow(
+                  counter: state.items[index].quantity,
+                  onMinusTap: () {
+                    setState(() {
+                      BlocProvider.of<CartBloc>(context)
+                          .add(CartItemRemoved(state.items[index].id));
+                    });
+                  },
+                  onPlusTap: () {
+                    state.items[index].quantity++;
+                    setState(() {
+                      BlocProvider.of<CartBloc>(context).add(
+                        CartItemAdded(
+                          state.items[index],
+                        ),
+                      );
+                    });
+                  }),
+            ),
             onTap: () {},
             name: state.items[index].name,
             price: state.items[index].price,
