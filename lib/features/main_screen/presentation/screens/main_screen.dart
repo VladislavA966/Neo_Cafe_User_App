@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neo_cafe_24/core/dependensies/di.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
+import 'package:neo_cafe_24/features/branches/data/data_source/local/branch_local_data.dart';
+import 'package:neo_cafe_24/features/menu_screen/domain/entity/category_entity.dart';
+import 'package:neo_cafe_24/features/menu_screen/presentation/controller/category_bloc/category_bloc.dart';
+import 'package:neo_cafe_24/features/menu_screen/presentation/controller/menu_item/menu_item_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/screens/item_info_screen.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/branches_screen.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/main_screen_text_field.dart';
@@ -21,12 +27,24 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   @override
+  @override
   void initState() {
     super.initState();
+    BlocProvider.of<CategoryBloc>(context).add(GetAllCategoriesEvent());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      showCustomAlertDialog(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      checkAndShowModal();
     });
+  }
+
+  Future<void> checkAndShowModal() async {
+    var branchLocalData = getIt<BranchLocalData>();
+
+    var branchId = await branchLocalData.getBranchId();
+
+    if (branchId == null) {
+      showCustomAlertDialog(context);
+    }
   }
 
   void showCustomAlertDialog(BuildContext context) {
@@ -67,28 +85,44 @@ class _MainScreenState extends State<MainScreen> {
       padding: const EdgeInsets.all(16),
       child: SingleChildScrollView(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 36,
-              ),
-              _buildTitleAndMenuButton(context),
-              _buildFirstCategoryRow(),
-              const SizedBox(
-                height: 12,
-              ),
-              _buildSecondCategoryRow(),
-              const SizedBox(
-                height: 24,
-              ),
-              _buildPopularTitle(),
-              const SizedBox(
-                height: 16,
-              ),
-              _buildPopularItemsList(),
-            ],
+          height: MediaQuery.of(context).size.height * 0.75,
+          child: BlocBuilder<CategoryBloc, CategoryState>(
+            builder: (context, state) {
+              if (state is CategoryAllLoaded) {
+                List<CategoryEntity> categories = state.model;
+                List<CategoryEntity> firstRowCategories =
+                    categories.take(2).toList();
+                List<CategoryEntity> secondRowCategories =
+                    categories.skip(2).take(3).toList();
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 36,
+                    ),
+                    _buildTitleAndMenuButton(context),
+                    _buildFirstCategoryRow(firstRowCategories),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    _buildSecondCategoryRow(secondRowCategories),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    _buildPopularTitle(),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _buildPopularItemsList(),
+                  ],
+                );
+              } else if (state is CategoryAllLoading) {
+                return const Center(
+                  child: SingleChildScrollView(),
+                );
+              }
+              return const SizedBox();
+            },
           ),
         ),
       ),
@@ -105,7 +139,7 @@ class _MainScreenState extends State<MainScreen> {
           padding: const EdgeInsets.only(bottom: 12),
           child: PopularMenuContainer(
             name: 'Крамельный раф',
-            price: 270,
+            price: '${270}',
             quantity: 0,
             buttonWidget: counter == 0
                 ? Positioned(
@@ -136,7 +170,7 @@ class _MainScreenState extends State<MainScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ItemInfoScreen(id: 0),
+                  builder: (context) => const ItemInfoScreen(id: 1),
                 ),
               );
             },
@@ -155,47 +189,66 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Row _buildSecondCategoryRow() {
-    return const Row(
-      children: [
-        MenuContainer(
-          title: 'Кофе',
-          image: AppImages.caceImage,
+  Row _buildSecondCategoryRow(List<CategoryEntity> categories) {
+    List<Widget> categoryWidgets = [];
+    for (int i = 0; i < categories.length; i++) {
+      categoryWidgets.add(
+        Expanded(
+          child: GestureDetector(
+            onTap: () => {
+              BlocProvider.of<MenuItemBloc>(context).add(
+                GetAllItemsEvent(
+                  id: categories[i].id,
+                ),
+              ),
+            },
+            child: MenuContainer(
+              title: categories[i].name,
+              image: categories[i].image,
+            ),
+          ),
         ),
-        SizedBox(
-          width: 14,
-        ),
-        MenuContainer(
-          title: 'Кофе',
-          image: AppImages.menuImage,
-        ),
-        SizedBox(
-          width: 14,
-        ),
-        MenuContainer(
-          title: 'Кофе',
-          image: AppImages.menuImage,
-        ),
-      ],
+      );
+      if (i < categories.length - 1) {
+        categoryWidgets.add(const SizedBox(width: 10));
+      }
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: categoryWidgets,
     );
   }
 
-  Row _buildFirstCategoryRow() {
-    return const Row(
+  Row _buildFirstCategoryRow(List<CategoryEntity> categories) {
+    List<Widget> categoryWidgets = [];
+    for (int i = 0; i < categories.length; i++) {
+      categoryWidgets.add(
+        Expanded(
+          child: GestureDetector(
+            onTap: () => {
+              BlocProvider.of<MenuItemBloc>(context).add(
+                GetAllItemsEvent(
+                  id: categories[i].id,
+                ),
+              ),
+            },
+            child: MenuContainer(
+              title: categories[i].name,
+              image: categories[i].image,
+            ),
+          ),
+        ),
+      );
+
+      if (i < categories.length - 1) {
+        categoryWidgets.add(const SizedBox(width: 10));
+      }
+    }
+
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        MenuContainer(
-          title: 'Кофе',
-          image: AppImages.menuImage,
-        ),
-        SizedBox(
-          width: 11,
-        ),
-        MenuContainer(
-          title: 'Кофе',
-          image: AppImages.menuImage,
-        ),
-      ],
+      children: categoryWidgets,
     );
   }
 

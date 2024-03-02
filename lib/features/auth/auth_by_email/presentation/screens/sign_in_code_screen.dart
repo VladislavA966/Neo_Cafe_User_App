@@ -86,42 +86,34 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
             const SizedBox(
               height: 36,
             ),
-            BlocListener<SignInBloc, SignInState>(
+            BlocConsumer<SignInBloc, SignInState>(
               listener: (context, state) {
                 if (state is SendCodeLoaded) {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const HomePage(),
+                      builder: (context) => HomePage(),
                     ),
                   );
                 } else if (state is SignInError) {
                   print(state.errorText);
                 }
               },
-              child: CustomButton(
-                title: 'Подтвердить',
-                onPressed: () {
-                  BlocProvider.of<SignInBloc>(context).add(
-                    SendCodeForSingInEvent(widget.email, code: controller.text),
-                  );
-                  // final dio = Dio();
-                  // final responce = await dio.post(
-                  //   'https://tokyo-backender.org.kg/customer/register/',
-                  //   data: {
-                  //     "email": 'v.afonin.1996@icloud.com',
-
-                  //   },
-                  // );
-                  // if (responce.statusCode == 201 ||
-                  //     responce.statusCode == 200) {
-                  //   print('Регистратия прошла успешно');
-                  // } else if (responce.statusCode == 400) {
-                  //   print("Ошибка ${responce.statusCode}");
-                  // }
-                },
-                height: 48,
-              ),
+              builder: (context, state) {
+                if (state is SignInLoading) {
+                  return const SingleChildScrollView();
+                }
+                return CustomButton(
+                  title: 'Подтвердить',
+                  onPressed: () {
+                    BlocProvider.of<SignInBloc>(context).add(
+                      SendCodeForSingInEvent(widget.email,
+                          code: controller.text),
+                    );
+                  },
+                  height: 48,
+                );
+              },
             ),
             const Spacer()
           ],

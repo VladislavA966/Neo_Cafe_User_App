@@ -7,8 +7,8 @@ class ItemEntity {
   final String name;
 
   final String description;
-
   final int categoryId;
+
   final String categoryName;
 
   final String itemImage;

@@ -105,7 +105,7 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
                 onPressed: () async {
                   BlocProvider.of<SignUpBloc>(context).add(
                     SendSignUpCodeEvent(
-                        email: widget.emailController,
+                        email: 'afonin30.10.96@gmail.com',
                         code: controllerPin.text),
                   );
                 },

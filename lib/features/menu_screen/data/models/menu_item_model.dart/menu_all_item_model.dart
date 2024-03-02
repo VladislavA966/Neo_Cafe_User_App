@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:neo_cafe_24/features/menu_screen/data/models/category/category_model.dart';
-import 'package:neo_cafe_24/features/menu_screen/domain/entity/item_entity.dart';
 
 part 'menu_all_item_model.g.dart';
 

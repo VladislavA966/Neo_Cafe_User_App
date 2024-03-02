@@ -10,7 +10,8 @@ import 'package:neo_cafe_24/features/auth/create_new_proifle/data/data_source/si
 import 'package:neo_cafe_24/features/auth/create_new_proifle/data/repository_impl/sign_up_repository_impl.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/repo/sign_up_repo.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/use_case/sign_up_use_case.dart';
-import 'package:neo_cafe_24/features/branches/data/data/branch_remote_data_source.dart';
+import 'package:neo_cafe_24/features/branches/data/data_source/local/branch_local_data.dart';
+import 'package:neo_cafe_24/features/branches/data/data_source/remote/branch_remote_data_source.dart';
 import 'package:neo_cafe_24/features/branches/data/repository_impl/branch_repository_impl.dart';
 import 'package:neo_cafe_24/features/branches/domain/use_case/get_all_branches_use_case.dart';
 import 'package:neo_cafe_24/features/branches/domain/use_case/get_branch.dart';
@@ -31,6 +32,9 @@ final getIt = GetIt.instance;
 void setupDependensies() {
   //Token
   getIt.registerSingleton<LocalDataSource>(LocalDataSource());
+  getIt.registerSingleton<BranchLocalData>(
+    BranchLocalData(),
+  );
   //DioSettings
   getIt.registerSingleton<DioSettings>(
     DioSettings(
@@ -88,7 +92,11 @@ void signInDependensy() {
 //Menu
 void manuDependency() {
   getIt.registerSingleton<MenuRemoteImpl>(
-      MenuRemoteImpl(dio: getIt<DioSettings>().dio));
+    MenuRemoteImpl(
+      dio: getIt<DioSettings>().dio,
+      local: getIt<BranchLocalData>(),
+    ),
+  );
   getIt.registerSingleton<MenuRepositoryImpl>(
     MenuRepositoryImpl(
       remote: getIt<MenuRemoteImpl>(),
@@ -127,7 +135,11 @@ void cartDependency() {
 //Branches
 void branchesDependency() {
   getIt.registerSingleton<BranchRemoteImpl>(
-      BranchRemoteImpl(dio: getIt<DioSettings>().dio));
+    BranchRemoteImpl(
+      dio: getIt<DioSettings>().dio,
+      localData: getIt<BranchLocalData>(),
+    ),
+  );
   getIt.registerSingleton<BranchRepositoryImpl>(
       BranchRepositoryImpl(remote: getIt<BranchRemoteImpl>()));
   getIt.registerSingleton<GetAllBranchesUseCase>(

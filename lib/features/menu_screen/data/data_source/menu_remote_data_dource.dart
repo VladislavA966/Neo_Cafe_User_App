@@ -1,17 +1,19 @@
 import 'package:dio/dio.dart';
+import 'package:neo_cafe_24/features/branches/data/data_source/local/branch_local_data.dart';
 import 'package:neo_cafe_24/features/menu_screen/data/models/category/category_model.dart';
-import 'package:neo_cafe_24/features/menu_screen/data/models/menu_all_item_model.dart';
+import 'package:neo_cafe_24/features/menu_screen/data/models/menu_item_model.dart/menu_all_item_model.dart';
 
 abstract class MenuRemote {
   Future<List<CategoryModel>> getAllCategories();
-  Future<List<ItemModel>> getAllItems();
+  Future<List<ItemModel>> getAllItems(int categoryId);
   Future<ItemModel> getItem(int id);
 }
 
 class MenuRemoteImpl implements MenuRemote {
+  final BranchLocalData local;
   final Dio dio;
 
-  MenuRemoteImpl({required this.dio});
+  MenuRemoteImpl({required this.dio, required this.local});
   @override
   Future<List<CategoryModel>> getAllCategories() async {
     final response = await dio.get(
@@ -33,9 +35,10 @@ class MenuRemoteImpl implements MenuRemote {
   }
 
   @override
-  Future<List<ItemModel>> getAllItems() async {
+  Future<List<ItemModel>> getAllItems(int categoyID) async {
+    final branchId = await local.getBranchId();
     final responce = await dio.get(
-      '/menu/item/all/',
+      '/branch-menu/$branchId/$categoyID/',
       options: Options(
         extra: {
           "requiresToken": true,

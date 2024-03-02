@@ -17,8 +17,8 @@ class MenuRepositoryImpl implements MenuRepo {
   }
 
   @override
-  Future<List<ItemEntity>> getAllMenuItems() async {
-    final remoteItems = await remote.getAllItems();
+  Future<List<ItemEntity>> getAllMenuItems(int categoryId) async {
+    final remoteItems = await remote.getAllItems(categoryId);
     final itemsEntity = remoteItems.map((model) => model.toDomain()).toList();
     return itemsEntity;
   }

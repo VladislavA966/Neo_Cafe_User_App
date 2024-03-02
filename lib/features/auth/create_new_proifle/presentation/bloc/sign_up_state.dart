@@ -9,11 +9,7 @@ final class SignUpLoading extends SignUpState {}
 
 final class SignUpLoaded extends SignUpState {}
 
-final class CodeSended extends SignUpState {
-  // final TokenEntity token;
-
-  // CodeSended({required this.token});
-}
+final class CodeSended extends SignUpState {}
 
 final class CodeError extends SignUpState {
   final String errorText;

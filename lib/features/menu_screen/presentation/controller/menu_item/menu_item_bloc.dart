@@ -17,9 +17,7 @@ class MenuItemBloc extends Bloc<MenuItemEvent, MenuItemState> {
       (event, emit) async {
         emit(MenuItemLoading());
         try {
-          final model = await getAllitems(
-            NoParams(),
-          );
+          final model = await getAllitems(CategoryParams(id: event.id));
           emit(
             MenuItemLoaded(model: model),
           );

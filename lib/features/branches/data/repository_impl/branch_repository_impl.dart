@@ -1,4 +1,4 @@
-import 'package:neo_cafe_24/features/branches/data/data/branch_remote_data_source.dart';
+import 'package:neo_cafe_24/features/branches/data/data_source/remote/branch_remote_data_source.dart';
 import 'package:neo_cafe_24/features/branches/data/mapper/branch_mapper.dart';
 import 'package:neo_cafe_24/features/branches/domain/entity/branch_entity.dart';
 import 'package:neo_cafe_24/features/branches/domain/repo/branches_repo.dart';

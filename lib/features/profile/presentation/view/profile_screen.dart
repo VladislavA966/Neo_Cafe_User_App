@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:neo_cafe_24/core/dependensies/di.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
+import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
+import 'package:neo_cafe_24/features/auth/auth_screen.dart';
+import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
+import 'package:neo_cafe_24/features/branches/data/data_source/local/branch_local_data.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/menu_container.dart';
 import 'package:neo_cafe_24/features/profile/presentation/view/edit_profile.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
@@ -20,6 +25,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
   }
 
+  final removeId = getIt<BranchLocalData>();
+  final logout = getIt<LocalDataSource>();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -28,8 +36,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
           appBar: _buildAppBar(),
           body: _buildBody(),
         ),
+        _buildAppBarButton(context),
         _buildNameContainer(context)
       ],
+    );
+  }
+
+  Positioned _buildAppBarButton(BuildContext context) {
+    return Positioned(
+      right: 0,
+      top: 60,
+      child: AppBarButton(
+        icon: Image.asset(AppImages.logoutIcon),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => LogountModalWindow(
+              logout: logout,
+              branchLocal: removeId,
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -147,99 +175,178 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   MyAppBar _buildAppBar() {
-    return MyAppBar(
+    return const MyAppBar(
       title: 'Профиль',
       centerTitle: false,
-      actions: [
-        AppBarButton(icon: Image.asset(AppImages.logoutIcon), onPressed: () {})
-      ],
+    );
+  }
+}
+
+class LogountModalWindow extends StatelessWidget {
+  const LogountModalWindow({
+    super.key,
+    required this.logout,
+    required this.branchLocal,
+  });
+
+  final LocalDataSource logout;
+  final BranchLocalData branchLocal;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      insetPadding: const EdgeInsets.all(16),
+      child: Container(
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Выход',
+              style: AppFonts.s24w600.copyWith(color: AppColors.black),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Уверены, что хотите выйти?',
+              textAlign: TextAlign.center,
+              style: AppFonts.s14w600.copyWith(color: AppColors.black),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    title: 'Нет',
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    height: 54,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: CustomButton(
+                    title: 'Да',
+                    onPressed: () {
+                      branchLocal.removeId();
+                      logout.deleteAllTokens();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AuthScreen(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    height: 54,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class OrderContainer extends StatelessWidget {
+  final Function()? onPressed;
   const OrderContainer({
     super.key,
+    this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 99,
-      clipBehavior: Clip.antiAlias,
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: double.infinity,
+        height: 99,
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          shadows: const [
+            BoxShadow(
+              color: Color(0x14000000),
+              blurRadius: 16,
+              offset: Offset(0, 8),
+              spreadRadius: 0,
+            ),
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 4,
+              offset: Offset(0, 0),
+              spreadRadius: 0,
+            ),
+          ],
         ),
-        shadows: const [
-          BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 16,
-            offset: Offset(0, 8),
-            spreadRadius: 0,
-          ),
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 4,
-            offset: Offset(0, 0),
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 80,
-            height: 86,
-            clipBehavior: Clip.antiAlias,
-            decoration: ShapeDecoration(
-              image: const DecorationImage(
-                image: NetworkImage("https://via.placeholder.com/80x90"),
-                fit: BoxFit.fill,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 95,
+              height: 95,
+              clipBehavior: Clip.antiAlias,
+              decoration: ShapeDecoration(
+                image: const DecorationImage(
+                  image: AssetImage(AppImages.item),
+                  fit: BoxFit.fill,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
-          ),
-          const SizedBox(
-            width: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 12,
-              bottom: 8,
+            const SizedBox(
+              width: 12,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Neo Cafe Derzinka,',
-                  style: AppFonts.s14w600.copyWith(
-                    color: AppColors.black,
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 12,
+                bottom: 8,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Neo Cafe Derzinka,',
+                    style: AppFonts.s14w600.copyWith(
+                      color: AppColors.black,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Латте, капучино, Багров...,',
-                  style: AppFonts.s12w400.copyWith(
-                    color: AppColors.black,
+                  const SizedBox(height: 6),
+                  Text(
+                    'Латте, капучино, Багров...,',
+                    style: AppFonts.s12w400.copyWith(
+                      color: AppColors.black,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                Text(
-                  'Сейчас',
-                  style: AppFonts.s14w600.copyWith(
-                    color: AppColors.orange,
+                  const Spacer(),
+                  Text(
+                    'Сейчас',
+                    style: AppFonts.s14w600.copyWith(
+                      color: AppColors.orange,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

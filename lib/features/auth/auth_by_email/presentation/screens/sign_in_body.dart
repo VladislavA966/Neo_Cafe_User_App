@@ -30,15 +30,15 @@ class _SignInBodyState extends State<SignInBody> {
         ),
         _buildRegistrationTextField(),
         const SizedBox(
-          height: 56,
+          height: 36,
         ),
         _buildButton(context),
       ],
     );
   }
 
-  BlocListener _buildButton(BuildContext context) {
-    return BlocListener<SignInBloc, SignInState>(
+  BlocConsumer _buildButton(BuildContext context) {
+    return BlocConsumer<SignInBloc, SignInState>(
       listener: (context, state) {
         if (state is SignInLoaded) {
           Navigator.push(
@@ -58,19 +58,23 @@ class _SignInBodyState extends State<SignInBody> {
           print(state);
         }
       },
-      child: CustomButton(
-        height: 48,
-        title: 'Получить код',
-        onPressed: () {
-          BlocProvider.of<SignInBloc>(context).add(
-            SendEmailForSingInEvent(email: controller.text),
-          );
-          setState(() {
-            
-          });
-          print('asdadasd');
-        },
-      ),
+      builder: (context, state) {
+        if (state is SignInLoading) {
+          return const CircularProgressIndicator();
+        }
+
+        return CustomButton(
+          height: 48,
+          title: 'Получить код',
+          onPressed: () {
+            BlocProvider.of<SignInBloc>(context).add(
+              SendEmailForSingInEvent(email: controller.text),
+            );
+            setState(() {});
+            print('asdadasd');
+          },
+        );
+      },
     );
   }
 

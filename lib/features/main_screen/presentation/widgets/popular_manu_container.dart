@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
+import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 
 class PopularMenuContainer extends StatelessWidget {
   final String name;
-  final int price;
+  final String price;
   final int quantity;
   final void Function()? onTap;
 
@@ -52,13 +53,12 @@ class PopularMenuContainer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 80,
-                  height: 86,
+                  width: 95,
+                  height: 96,
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                     image: const DecorationImage(
-                      image:
-                          NetworkImage("https://via.placeholder.com/80x90  "),
+                      image: AssetImage(AppImages.item),
                       fit: BoxFit.fill,
                     ),
                     shape: RoundedRectangleBorder(
@@ -78,7 +78,7 @@ class PopularMenuContainer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Карамельный раф,',
+                        name,
                         style: AppFonts.s14w600.copyWith(
                           color: AppColors.black,
                         ),
@@ -94,7 +94,7 @@ class PopularMenuContainer extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        '270 c',
+                        price,
                         style: AppFonts.s14w600.copyWith(
                           color: AppColors.orange,
                         ),

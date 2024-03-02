@@ -25,7 +25,11 @@ class _MenuScreenState extends State<MenuScreen> {
   int selectedIndex = 0;
   @override
   void initState() {
-    BlocProvider.of<MenuItemBloc>(context).add(GetAllItemsEvent());
+    BlocProvider.of<MenuItemBloc>(context).add(
+      GetAllItemsEvent(
+        id: 1,
+      ),
+    );
     BlocProvider.of<CategoryBloc>(context).add(
       GetAllCategoriesEvent(),
     );
@@ -43,22 +47,23 @@ class _MenuScreenState extends State<MenuScreen> {
 
     double totalSpacing = spacing * (crossAxisCount - 1) + padding;
     double itemWidth = (screenWidth - totalSpacing) / crossAxisCount;
-    double itemHeight = 206.0;
+    double itemHeight = 240.0;
 
     double childAspectRatio = itemWidth / itemHeight;
+    bool isGrid = false;
 
     return Stack(
       children: [
         Scaffold(
           appBar: _buildAppBar(),
-          body: _buildBody(childAspectRatio),
+          body: _buildBody(childAspectRatio, isGrid),
         ),
         SearchField(controller: controller)
       ],
     );
   }
 
-  Padding _buildBody(double childAspectRatio) {
+  Padding _buildBody(double childAspectRatio, bool isGrid) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -78,6 +83,23 @@ class _MenuScreenState extends State<MenuScreen> {
           _buildMenuGrid(childAspectRatio)
         ],
       ),
+    );
+  }
+
+  BlocBuilder _buildListMenu(double childAspectRatio) {
+    return BlocBuilder<MenuItemBloc, MenuItemState>(
+      builder: (context, state) {
+        if (state is MenuItemLoaded) {
+          return _buildMenuGrid(childAspectRatio);
+        } else if (state is MenuItemError) {
+          return Center(child: Text(state.errorText));
+        } else if (state is MenuItemLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 
@@ -127,6 +149,10 @@ class _MenuScreenState extends State<MenuScreen> {
           );
         } else if (state is MenuItemError) {
           return Center(child: Text(state.errorText));
+        } else if (state is MenuItemLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
         return const SizedBox();
       },
@@ -143,46 +169,26 @@ class _MenuScreenState extends State<MenuScreen> {
               scrollDirection: Axis.horizontal,
               itemCount: state.model.length,
               itemBuilder: (context, index) {
+                Color textColor =
+                    selectedIndex == index ? Colors.white : Colors.black;
                 Color buttonColor =
-                    selectedIndex == index ? Colors.orange : Colors.grey;
+                    selectedIndex == index ? AppColors.orange : AppColors.grey;
                 return Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: GestureDetector(
                     onTap: () {
+                      BlocProvider.of<MenuItemBloc>(context).add(
+                        GetAllItemsEvent(
+                          id: state.model[index].id,
+                        ),
+                      );
                       selectedIndex = index;
                       setState(() {});
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: buttonColor,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 28,
-                              height: 28,
-                              padding: const EdgeInsets.all(4),
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              state.model[index].name,
-                              style: AppFonts.s12w400,
-                            )
-                          ],
-                        ),
-                      ),
+                    child: ToggleButton(
+                      textColor: textColor,
+                      buttonColor: buttonColor,
+                      name: state.model[index].name,
                     ),
                   ),
                 );
@@ -215,6 +221,39 @@ class _MenuScreenState extends State<MenuScreen> {
             Navigator.pop(context);
           }),
       title: 'Меню: Держинка',
+    );
+  }
+}
+
+class ToggleButton extends StatelessWidget {
+  final Color textColor;
+  final Color buttonColor;
+  final String name;
+  const ToggleButton({
+    super.key,
+    required this.buttonColor,
+    required this.name,
+    required this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 90,
+      decoration: BoxDecoration(
+        color: buttonColor,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Center(
+          child: Text(
+            name,
+            style: AppFonts.s12w400
+                .copyWith(color: textColor, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
     );
   }
 }

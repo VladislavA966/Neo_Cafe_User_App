@@ -6,6 +6,7 @@ import 'package:neo_cafe_24/features/widgets/circle_button.dart';
 class MenuContainer extends StatefulWidget {
   final String image;
   final String title;
+
   const MenuContainer({
     super.key,
     required this.image,
@@ -33,7 +34,7 @@ class _MenuContainerState extends State<MenuContainer> {
             const SizedBox(
               height: 16,
             ),
-            Image.asset(widget.image),
+            Image.network(widget.image),
             const SizedBox(
               height: 12,
             ),

@@ -11,6 +11,7 @@ import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/view
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/circle_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
+import 'package:neo_cafe_24/features/widgets/navigation_bar.dart';
 
 class ItemInfoScreen extends StatefulWidget {
   const ItemInfoScreen({super.key, required this.id});
@@ -121,7 +122,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
             ),
       onTap: () {},
       name: 'Крамельный раф',
-      price: 270,
+      price: '${270}',
       quantity: 0,
     );
   }
@@ -156,7 +157,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
             ),
       onTap: () {},
       name: 'Крамельный раф',
-      price: 270,
+      price: '${270}',
       quantity: 0,
     );
   }
@@ -191,7 +192,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
             ),
       onTap: () {},
       name: 'Карамельный раф',
-      price: 270,
+      price: '${270}',
       quantity: 0,
     );
   }
@@ -239,7 +240,9 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (counter) => const CartScreen(),
+                  builder: (counter) => HomePage(
+                    selectedIndex: 1,
+                  ),
                 ),
               );
             },
@@ -288,6 +291,8 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
             state.item.description,
             style: AppFonts.s16w400.copyWith(color: AppColors.black),
           );
+        } else if (state is ItemError) {
+          return Text(state.errorText);
         }
         return Text(
           'Латте — шоколадное пирожное коричневого цвета, прямоугольные куски нарезанного шоколадного пирога.',
@@ -315,16 +320,19 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
 
   InfoAppBar _buildAppBar() {
     return InfoAppBar(
+      image: AppImages.appBarBigImage,
       appBarHeight: MediaQuery.of(context).size.height * 0.23,
     );
   }
 }
 
 class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String image;
   final double appBarHeight;
   const InfoAppBar({
     super.key,
     required this.appBarHeight,
+    required this.image,
   });
 
   @override
@@ -354,7 +362,7 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: BlocBuilder<ItemBloc, ItemState>(
                 builder: (context, state) {
                   return Image.asset(
-                    AppImages.appBarBigImage,
+                    image,
                     fit: BoxFit.cover,
                   );
                 },

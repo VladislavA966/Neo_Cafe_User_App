@@ -4,7 +4,7 @@ import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/branches/presentation/controller/all_branches_bloc/all_branches_bloc.dart';
-import 'package:neo_cafe_24/features/branches/presentation/controller/bloc/single_branch_bloc.dart';
+import 'package:neo_cafe_24/features/branches/presentation/controller/branch_info/single_branch_bloc.dart';
 import 'package:neo_cafe_24/features/branches/presentation/view/branch_info_screen.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
@@ -62,7 +62,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
                     padding: const EdgeInsets.only(
                       bottom: 12,
                     ),
-                    child: BranchContainer(
+                    child: BranchInfoContainer(
                       onTap: () {
                         BlocProvider.of<SingleBranchBloc>(context).add(
                           GetSingleBranchEvent(id: state.branches[index].id),
@@ -101,13 +101,13 @@ class _BranchesScreenState extends State<BranchesScreen> {
   }
 }
 
-class BranchContainer extends StatelessWidget {
+class BranchInfoContainer extends StatelessWidget {
   final String name;
   final String address;
   final String phoneNumber;
 
   final Function() onTap;
-  const BranchContainer({
+  const BranchInfoContainer({
     super.key,
     required this.onTap,
     required this.name,
@@ -147,7 +147,9 @@ class BranchContainer extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(child: Image.asset('assets/images/branch_image.png')),
+              Center(
+                child: Image.asset('assets/images/branch_image.png'),
+              ),
               const SizedBox(height: 12),
               Text(
                 name,

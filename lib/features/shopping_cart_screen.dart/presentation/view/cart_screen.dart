@@ -7,10 +7,10 @@ import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/menu_container.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/popular_manu_container.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/screens/menu_screen.dart';
+import 'package:neo_cafe_24/features/order_history/presentation/view/orders_screen.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
-import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class CartScreen extends StatefulWidget {
@@ -45,7 +45,7 @@ class _CartScreenState extends State<CartScreen> {
     return Stack(
       children: [
         Scaffold(
-          appBar: _buildAppBar(),
+          appBar: _buildAppBar(context),
           body: BlocBuilder<CartBloc, CartState>(
             builder: (context, state) {
               if (state is CartLoadSuccess) {
@@ -60,6 +60,21 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ),
         _buildToggleButtons(),
+        Positioned(
+          top: 60,
+          right: 0,
+          child: AppBarButton(
+            icon: Image.asset(AppImages.clipBoard),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const OrdersHistoryScreen(),
+                ),
+              );
+            },
+          ),
+        )
       ],
     );
   }
@@ -154,12 +169,16 @@ class _CartScreenState extends State<CartScreen> {
 
   CustomButton _buildOrderButton() {
     return CustomButton(
-      title: 'Заказать',
-      onPressed: () {
-        BlocProvider.of<CartBloc>(context).add(CleanCartEvent());
-      },
-      height: 54,
-    );
+        height: 54,
+        title: 'Заказать',
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const FirstBonusDialog();
+            },
+          );
+        });
   }
 
   RichText _buildSummaryText(BuildContext context, CartLoadSuccess state) {
@@ -244,7 +263,7 @@ class _CartScreenState extends State<CartScreen> {
             ),
             onTap: () {},
             name: state.items[index].name,
-            price: state.items[index].price,
+            price: '${state.items[index].price}',
             quantity: state.items[index].quantity,
           ),
         ),
@@ -253,14 +272,211 @@ class _CartScreenState extends State<CartScreen> {
   }
 }
 
-MyAppBar _buildAppBar() {
-  return MyAppBar(
-    actions: [
-      AppBarButton(
-        icon: Image.asset(AppImages.clipBoard),
-        onPressed: () {},
-      )
-    ],
+class FirstBonusDialog extends StatelessWidget {
+  const FirstBonusDialog({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      insetPadding: const EdgeInsets.all(16),
+      child: Container(
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Списание бонусов',
+              style: AppFonts.s24w600.copyWith(color: AppColors.black),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'У вас есть 100 бонусов, хотите\nих списать?',
+              textAlign: TextAlign.center,
+              style: AppFonts.s14w600.copyWith(color: AppColors.black),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    title: 'Нет',
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    height: 54,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: CustomButton(
+                    title: 'Да',
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (context) => const SecondBonusDialog(),
+                      );
+                    },
+                    height: 54,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SecondBonusDialog extends StatelessWidget {
+  const SecondBonusDialog({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      insetPadding: const EdgeInsets.all(16),
+      child: Container(
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Ваши бонусы: 100',
+              style: AppFonts.s24w600.copyWith(color: AppColors.black),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Введите количество бонусов\nкоторое хотите списать',
+              textAlign: TextAlign.center,
+              style: AppFonts.s14w600.copyWith(color: AppColors.black),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              height: 40,
+              child: TextField(
+                decoration: InputDecoration(
+                  focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.black)),
+                  enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.grey)),
+                  filled: true,
+                  fillColor: AppColors.grey,
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(color: AppColors.grey),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    title: 'Отмена',
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    height: 54,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: CustomButton(
+                    title: 'Списать',
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (context) => const ThirdDialog(),
+                      );
+                    },
+                    height: 54,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ThirdDialog extends StatelessWidget {
+  const ThirdDialog({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      insetPadding: const EdgeInsets.all(16),
+      child: Container(
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Списание бонусов',
+              style: AppFonts.s24w600.copyWith(color: AppColors.black),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Ваш заказ принят',
+              textAlign: TextAlign.center,
+              style: AppFonts.s14w600.copyWith(color: AppColors.black),
+            ),
+            const SizedBox(height: 24),
+            CustomButton(
+              title: 'Отлично!',
+              onPressed: () {
+                BlocProvider.of<CartBloc>(context).add(CleanCartEvent());
+                Navigator.pop(context);
+              },
+              height: 54,
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+MyAppBar _buildAppBar(BuildContext context) {
+  return const MyAppBar(
     title: 'Корзина',
     centerTitle: false,
   );

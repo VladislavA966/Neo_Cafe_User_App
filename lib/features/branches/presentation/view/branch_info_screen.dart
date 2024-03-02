@@ -6,7 +6,7 @@ import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
-import 'package:neo_cafe_24/features/branches/presentation/controller/bloc/single_branch_bloc.dart';
+import 'package:neo_cafe_24/features/branches/presentation/controller/branch_info/single_branch_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/screens/item_info_screen.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
@@ -23,15 +23,6 @@ class BranchInfoScreen extends StatefulWidget {
 class _BranchInfoScreenState extends State<BranchInfoScreen> {
   bool isExpanded = false;
 
-  final List<String> schedule = [
-    'Пн: 11:00 – 22:00',
-    'Вт: 11:00 – 22:00',
-    'Вт: 11:00 – 22:00',
-    'Вт: 11:00 – 22:00',
-    'Вт: 11:00 – 22:00',
-    'Вт: 11:00 – 22:00',
-    'Вт: 11:00 – 22:00',
-  ];
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -168,14 +159,14 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       curve: Curves.fastOutSlowIn,
-      height: isExpanded ? min(schedule.length * 20.0, 200.0) : 0,
+      height: isExpanded ? min(state.branch.schedules.length * 20.0, 200.0) : 0,
       child: Expanded(
         child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           itemCount: isExpanded ? state.branch.schedules.length : 0,
           itemBuilder: (context, index) {
             return Text(
-              '${state.branch.schedules[index].day}:${state.branch.schedules[index].startTime} - ${state.branch.schedules[index].endTime}',
+              '${state.branch.schedules[index].day}: ${state.branch.schedules[index].startTime} - ${state.branch.schedules[index].endTime}',
               style: AppFonts.s16w400.copyWith(
                 color: AppColors.black,
               ),
@@ -249,6 +240,7 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
 
   InfoAppBar _buildAppBar(BuildContext context) {
     return InfoAppBar(
+      image: 'assets/images/big_branch_image.png',
       appBarHeight: MediaQuery.of(context).size.height * 0.23,
     );
   }

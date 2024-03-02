@@ -3,6 +3,6 @@ import 'package:neo_cafe_24/features/menu_screen/domain/entity/item_entity.dart'
 
 abstract class MenuRepo {
   Future<List<CategoryEntity>> getAllCategories();
-  Future<List<ItemEntity>> getAllMenuItems();
+  Future<List<ItemEntity>> getAllMenuItems(int categoryId);
   Future<ItemEntity> getItem(int id);
 }
