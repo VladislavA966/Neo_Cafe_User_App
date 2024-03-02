@@ -7,8 +7,7 @@ import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/menu_container.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/popular_manu_container.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/item_bloc/item_bloc.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/view/cart_screen.dart';
-import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
+import 'package:neo_cafe_24/features/menu_screen/presentation/widgets/info_app_bar.dart';
 import 'package:neo_cafe_24/features/widgets/circle_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 import 'package:neo_cafe_24/features/widgets/navigation_bar.dart';
@@ -324,70 +323,4 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
       appBarHeight: MediaQuery.of(context).size.height * 0.23,
     );
   }
-}
-
-class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String image;
-  final double appBarHeight;
-  const InfoAppBar({
-    super.key,
-    required this.appBarHeight,
-    required this.image,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(appBarHeight),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(
-          bottom: Radius.circular(16),
-        ),
-        child: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(AppImages.coffeeBeans),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: AppBar(
-                automaticallyImplyLeading: false,
-                backgroundColor: AppColors.mainColors,
-                elevation: 0,
-              ),
-            ),
-            Positioned.fill(
-              child: BlocBuilder<ItemBloc, ItemState>(
-                builder: (context, state) {
-                  return Image.asset(
-                    image,
-                    fit: BoxFit.cover,
-                  );
-                },
-              ),
-            ),
-            Positioned(
-              top: 40,
-              left: 3,
-              child: AppBarButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(appBarHeight);
 }

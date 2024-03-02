@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/dependensies/di.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
-import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/branches/data/data_source/local/branch_local_data.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/entity/category_entity.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/category_bloc/category_bloc.dart';
@@ -201,6 +200,12 @@ class _MainScreenState extends State<MainScreen> {
                   id: categories[i].id,
                 ),
               ),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MenuScreen(i),
+                ),
+              ),
             },
             child: MenuContainer(
               title: categories[i].name,
@@ -230,6 +235,14 @@ class _MainScreenState extends State<MainScreen> {
               BlocProvider.of<MenuItemBloc>(context).add(
                 GetAllItemsEvent(
                   id: categories[i].id,
+                ),
+              ),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MenuScreen(
+                    i,
+                  ),
                 ),
               ),
             },
@@ -265,7 +278,9 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const MenuScreen(),
+                builder: (context) => MenuScreen(
+                  0,
+                ),
               ),
             );
           },

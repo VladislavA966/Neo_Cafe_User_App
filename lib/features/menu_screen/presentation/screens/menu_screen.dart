@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
-import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/screens/item_info_screen.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/main_screen_text_field.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/category_bloc/category_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/menu_item/menu_item_bloc.dart';
+import 'package:neo_cafe_24/features/menu_screen/presentation/widgets/menu_item.dart';
+import 'package:neo_cafe_24/features/menu_screen/presentation/widgets/toggle_button.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/entity/cart_item_entity.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
-import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 
 class MenuScreen extends StatefulWidget {
-  const MenuScreen({super.key});
+  int selectedIndex;
+  MenuScreen(int i, {super.key, this.selectedIndex = 0});
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();
@@ -22,14 +23,9 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   final controller = TextEditingController();
-  int selectedIndex = 0;
+
   @override
   void initState() {
-    BlocProvider.of<MenuItemBloc>(context).add(
-      GetAllItemsEvent(
-        id: 1,
-      ),
-    );
     BlocProvider.of<CategoryBloc>(context).add(
       GetAllCategoriesEvent(),
     );
@@ -170,9 +166,10 @@ class _MenuScreenState extends State<MenuScreen> {
               itemCount: state.model.length,
               itemBuilder: (context, index) {
                 Color textColor =
-                    selectedIndex == index ? Colors.white : Colors.black;
-                Color buttonColor =
-                    selectedIndex == index ? AppColors.orange : AppColors.grey;
+                    widget.selectedIndex == index ? Colors.white : Colors.black;
+                Color buttonColor = widget.selectedIndex == index
+                    ? AppColors.orange
+                    : AppColors.grey;
                 return Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: GestureDetector(
@@ -182,7 +179,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           id: state.model[index].id,
                         ),
                       );
-                      selectedIndex = index;
+                      widget.selectedIndex = index;
                       setState(() {});
                     },
                     child: ToggleButton(
@@ -221,117 +218,6 @@ class _MenuScreenState extends State<MenuScreen> {
             Navigator.pop(context);
           }),
       title: 'Меню: Держинка',
-    );
-  }
-}
-
-class ToggleButton extends StatelessWidget {
-  final Color textColor;
-  final Color buttonColor;
-  final String name;
-  const ToggleButton({
-    super.key,
-    required this.buttonColor,
-    required this.name,
-    required this.textColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 90,
-      decoration: BoxDecoration(
-        color: buttonColor,
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: Center(
-          child: Text(
-            name,
-            style: AppFonts.s12w400
-                .copyWith(color: textColor, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class MenuItem extends StatelessWidget {
-  final Function() onTap;
-  final String name;
-  final String price;
-  final Function() addTap;
-
-  const MenuItem(
-      {super.key,
-      required this.onTap,
-      required this.name,
-      required this.price,
-      required this.addTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Image.asset(
-                  AppImages.item,
-                  width: double.infinity,
-                  height: 110,
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                name,
-                style: AppFonts.s14w600.copyWith(
-                  color: AppColors.black,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 35,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('$price c',
-                      style:
-                          AppFonts.s14w600.copyWith(color: AppColors.orange)),
-                  CustomRadiusButton(
-                    onPressed: addTap,
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

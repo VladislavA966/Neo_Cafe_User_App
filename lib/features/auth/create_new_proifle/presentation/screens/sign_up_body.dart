@@ -1,8 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
-import 'package:neo_cafe_24/core/services/dio_settings.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/presentation/bloc/sign_up_bloc.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/presentation/screens/sign_up_code_screen.dart';
 import 'package:neo_cafe_24/features/auth/widgets/auth_text_field.dart';

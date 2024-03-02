@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:neo_cafe_24/core/services/validation.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
-import 'package:neo_cafe_24/features/auth/auth_by_email/domain/entity/token_entity.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/domain/use_case/sign_in_use_case.dart';
 
 part 'sign_in_event.dart';

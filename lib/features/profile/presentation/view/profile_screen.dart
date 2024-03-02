@@ -7,7 +7,6 @@ import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_d
 import 'package:neo_cafe_24/features/auth/auth_screen.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/branches/data/data_source/local/branch_local_data.dart';
-import 'package:neo_cafe_24/features/main_screen/presentation/widgets/menu_container.dart';
 import 'package:neo_cafe_24/features/profile/presentation/view/edit_profile.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';

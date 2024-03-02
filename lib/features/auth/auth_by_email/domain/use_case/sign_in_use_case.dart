@@ -1,4 +1,3 @@
-import 'package:neo_cafe_24/features/auth/auth_by_email/domain/entity/token_entity.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/domain/repo/sign_in_repo.dart';
 
 class SignInUseCase {

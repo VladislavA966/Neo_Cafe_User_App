@@ -1,4 +1,3 @@
-import 'package:neo_cafe_24/features/menu_screen/domain/entity/category_entity.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/entity/ingredient_entity.dart';
 
 class ItemEntity {
