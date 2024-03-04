@@ -130,7 +130,7 @@ class _CartScreenState extends State<CartScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (counter) => MenuScreen(),
+                    builder: (counter) => const MenuScreen(),
                   ),
                 );
               },

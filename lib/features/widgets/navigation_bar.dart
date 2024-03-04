@@ -3,14 +3,15 @@ import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/branches/presentation/view/branches_page.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/screens/main_screen.dart';
+import 'package:neo_cafe_24/features/menu_screen/presentation/screens/menu_screen.dart';
 import 'package:neo_cafe_24/features/profile/presentation/view/profile_screen.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/view/cart_screen.dart';
 
 class HomePage extends StatefulWidget {
-  int selectedIndex;
-  HomePage({
+  final int initialIndex;
+  const HomePage({
     super.key,
-    this.selectedIndex = 0,
+    this.initialIndex = 0,
   });
 
   @override
@@ -18,6 +19,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late int _selectedIndex;
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
+
   final List<Widget> _widgetOptions = [
     const MainScreen(),
     const CartScreen(),
@@ -27,7 +35,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onItemTapped(int index) {
     setState(() {
-      widget.selectedIndex = index;
+      _selectedIndex = index;
     });
   }
 
@@ -35,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
-        index: widget.selectedIndex,
+        index: _selectedIndex,
         children: _widgetOptions,
       ),
       bottomNavigationBar: Container(
@@ -102,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                 label: 'Профиль',
               ),
             ],
-            currentIndex: widget.selectedIndex,
+            currentIndex: _selectedIndex,
             onTap: _onItemTapped,
           ),
         ),

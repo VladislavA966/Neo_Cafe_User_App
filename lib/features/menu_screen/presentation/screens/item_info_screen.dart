@@ -232,7 +232,6 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
           width: 40,
           iconSize: 24,
           onTap: () {
-            // Отправляем событие удаления товара в CartBloc
             context.read<CartBloc>().add(CartItemRemoved(itemId));
           },
           color: AppColors.grey,
@@ -252,7 +251,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
                 );
               }
               return Text(
-                '0', // Отображаем 0, если товар не найден или произошла ошибка
+                '0',
                 style: AppFonts.s32w600.copyWith(color: AppColors.black),
               );
             },
@@ -282,7 +281,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CartScreen(),
+                  builder: (context) => const HomePage(initialIndex: 1),
                 ),
               );
             },
