@@ -29,6 +29,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+
     BlocProvider.of<CategoryBloc>(context).add(GetAllCategoriesEvent());
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -195,15 +196,12 @@ class _MainScreenState extends State<MainScreen> {
         Expanded(
           child: GestureDetector(
             onTap: () => {
-              BlocProvider.of<MenuItemBloc>(context).add(
-                GetAllItemsEvent(
-                  id: categories[i].id,
-                ),
-              ),
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MenuScreen(i),
+                  builder: (context) => MenuScreen(
+                    initialId: categories[i].id,
+                  ),
                 ),
               ),
             },
@@ -241,7 +239,7 @@ class _MainScreenState extends State<MainScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => MenuScreen(
-                    i,
+                    initialId: categories[i].id,
                   ),
                 ),
               ),
@@ -278,9 +276,7 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => MenuScreen(
-                  0,
-                ),
+                builder: (context) => const MenuScreen(),
               ),
             );
           },

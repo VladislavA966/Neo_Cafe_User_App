@@ -14,8 +14,9 @@ import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 
 class MenuScreen extends StatefulWidget {
-  int selectedIndex;
-  MenuScreen(int i, {super.key, this.selectedIndex = 0});
+  final int initialId;
+
+  const MenuScreen({super.key, this.initialId = 1});
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();
@@ -23,15 +24,27 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   final controller = TextEditingController();
+  late int selectedId;
 
   @override
   void initState() {
+    selectedId = widget.initialId;
     BlocProvider.of<CategoryBloc>(context).add(
       GetAllCategoriesEvent(),
+    );
+    BlocProvider.of<MenuItemBloc>(context).add(
+      GetAllItemsEvent(id: widget.initialId),
     );
     BlocProvider.of<CartBloc>(context).add(CartStarted());
 
     super.initState();
+  }
+
+  void _onCategorySelected(int id) {
+    setState(() {
+      selectedId = id;
+    });
+    BlocProvider.of<MenuItemBloc>(context).add(GetAllItemsEvent(id: id));
   }
 
   @override
@@ -165,22 +178,17 @@ class _MenuScreenState extends State<MenuScreen> {
               scrollDirection: Axis.horizontal,
               itemCount: state.model.length,
               itemBuilder: (context, index) {
+                final categoryId = state.model[index].id;
                 Color textColor =
-                    widget.selectedIndex == index ? Colors.white : Colors.black;
-                Color buttonColor = widget.selectedIndex == index
+                    selectedId == categoryId ? Colors.white : Colors.black;
+                Color buttonColor = selectedId == categoryId
                     ? AppColors.orange
                     : AppColors.grey;
                 return Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: GestureDetector(
                     onTap: () {
-                      BlocProvider.of<MenuItemBloc>(context).add(
-                        GetAllItemsEvent(
-                          id: state.model[index].id,
-                        ),
-                      );
-                      widget.selectedIndex = index;
-                      setState(() {});
+                      _onCategorySelected(categoryId);
                     },
                     child: ToggleButton(
                       textColor: textColor,

@@ -27,6 +27,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final removeId = getIt<BranchLocalData>();
   final logout = getIt<LocalDataSource>();
 
+  void editProfileNavigator() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EditProfileScreen(),
+      ),
+    );
+  }
+
+  void showLogOurDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => LogountModalWindow(
+        logout: logout,
+        branchLocal: removeId,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -46,17 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       right: 0,
       top: 60,
       child: AppBarButton(
-        icon: Image.asset(AppImages.logoutIcon),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => LogountModalWindow(
-              logout: logout,
-              branchLocal: removeId,
-            ),
-          );
-        },
-      ),
+          icon: Image.asset(AppImages.logoutIcon), onPressed: showLogOurDialog),
     );
   }
 
@@ -90,14 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EditProfileScreen(),
-                  ),
-                );
-              },
+              onTap: editProfileNavigator,
               child: Image.asset(
                 'assets/images/pencil.png',
               ),

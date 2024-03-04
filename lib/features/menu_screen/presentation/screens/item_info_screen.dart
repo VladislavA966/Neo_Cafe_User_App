@@ -1,13 +1,19 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neo_cafe_24/core/dependensies/di.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/menu_container.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/popular_manu_container.dart';
+import 'package:neo_cafe_24/features/menu_screen/domain/entity/item_entity.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/item_bloc/item_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/widgets/info_app_bar.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/entity/cart_item_entity.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/view/cart_screen.dart';
 import 'package:neo_cafe_24/features/widgets/circle_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 import 'package:neo_cafe_24/features/widgets/navigation_bar.dart';
@@ -21,73 +27,94 @@ class ItemInfoScreen extends StatefulWidget {
 }
 
 class _ItemInfoScreenState extends State<ItemInfoScreen> {
+  final cartBloc = getIt<CartBloc>();
   @override
   void initState() {
     super.initState();
     BlocProvider.of<ItemBloc>(context).add(
       GetItemEvent(id: widget.id),
     );
+    updateCounterFromCart();
+  }
+
+  void updateCounterFromCart() {
+    final currentState = cartBloc.state;
+    if (currentState is CartLoadSuccess) {
+      final currentItem =
+          currentState.items.firstWhereOrNull((item) => item.id == widget.id);
+      if (currentItem != null) {
+        setState(() {
+          counter = currentItem.quantity;
+          price = currentItem.price;
+          summ = price * counter;
+        });
+      }
+    }
   }
 
   int summ = 0;
   int price = 0;
   int counter = 1;
   void incrementCounter() {
-    setState(() {
-      counter++;
-      summ = price * counter;
-    });
+    setState(() {});
   }
 
   void decrementCounter() {
     if (counter > 1) {
       setState(() {
-        counter--;
-        summ = price * counter;
+        cartBloc.add(
+          CartItemRemoved(
+            widget.id,
+          ),
+        );
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(),
-    );
-  }
-
-  Padding _buildBody() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 24,
-          ),
-          _buildTitle(),
-          const SizedBox(
-            height: 24,
-          ),
-          _buildDescreption(),
-          const SizedBox(
-            height: 20,
-          ),
-          _buildSecondTitle(),
-          const SizedBox(height: 16),
-          _buildFirstPopular(),
-          const SizedBox(height: 12),
-          _buildSecondPopular(),
-          const SizedBox(height: 16),
-          _buildThirdPopular(),
-          const SizedBox(height: 12),
-          _buildTotalPrice(),
-          const SizedBox(
-            height: 11,
-          ),
-          _buildBtuttons()
-        ],
-      ),
+    return BlocBuilder<ItemBloc, ItemState>(
+      builder: (context, state) {
+        if (state is ItemLoaded) {
+          return Scaffold(
+            appBar: _buildAppBar(),
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  _buildTitle(),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  _buildDescreption(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  _buildSecondTitle(),
+                  const SizedBox(height: 16),
+                  _buildFirstPopular(),
+                  const SizedBox(height: 12),
+                  _buildSecondPopular(),
+                  const SizedBox(height: 16),
+                  _buildThirdPopular(),
+                  const SizedBox(height: 12),
+                  _buildTotalPrice(),
+                  const SizedBox(
+                    height: 11,
+                  ),
+                  _buildButtons(context, state.item.id, state.item.name,
+                      state.item.itemImage, state.item.pricePerUnit),
+                ],
+              ),
+            ),
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 
@@ -196,7 +223,8 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
     );
   }
 
-  Row _buildBtuttons() {
+  Widget _buildButtons(BuildContext context, int itemId, String itemName,
+      String itemImage, int itemPrice) {
     return Row(
       children: [
         CircleButton(
@@ -204,18 +232,30 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
           width: 40,
           iconSize: 24,
           onTap: () {
-            decrementCounter();
+            // Отправляем событие удаления товара в CartBloc
+            context.read<CartBloc>().add(CartItemRemoved(itemId));
           },
           color: AppColors.grey,
           icon: Icons.remove,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            '$counter',
-            style: AppFonts.s32w600.copyWith(
-              color: AppColors.black,
-            ),
+          child: BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartLoadSuccess) {
+                final currentItem =
+                    state.items.firstWhereOrNull((item) => item.id == itemId);
+                final itemCount = currentItem?.quantity ?? 0;
+                return Text(
+                  '$itemCount',
+                  style: AppFonts.s32w600.copyWith(color: AppColors.black),
+                );
+              }
+              return Text(
+                '0', // Отображаем 0, если товар не найден или произошла ошибка
+                style: AppFonts.s32w600.copyWith(color: AppColors.black),
+              );
+            },
           ),
         ),
         CircleButton(
@@ -225,13 +265,16 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
           color: AppColors.orange,
           icon: Icons.add,
           onTap: () {
-            incrementCounter();
-            setState(() {});
+            context.read<CartBloc>().add(CartItemAdded(CartItemEntity(
+                  id: itemId,
+                  name: itemName,
+                  image: itemImage,
+                  price: itemPrice,
+                  quantity: 1,
+                )));
           },
         ),
-        const SizedBox(
-          width: 20,
-        ),
+        const SizedBox(width: 20),
         Expanded(
           child: CustomButton(
             title: 'В корзину',
@@ -239,9 +282,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (counter) => HomePage(
-                    selectedIndex: 1,
-                  ),
+                  builder: (context) => const CartScreen(),
                 ),
               );
             },
