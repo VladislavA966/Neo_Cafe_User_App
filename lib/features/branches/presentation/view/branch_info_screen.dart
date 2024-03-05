@@ -10,7 +10,6 @@ import 'package:neo_cafe_24/features/branches/presentation/widgets/popular_branc
 import 'package:neo_cafe_24/features/menu_screen/presentation/screens/menu_screen.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/widgets/info_app_bar.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
-import 'package:neo_cafe_24/features/widgets/navigation_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BranchInfoScreen extends StatefulWidget {

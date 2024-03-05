@@ -18,6 +18,12 @@ class SingInCodeScreen extends StatefulWidget {
 }
 
 class _SingInCodeScreenState extends State<SingInCodeScreen> {
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   final controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -92,7 +98,7 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => const HomePage(),
                     ),
                   );
                 } else if (state is SignInError) {
@@ -122,11 +128,22 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
     );
   }
 
-  Text _buildTextInfo() {
-    return Text(
-      'Введите 4-х значный код,\n отправленный на ${widget.email},',
-      textAlign: TextAlign.center,
-      style: AppFonts.s16w600,
+  BlocBuilder _buildTextInfo() {
+    return BlocBuilder<SignInBloc, SignInState>(
+      builder: (context, state) {
+        if (state is SignInError) {
+          return Text(
+            'Неправильный адрес электронной почты,\nпопробуйте ещё раз',
+            textAlign: TextAlign.center,
+            style: AppFonts.s16w500.copyWith(color: Colors.red),
+          );
+        }
+        return Text(
+          'Введите 4-х значный код,\n отправленный на ${widget.email},',
+          textAlign: TextAlign.center,
+          style: AppFonts.s16w600,
+        );
+      },
     );
   }
 

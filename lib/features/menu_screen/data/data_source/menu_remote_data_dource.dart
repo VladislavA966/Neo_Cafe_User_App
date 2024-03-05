@@ -16,14 +16,7 @@ class MenuRemoteImpl implements MenuRemote {
   MenuRemoteImpl({required this.dio, required this.local});
   @override
   Future<List<CategoryModel>> getAllCategories() async {
-    final response = await dio.get(
-      '/menu/category/all/',
-      options: Options(
-        extra: {
-          "requiresToken": true,
-        },
-      ),
-    );
+    final response = await dio.get('/menu/category/all/');
     if (response.statusCode == 201 || response.statusCode == 200) {
       List<dynamic> jsonData = response.data;
       List<CategoryModel> categories =
@@ -39,11 +32,6 @@ class MenuRemoteImpl implements MenuRemote {
     final branchId = await local.getBranchId();
     final responce = await dio.get(
       '/branch-menu/$branchId/$categoyID/',
-      options: Options(
-        extra: {
-          "requiresToken": true,
-        },
-      ),
     );
     List<dynamic> jsonData = responce.data;
     List<ItemModel> items =

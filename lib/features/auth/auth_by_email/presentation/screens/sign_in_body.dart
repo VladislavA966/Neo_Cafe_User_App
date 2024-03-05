@@ -52,6 +52,7 @@ class _SignInBodyState extends State<SignInBody> {
           print(state);
         } else if (state is SignInError) {
           _errorText = state.errorText;
+          setState(() {});
           print(state);
         } else if (state is SignInValidationError) {
           _errorText = state.errorText;
