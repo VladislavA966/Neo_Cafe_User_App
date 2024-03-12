@@ -16,6 +16,6 @@ class BranchLocalData {
   Future<void> removeId() async {
     final prefs = await SharedPreferences.getInstance();
 
-    await prefs.remove('branchId');
+    prefs.remove('branchId');
   }
 }

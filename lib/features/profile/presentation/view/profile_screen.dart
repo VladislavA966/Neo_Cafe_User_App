@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/dependensies/di.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
@@ -7,7 +8,9 @@ import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_d
 import 'package:neo_cafe_24/features/auth/auth_screen.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/branches/data/data_source/local/branch_local_data.dart';
+import 'package:neo_cafe_24/features/profile/presentation/controller/bloc/profile_bloc.dart';
 import 'package:neo_cafe_24/features/profile/presentation/view/edit_profile.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/view/cart_screen.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 
@@ -21,6 +24,9 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
+    BlocProvider.of<ProfileBloc>(context).add(
+      ProfileInfoEvent(),
+    );
     super.initState();
   }
 
@@ -48,15 +54,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: _buildAppBar(),
-          body: _buildBody(),
-        ),
-        _buildAppBarButton(context),
-        _buildNameContainer(context)
-      ],
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        if (state is ProfileLoaded) {
+          return Stack(
+            children: [
+              Scaffold(
+                appBar: _buildAppBar(),
+                body: _buildBody(state),
+              ),
+              _buildAppBarButton(context),
+              _buildNameContainer(context, state)
+            ],
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 
@@ -69,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Positioned _buildNameContainer(BuildContext context) {
+  Positioned _buildNameContainer(BuildContext context, ProfileLoaded state) {
     return Positioned(
       top: 160,
       left: 16,
@@ -93,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Лаура',
+              state.model.firstName,
               style: AppFonts.s24w600.copyWith(
                 color: AppColors.black,
               ),
@@ -110,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Padding _buildBody() {
+  Padding _buildBody(ProfileLoaded state) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -143,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       Text(
-                        '100',
+                        '${state.model.bonusPoints}',
                         style:
                             AppFonts.s24w600.copyWith(color: AppColors.black),
                       )
@@ -224,12 +237,12 @@ class LogountModalWindow extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                  child: CustomButton(
+                  child: OpacityButton(
+                    borderColor: AppColors.black,
                     title: 'Нет',
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    height: 54,
                   ),
                 ),
                 const SizedBox(width: 16),

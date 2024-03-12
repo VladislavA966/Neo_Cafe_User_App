@@ -19,6 +19,7 @@ class _SignInBodyState extends State<SignInBody> {
   final controller = TextEditingController();
 
   String? _errorText;
+  String _hintText = 'Введите почту';
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +50,14 @@ class _SignInBodyState extends State<SignInBody> {
               ),
             ),
           );
-          print(state);
         } else if (state is SignInError) {
           _errorText = state.errorText;
+          controller.text = '';
+          _hintText = 'Неправильная почта';
           setState(() {});
-          print(state);
         } else if (state is SignInValidationError) {
           _errorText = state.errorText;
-          print(state);
+          _hintText = 'Неправильная почта';
         }
       },
       builder: (context, state) {
@@ -72,7 +73,6 @@ class _SignInBodyState extends State<SignInBody> {
               SendEmailForSingInEvent(email: controller.text),
             );
             setState(() {});
-            print('asdadasd');
           },
         );
       },
@@ -83,7 +83,7 @@ class _SignInBodyState extends State<SignInBody> {
     return RegistrationTextField(
       errorText: _errorText,
       controller: controller,
-      hintText: 'Введите почту',
+      hintText: _hintText,
       prefixImage: AppImages.emailSymbol,
     );
   }

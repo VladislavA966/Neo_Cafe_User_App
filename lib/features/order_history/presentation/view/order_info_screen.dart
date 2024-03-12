@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
-import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/popular_manu_container.dart';
 import 'package:neo_cafe_24/features/order_history/presentation/widgets/custom_text.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
@@ -64,7 +63,6 @@ class _OrderInfoScreenState extends State<OrderInfoScreen> {
             const SizedBox(
               height: 24,
             ),
-            _buildButton(),
             const SizedBox(height: 16)
           ],
         ),
@@ -72,19 +70,12 @@ class _OrderInfoScreenState extends State<OrderInfoScreen> {
     );
   }
 
-  CustomButton _buildButton() {
-    return CustomButton(
-      title: 'Заказать',
-      onPressed: () {},
-      height: 54,
-    );
-  }
-
   CustomText _buildCostTitle() =>
       const CustomText(firstText: 'Итого: ', secondText: '720 c');
 
   CustomText _buildBonusTitle() {
-    return const CustomText(firstText: 'Бонусы к списанию', secondText: '50');
+    return const CustomText(
+        firstText: 'Бонусы к списанию: ', secondText: '50 c');
   }
 
   Text _buildTitle() {

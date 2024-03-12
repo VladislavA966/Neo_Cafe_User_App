@@ -60,7 +60,6 @@ class _CartScreenState extends State<CartScreen> {
             },
           ),
         ),
-        _buildToggleButtons(),
         Positioned(
           top: 60,
           right: 0,
@@ -150,7 +149,7 @@ class _CartScreenState extends State<CartScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 64,
+              height: 20,
             ),
             _buildCartList(state),
             const SizedBox(height: 20),
@@ -205,30 +204,11 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  SizedBox _buildAddMoreButton() {
-    return SizedBox(
-      height: 50,
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(
-              color: AppColors.orange,
-            ),
-            borderRadius: BorderRadius.circular(
-              16,
-            ),
-          ),
-          backgroundColor: Colors.white,
-        ),
-        onPressed: () {},
-        child: Text(
-          'Добавить еще',
-          style: AppFonts.s16w600.copyWith(
-            color: AppColors.orange,
-          ),
-        ),
-      ),
+  OpacityButton _buildAddMoreButton() {
+    return OpacityButton(
+      title: 'Добавить еще',
+      onPressed: () {},
+      borderColor: AppColors.orange,
     );
   }
 
@@ -266,6 +246,45 @@ class _CartScreenState extends State<CartScreen> {
             name: state.items[index].name,
             price: '${state.items[index].price}',
             quantity: state.items[index].quantity,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class OpacityButton extends StatelessWidget {
+  final Color borderColor;
+  final String title;
+  final Function() onPressed;
+  const OpacityButton(
+      {super.key,
+      required this.borderColor,
+      required this.title,
+      required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: borderColor,
+            ),
+            borderRadius: BorderRadius.circular(
+              16,
+            ),
+          ),
+          backgroundColor: Colors.white,
+        ),
+        onPressed: onPressed,
+        child: Text(
+          title,
+          style: AppFonts.s16w600.copyWith(
+            color: borderColor,
           ),
         ),
       ),

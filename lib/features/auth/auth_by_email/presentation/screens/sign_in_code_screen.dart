@@ -133,7 +133,7 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
       builder: (context, state) {
         if (state is SignInError) {
           return Text(
-            'Неправильный адрес электронной почты,\nпопробуйте ещё раз',
+            'Код введен неверно,\nпопробуйте ещё раз',
             textAlign: TextAlign.center,
             style: AppFonts.s16w500.copyWith(color: Colors.red),
           );

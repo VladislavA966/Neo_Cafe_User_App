@@ -6,4 +6,5 @@ abstract class CartRepository {
   Future<CartEntity> getOrCreateCart();
   Future<List<CartItemEntity>> getItems();
   Future<void> clearCart();
+  Future<bool> isItemInCart(int itemId);
 }

@@ -21,6 +21,13 @@ import 'package:neo_cafe_24/features/menu_screen/data/repository_impl/category_r
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/category_use_case.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/item_use_case.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/menu_items_use_case.dart';
+import 'package:neo_cafe_24/features/profile/data/data_source/profile_data_source.dart';
+import 'package:neo_cafe_24/features/profile/data/mapper/ito_mapper.dart';
+import 'package:neo_cafe_24/features/profile/data/mapper/order_mapper.dart';
+import 'package:neo_cafe_24/features/profile/data/mapper/profile_mapper.dart';
+import 'package:neo_cafe_24/features/profile/data/mapper/table_mappre.dart';
+import 'package:neo_cafe_24/features/profile/data/repository_impl/profile_repository_impl.dart';
+import 'package:neo_cafe_24/features/profile/domain/use_case/profile_use_case.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/data_source/local/cart_local_data_source.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/model/cart_model/cart_model.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/repository_impl/cart_repository_impl.dart';
@@ -41,6 +48,7 @@ void setupDependensies() {
       getIt<LocalDataSource>(),
     ),
   );
+  mappers();
 
   signInDependensy();
   signUpDependency();
@@ -48,6 +56,8 @@ void setupDependensies() {
   cartDependency();
   branchesDependency();
   blocDependencies();
+
+  profileDependency();
 }
 
 //SignUp
@@ -158,6 +168,48 @@ void blocDependencies() {
   getIt.registerSingleton<CartBloc>(
     CartBloc(
       cartUseCase: getIt<CartUseCase>(),
+    ),
+  );
+}
+//Profile
+
+void profileDependency() {
+  getIt.registerSingleton<ProfileDataSourceImpl>(
+    ProfileDataSourceImpl(
+      local: getIt<LocalDataSource>(),
+      dio: getIt<DioSettings>().dio,
+    ),
+  );
+  getIt.registerSingleton<ProfileRepositoryImpl>(
+    ProfileRepositoryImpl(
+      remote: getIt<ProfileDataSourceImpl>(),
+      profileMapper: getIt<ProfileMapper>(),
+    ),
+  );
+  getIt.registerSingleton<ProfileUseCase>(
+    ProfileUseCase(
+      repo: getIt<ProfileRepositoryImpl>(),
+    ),
+  );
+}
+
+//Mappers
+void mappers() {
+  getIt.registerSingleton<TableMapper>(
+    TableMapper(),
+  );
+  getIt.registerSingleton<ItoMapper>(
+    ItoMapper(),
+  );
+  getIt.registerSingleton<OrderMapper>(
+    OrderMapper(
+      tableMapper: getIt<TableMapper>(),
+      itoMapper: getIt<ItoMapper>(),
+    ),
+  );
+  getIt.registerSingleton<ProfileMapper>(
+    ProfileMapper(
+      orderMapper: getIt<OrderMapper>(),
     ),
   );
 }

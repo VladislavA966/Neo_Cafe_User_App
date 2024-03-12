@@ -8,6 +8,7 @@ abstract class CartLocalDataSource {
   Future<CartModel> getOrCreateCart();
   Future<List<CartItemModel>> getItems();
   Future<void> clearCart();
+  Future<bool> isItemInCart(int itemId);
 }
 
 class CartLocalDataSourceImpl implements CartLocalDataSource {
@@ -75,5 +76,12 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
     final cart = await getOrCreateCart();
     cart.items.clear();
     await cart.save();
+  }
+
+  @override
+  Future<bool> isItemInCart(int itemId) async {
+    final cart = await getOrCreateCart();
+    int itemIndex = cart.items.indexWhere((item) => item.id == itemId);
+    return itemIndex != -1;
   }
 }

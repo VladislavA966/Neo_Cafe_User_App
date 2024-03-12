@@ -229,68 +229,89 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
       String itemImage, int itemPrice) {
     return Row(
       children: [
-        CircleButton(
-          height: 40,
-          width: 40,
-          iconSize: 24,
-          onTap: () {
-            context.read<CartBloc>().add(CartItemRemoved(itemId));
-          },
-          color: AppColors.grey,
-          icon: Icons.remove,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: BlocBuilder<CartBloc, CartState>(
-            builder: (context, state) {
-              if (state is CartLoadSuccess) {
-                final currentItem =
-                    state.items.firstWhereOrNull((item) => item.id == itemId);
-                final itemCount = currentItem?.quantity ?? 0;
-                return Text(
-                  '$itemCount',
-                  style: AppFonts.s32w600.copyWith(color: AppColors.black),
-                );
-              }
-              return Text(
-                '0',
-                style: AppFonts.s32w600.copyWith(color: AppColors.black),
-              );
-            },
-          ),
-        ),
-        CircleButton(
-          height: 40,
-          width: 40,
-          iconSize: 24,
-          color: AppColors.orange,
-          icon: Icons.add,
-          onTap: () {
-            context.read<CartBloc>().add(CartItemAdded(CartItemEntity(
+        _buildMinusButton(context, itemId),
+        _buildItemQuintity(itemId),
+        _buildPlusButton(context, itemId, itemName, itemImage, itemPrice),
+        const SizedBox(width: 20),
+        _buildToCartButton(context)
+      ],
+    );
+  }
+
+  Padding _buildItemQuintity(int itemId) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          if (state is CartLoadSuccess) {
+            final currentItem =
+                state.items.firstWhereOrNull((item) => item.id == itemId);
+            final itemCount = currentItem?.quantity ?? 0;
+            return Text(
+              '$itemCount',
+              style: AppFonts.s32w600.copyWith(color: AppColors.black),
+            );
+          }
+          return Text(
+            '0',
+            style: AppFonts.s32w600.copyWith(color: AppColors.black),
+          );
+        },
+      ),
+    );
+  }
+
+  CircleButton _buildPlusButton(BuildContext context, int itemId,
+      String itemName, String itemImage, int itemPrice) {
+    return CircleButton(
+      height: 40,
+      width: 40,
+      iconSize: 24,
+      color: AppColors.orange,
+      icon: Icons.add,
+      onTap: () {
+        context.read<CartBloc>().add(
+              CartItemAdded(
+                CartItemEntity(
                   id: itemId,
                   name: itemName,
                   image: itemImage,
                   price: itemPrice,
                   quantity: 1,
-                )));
-          },
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: CustomButton(
-            title: 'В корзину',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(initialIndex: 1),
                 ),
-              );
-            },
-            height: 55,
-          ),
-        )
-      ],
+              ),
+            );
+      },
+    );
+  }
+
+  CircleButton _buildMinusButton(BuildContext context, int itemId) {
+    return CircleButton(
+      height: 40,
+      width: 40,
+      iconSize: 24,
+      onTap: () {
+        context.read<CartBloc>().add(CartItemRemoved(itemId));
+      },
+      color: AppColors.grey,
+      icon: Icons.remove,
+    );
+  }
+
+  Expanded _buildToCartButton(BuildContext context) {
+    return Expanded(
+      child: CustomButton(
+        title: 'В корзину',
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePage(initialIndex: 1),
+            ),
+          );
+        },
+        height: 55,
+      ),
     );
   }
 

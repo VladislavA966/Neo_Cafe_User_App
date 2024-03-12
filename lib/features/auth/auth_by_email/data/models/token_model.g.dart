@@ -12,6 +12,8 @@ AuthenticationResponse _$AuthenticationResponseFromJson(
       message: json['message'] as String,
       accessToken: json['access_token'] as String,
       refreshToken: json['refresh_token'] as String,
+      customerProfile: ProfileModel.fromJson(
+          json['customer_profile'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AuthenticationResponseToJson(
@@ -20,4 +22,5 @@ Map<String, dynamic> _$AuthenticationResponseToJson(
       'message': instance.message,
       'access_token': instance.accessToken,
       'refresh_token': instance.refreshToken,
+      'customer_profile': instance.customerProfile,
     };

@@ -11,7 +11,13 @@ class SignInRepositotyImpl implements SignInRepo {
   Future<void> sendCode(String email, String code) async {
     final tokenRemote = await remote
         .confirmLoginCode({"email": email, "confirmation_code": code});
-    await local.saveToken(tokenRemote.accessToken, tokenRemote.refreshToken);
+    await local.saveToken(
+      tokenRemote.accessToken,
+      tokenRemote.refreshToken,
+    );
+    await local.saveId(
+      tokenRemote.customerProfile.customerId.toString(),
+    );
   }
 
   @override

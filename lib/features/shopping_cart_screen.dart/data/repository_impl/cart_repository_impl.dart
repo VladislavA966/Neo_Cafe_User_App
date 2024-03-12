@@ -56,8 +56,14 @@ class CartRepositoryImpl implements CartRepository {
   Future<void> removeItemAt(int itemId) async {
     await data.removeItemAt(itemId);
   }
-  @override 
-  Future<void> clearCart () async {
+
+  @override
+  Future<void> clearCart() async {
     await data.clearCart();
+  }
+
+  @override
+  Future<bool> isItemInCart(int itemId) async {
+    return await isItemInCart(itemId);
   }
 }

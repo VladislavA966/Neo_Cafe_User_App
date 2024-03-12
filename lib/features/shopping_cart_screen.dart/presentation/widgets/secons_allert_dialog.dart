@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/view/cart_screen.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/widgets/third_dialog.dart';
 
 class SecondBonusDialog extends StatelessWidget {
@@ -59,12 +60,12 @@ class SecondBonusDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                  child: CustomButton(
+                  child: OpacityButton(
                     title: 'Отмена',
+                    borderColor: AppColors.black,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    height: 54,
                   ),
                 ),
                 const SizedBox(width: 16),

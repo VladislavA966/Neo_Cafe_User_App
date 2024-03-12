@@ -56,7 +56,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
     double totalSpacing = spacing * (crossAxisCount - 1) + padding;
     double itemWidth = (screenWidth - totalSpacing) / crossAxisCount;
-    double itemHeight = 240.0;
+    double itemHeight = 250.0;
 
     double childAspectRatio = itemWidth / itemHeight;
     bool isGrid = false;
@@ -129,6 +129,9 @@ class _MenuScreenState extends State<MenuScreen> {
               itemCount: state.model.length,
               itemBuilder: (BuildContext context, int index) {
                 return MenuItem(
+                  icon: state.model[index].isInCart
+                      ? Icons.shopping_cart
+                      : Icons.add,
                   addTap: () {
                     final cartItem = CartItemEntity(
                         id: state.model[index].id,

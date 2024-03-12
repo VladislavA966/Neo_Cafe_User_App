@@ -5,7 +5,6 @@ import 'package:neo_cafe_24/core/dependensies/di.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/domain/use_case/sign_in_use_case.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/presentation/bloc/sign_in_bloc.dart';
-import 'package:neo_cafe_24/features/auth/auth_screen.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/use_case/sign_up_use_case.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/presentation/bloc/sign_up_bloc.dart';
 import 'package:neo_cafe_24/features/branches/domain/use_case/get_all_branches_use_case.dart';
@@ -18,8 +17,11 @@ import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/menu_items_use
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/category_bloc/category_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/item_bloc/item_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/menu_item/menu_item_bloc.dart';
+import 'package:neo_cafe_24/features/profile/domain/use_case/profile_use_case.dart';
+import 'package:neo_cafe_24/features/profile/presentation/controller/bloc/profile_bloc.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/use_case/cart_use_case.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
+import 'package:neo_cafe_24/features/welcom_screen/welcome_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,6 +50,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => MenuItemBloc(
             getIt<AllItemsUseCase>(),
+            getIt<CartUseCase>(),
           ),
         ),
         BlocProvider(
@@ -70,6 +73,11 @@ class MyApp extends StatelessWidget {
             getIt<BranchUseCase>(),
           ),
         ),
+        BlocProvider(
+          create: (context) => ProfileBloc(
+            getIt<ProfileUseCase>(),
+          ),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -78,7 +86,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const AuthScreen(),
+        home: const WelcomeScreen(),
       ),
     );
   }

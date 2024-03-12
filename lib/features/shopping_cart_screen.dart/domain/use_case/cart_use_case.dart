@@ -24,4 +24,8 @@ class CartUseCase {
   Future<void> clearCart() async {
     return await repo.clearCart();
   }
+
+  Future<bool> isItemIncart(int itemId) async {
+    return await repo.isItemInCart(itemId);
+  }
 }

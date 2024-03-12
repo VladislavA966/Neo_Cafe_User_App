@@ -9,13 +9,15 @@ class MenuItem extends StatelessWidget {
   final String name;
   final String price;
   final Function() addTap;
+  final IconData icon;
 
   const MenuItem(
       {super.key,
       required this.onTap,
       required this.name,
       required this.price,
-      required this.addTap});
+      required this.addTap,
+      this.icon = Icons.add});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class MenuItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -66,12 +68,16 @@ class MenuItem extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('$price c',
-                      style:
-                          AppFonts.s14w600.copyWith(color: AppColors.orange)),
+                  Text(
+                    '$price c',
+                    style: AppFonts.s14w600.copyWith(
+                      color: AppColors.orange,
+                    ),
+                  ),
                   CustomRadiusButton(
                     onPressed: addTap,
-                  )
+                    icon: icon,
+                  ),
                 ],
               ),
             ),
