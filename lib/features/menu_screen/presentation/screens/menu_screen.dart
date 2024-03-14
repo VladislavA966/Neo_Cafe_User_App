@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
@@ -8,10 +9,11 @@ import 'package:neo_cafe_24/features/menu_screen/presentation/controller/categor
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/menu_item/menu_item_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/widgets/menu_item.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/widgets/toggle_button.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/entity/cart_item_entity.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/domain/entity/cart_item_entity.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/bloc/cart_bloc.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
+import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 
 class MenuScreen extends StatefulWidget {
   final int initialId;
@@ -72,39 +74,105 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  Padding _buildBody(double childAspectRatio, bool isGrid) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 48,
-          ),
-          _buildTitle(),
-          const SizedBox(
-            height: 12,
-          ),
-          _buildToggleButtonsList(),
-          const SizedBox(
-            height: 20,
-          ),
-          _buildMenuGrid(childAspectRatio)
-        ],
+  BlocBuilder _buildBody(double childAspectRatio, bool isGrid) {
+    return BlocBuilder<MenuItemBloc, MenuItemState>(
+      builder: (context, state) {
+        if (state is MenuItemLoaded) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 48,
+                ),
+                _buildTitle(),
+                const SizedBox(
+                  height: 12,
+                ),
+                _buildToggleButtonsList(),
+                const SizedBox(
+                  height: 20,
+                ),
+                _buildMenuGrid(childAspectRatio, state)
+              ],
+            ),
+          );
+        } else if (state is MenuItemLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  Expanded _buildMenuGrid(double childAspectRatio, MenuItemLoaded state) {
+    return Expanded(
+      child: GridView.builder(
+        shrinkWrap: true,
+        padding: const EdgeInsets.all(8),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: (childAspectRatio),
+        ),
+        itemCount: state.model.length,
+        itemBuilder: (BuildContext context, int index) {
+          return MenuItem(
+            button: _buildAddButton(
+              state,
+              index,
+              context,
+              state.model[index].id,
+              state.model[index].itemImage,
+              state.model[index].name,
+              state.model[index].pricePerUnit,
+            ),
+            name: state.model[index].name,
+            price: state.model[index].pricePerUnit.toString(),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ItemInfoScreen(
+                    id: state.model[index].id,
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
 
-  BlocBuilder _buildListMenu(double childAspectRatio) {
-    return BlocBuilder<MenuItemBloc, MenuItemState>(
+  BlocBuilder _buildAddButton(
+    MenuItemLoaded state,
+    int index,
+    BuildContext context,
+    int id,
+    String image,
+    String name,
+    int price,
+  ) {
+    return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
-        if (state is MenuItemLoaded) {
-          return _buildMenuGrid(childAspectRatio);
-        } else if (state is MenuItemError) {
-          return Center(child: Text(state.errorText));
-        } else if (state is MenuItemLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
+        if (state is CartLoadSuccess) {
+          final currentItem =
+              state.items.firstWhereOrNull((item) => item.id == id);
+          final itemCount = currentItem?.quantity ?? 0;
+          return CustomRadiusButton(
+            onPressed: () {
+              if (itemCount == 0) {
+                _addItemToCart(context, id, image, name, price);
+              } else {
+                _removeItemFromCart(context, currentItem);
+              }
+            },
+            icon: itemCount == 0 ? Icons.add : Icons.shopping_cart,
           );
         }
         return const SizedBox();
@@ -112,62 +180,22 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  BlocBuilder _buildMenuGrid(double childAspectRatio) {
-    return BlocBuilder<MenuItemBloc, MenuItemState>(
-      builder: (context, state) {
-        if (state is MenuItemLoaded) {
-          return Expanded(
-            child: GridView.builder(
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(8),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: (childAspectRatio),
-              ),
-              itemCount: state.model.length,
-              itemBuilder: (BuildContext context, int index) {
-                return MenuItem(
-                  icon: state.model[index].isInCart
-                      ? Icons.shopping_cart
-                      : Icons.add,
-                  addTap: () {
-                    final cartItem = CartItemEntity(
-                        id: state.model[index].id,
-                        image: state.model[index].itemImage,
-                        name: state.model[index].name,
-                        price: state.model[index].pricePerUnit,
-                        quantity: 1);
-                    BlocProvider.of<CartBloc>(context).add(
-                      CartItemAdded(cartItem),
-                    );
-                  },
-                  name: state.model[index].name,
-                  price: state.model[index].pricePerUnit.toString(),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ItemInfoScreen(
-                          id: state.model[index].id,
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          );
-        } else if (state is MenuItemError) {
-          return Center(child: Text(state.errorText));
-        } else if (state is MenuItemLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return const SizedBox();
-      },
+  void _removeItemFromCart(BuildContext context, CartItemEntity? currentItem) {
+    context.read<CartBloc>().add(CartItemRemoved(currentItem?.id ?? 1));
+  }
+
+  void _addItemToCart(
+      BuildContext context, int id, String image, String name, int price) {
+    BlocProvider.of<CartBloc>(context).add(
+      CartItemAdded(
+        CartItemEntity(
+          id: id,
+          image: image,
+          name: name,
+          price: price,
+          quantity: 1,
+        ),
+      ),
     );
   }
 

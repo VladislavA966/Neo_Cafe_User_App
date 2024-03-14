@@ -8,8 +8,8 @@ import 'package:neo_cafe_24/features/main_screen/presentation/widgets/menu_conta
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/popular_manu_container.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/screens/menu_screen.dart';
 import 'package:neo_cafe_24/features/order_history/presentation/view/orders_screen.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/widgets/first_allert_dialog.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/bloc/cart_bloc.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/widgets/first_allert_dialog.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:toggle_switch/toggle_switch.dart';

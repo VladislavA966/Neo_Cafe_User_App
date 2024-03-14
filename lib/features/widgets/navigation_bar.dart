@@ -4,7 +4,7 @@ import 'package:neo_cafe_24/core/recources/app_images.dart';
 import 'package:neo_cafe_24/features/branches/presentation/view/branches_page.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/screens/main_screen.dart';
 import 'package:neo_cafe_24/features/profile/presentation/view/profile_screen.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/view/cart_screen.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/view/cart_screen.dart';
 
 class HomePage extends StatefulWidget {
   final int initialIndex;

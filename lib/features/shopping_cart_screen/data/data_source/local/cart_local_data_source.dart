@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/model/cart_item_model/cart_item_model.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/model/cart_model/cart_model.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/data/model/cart_item_model/cart_item_model.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/data/model/cart_model/cart_model.dart';
 
 abstract class CartLocalDataSource {
   Future<void> addItem(CartItemModel item);
@@ -8,7 +8,6 @@ abstract class CartLocalDataSource {
   Future<CartModel> getOrCreateCart();
   Future<List<CartItemModel>> getItems();
   Future<void> clearCart();
-  Future<bool> isItemInCart(int itemId);
 }
 
 class CartLocalDataSourceImpl implements CartLocalDataSource {
@@ -76,12 +75,5 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
     final cart = await getOrCreateCart();
     cart.items.clear();
     await cart.save();
-  }
-
-  @override
-  Future<bool> isItemInCart(int itemId) async {
-    final cart = await getOrCreateCart();
-    int itemIndex = cart.items.indexWhere((item) => item.id == itemId);
-    return itemIndex != -1;
   }
 }

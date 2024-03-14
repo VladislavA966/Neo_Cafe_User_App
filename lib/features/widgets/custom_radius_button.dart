@@ -4,8 +4,12 @@ import 'package:neo_cafe_24/core/recources/app_colors.dart';
 class CustomRadiusButton extends StatelessWidget {
   final Function()? onPressed;
   final IconData? icon;
+  final Color? color;
   const CustomRadiusButton(
-      {super.key, required this.onPressed, this.icon = Icons.add});
+      {super.key,
+      required this.onPressed,
+      this.icon = Icons.add,
+      this.color = AppColors.orange});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +20,9 @@ class CustomRadiusButton extends StatelessWidget {
         height: 40,
         padding: const EdgeInsets.only(top: 7, left: 16, right: 16, bottom: 9),
         clipBehavior: Clip.antiAlias,
-        decoration: const ShapeDecoration(
-          color: AppColors.orange,
-          shape: RoundedRectangleBorder(
+        decoration: ShapeDecoration(
+          color: color,
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),

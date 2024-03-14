@@ -19,8 +19,8 @@ import 'package:neo_cafe_24/features/menu_screen/presentation/controller/item_bl
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/menu_item/menu_item_bloc.dart';
 import 'package:neo_cafe_24/features/profile/domain/use_case/profile_use_case.dart';
 import 'package:neo_cafe_24/features/profile/presentation/controller/bloc/profile_bloc.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/use_case/cart_use_case.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/domain/use_case/cart_use_case.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/bloc/cart_bloc.dart';
 import 'package:neo_cafe_24/features/welcom_screen/welcome_screen.dart';
 
 class MyApp extends StatelessWidget {

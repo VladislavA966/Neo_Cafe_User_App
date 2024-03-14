@@ -28,11 +28,11 @@ import 'package:neo_cafe_24/features/profile/data/mapper/profile_mapper.dart';
 import 'package:neo_cafe_24/features/profile/data/mapper/table_mappre.dart';
 import 'package:neo_cafe_24/features/profile/data/repository_impl/profile_repository_impl.dart';
 import 'package:neo_cafe_24/features/profile/domain/use_case/profile_use_case.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/data_source/local/cart_local_data_source.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/model/cart_model/cart_model.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/data/repository_impl/cart_repository_impl.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/domain/use_case/cart_use_case.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/controller/bloc/cart_bloc.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/data/data_source/local/cart_local_data_source.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/data/model/cart_model/cart_model.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/data/repository_impl/cart_repository_impl.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/domain/use_case/cart_use_case.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/bloc/cart_bloc.dart';
 
 final getIt = GetIt.instance;
 

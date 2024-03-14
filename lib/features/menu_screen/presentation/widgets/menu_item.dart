@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/core/recources/app_images.dart';
-import 'package:neo_cafe_24/features/widgets/custom_radius_button.dart';
 
 class MenuItem extends StatelessWidget {
   final Function() onTap;
   final String name;
   final String price;
-  final Function() addTap;
-  final IconData icon;
 
-  const MenuItem(
-      {super.key,
-      required this.onTap,
-      required this.name,
-      required this.price,
-      required this.addTap,
-      this.icon = Icons.add});
+  final Widget button;
+
+  const MenuItem({
+    super.key,
+    required this.onTap,
+    required this.button,
+    required this.name,
+    required this.price,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +53,7 @@ class MenuItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                name,
+                '$name c',
                 style: AppFonts.s14w600.copyWith(
                   color: AppColors.black,
                 ),
@@ -74,10 +73,7 @@ class MenuItem extends StatelessWidget {
                       color: AppColors.orange,
                     ),
                   ),
-                  CustomRadiusButton(
-                    onPressed: addTap,
-                    icon: icon,
-                  ),
+                  button
                 ],
               ),
             ),

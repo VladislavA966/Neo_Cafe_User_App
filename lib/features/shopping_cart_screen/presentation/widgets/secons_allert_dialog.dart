@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/view/cart_screen.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen.dart/presentation/widgets/third_dialog.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/view/cart_screen.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/widgets/third_dialog.dart';
 
 class SecondBonusDialog extends StatelessWidget {
   const SecondBonusDialog({
