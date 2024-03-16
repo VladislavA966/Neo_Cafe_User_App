@@ -18,6 +18,20 @@ class PopularMenuContainer extends StatelessWidget {
       required this.price,
       required this.quantity});
 
+  List<BoxShadow> get shadows => const [
+        BoxShadow(
+          color: Color(0x14000000),
+          blurRadius: 16,
+          offset: Offset(0, 8),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x0A000000),
+          blurRadius: 4,
+          offset: Offset(0, 0),
+          spreadRadius: 0,
+        ),
+      ];
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -33,20 +47,7 @@ class PopularMenuContainer extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              shadows: const [
-                BoxShadow(
-                  color: Color(0x14000000),
-                  blurRadius: 16,
-                  offset: Offset(0, 8),
-                  spreadRadius: 0,
-                ),
-                BoxShadow(
-                  color: Color(0x0A000000),
-                  blurRadius: 4,
-                  offset: Offset(0, 0),
-                  spreadRadius: 0,
-                ),
-              ],
+              shadows: shadows,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +94,7 @@ class PopularMenuContainer extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        price,
+                        "$price c",
                         style: AppFonts.s14w600.copyWith(
                           color: AppColors.orange,
                         ),

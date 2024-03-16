@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:neo_cafe_24/core/services/validation.dart';
@@ -12,50 +13,44 @@ class SignInBloc extends Bloc<SignInEvent, SignInState>
   final SignInUseCase useCase;
   final LocalDataSource localData;
   SignInBloc(this.useCase, this.localData) : super(SignInInitial()) {
-    _sendEmailEvent();
-    _sendSignInCodeEvent();
+    on<SendEmailForSingInEvent>(_sendEmailForSignIn);
+    on<SendCodeForSingInEvent>(_sendCodeForSignInEvent);
   }
 
-  void _sendEmailEvent() {
-    return on<SendEmailForSingInEvent>(
-      (event, emit) async {
-        if (!isValidEmail(event.email)) {
-          emit(SignInValidationError(errorText: 'Неверный формат почты'));
-          return;
-        }
-        emit(SignInLoading());
-        try {
-          await useCase.sendEmailCall(event.email);
-          emit(SignInLoaded());
-        } catch (e) {
-          emit(
-            SignInError(
-              errorText: 'Пользователя с такой почтой не существует',
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  void _sendSignInCodeEvent() {
-    return on<SendCodeForSingInEvent>((event, emit) async {
+  FutureOr<void> _sendEmailForSignIn(event, emit) async {
+    if (!isValidEmail(event.email)) {
+      emit(SignInValidationError(errorText: 'Неверный формат почты'));
+      return;
+    }
+    emit(SignInLoading());
+    try {
+      await useCase.sendEmailCall(event.email);
+      emit(SignInLoaded());
+    } catch (e) {
       emit(
-        SignInLoading(),
+        SignInError(
+          errorText: 'Пользователя с такой почтой не существует',
+        ),
       );
-      try {
-        await useCase.sendCodeCall(event.email, event.code);
+    }
+  }
 
-        emit(
-          SendCodeLoaded(),
-        );
-      } catch (e) {
-        emit(
-          SignInError(
-            errorText: e.toString(),
-          ),
-        );
-      }
-    });
+  FutureOr<void> _sendCodeForSignInEvent(event, emit) async {
+    emit(
+      SignInLoading(),
+    );
+    try {
+      await useCase.sendCodeCall(event.email, event.code);
+
+      emit(
+        SendCodeLoaded(),
+      );
+    } catch (e) {
+      emit(
+        SignInError(
+          errorText: e.toString(),
+        ),
+      );
+    }
   }
 }

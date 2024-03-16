@@ -22,6 +22,25 @@ class _BranchesScreenState extends State<BranchesScreen> {
     super.initState();
   }
 
+  void _branchInfoEvent(
+      BuildContext context, AllBranchesLoaded state, int index) {
+    BlocProvider.of<SingleBranchBloc>(context).add(
+      GetSingleBranchEvent(id: state.branches[index].id),
+    );
+  }
+
+  void _navigateBranchInfoScreen(
+      BuildContext context, AllBranchesLoaded state, int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BranchInfoScreen(
+          id: state.branches[index].id,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,54 +57,50 @@ class _BranchesScreenState extends State<BranchesScreen> {
           const SizedBox(
             height: 24,
           ),
-          _buildBranchesList()
+          BlocBuilder<AllBranchesBloc, AllBranchesState>(
+            builder: (context, state) {
+              if (state is AllBranchesLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is AllBranchesLoaded) {
+                return _buildBranchesList(state);
+              }
+              return const SizedBox();
+            },
+          ),
         ],
       ),
     );
   }
 
-  BlocBuilder _buildBranchesList() {
-    return BlocBuilder<AllBranchesBloc, AllBranchesState>(
-      builder: (context, state) {
-        if (state is AllBranchesLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is AllBranchesLoaded) {
-          return Expanded(
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: state.branches.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 12,
-                    ),
-                    child: BranchInfoContainer(
-                      onTap: () {
-                        BlocProvider.of<SingleBranchBloc>(context).add(
-                          GetSingleBranchEvent(id: state.branches[index].id),
-                        );
+  Expanded _buildBranchesList(AllBranchesLoaded state) {
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: state.branches.length,
+        itemBuilder: (context, index) =>
+            _buildBranchItem(context, state, index),
+      ),
+    );
+  }
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BranchInfoScreen(
-                              id: state.branches[index].id,
-                            ),
-                          ),
-                        );
-                      },
-                      name: state.branches[index].branchName,
-                      address: state.branches[index].adress,
-                      phoneNumber: state.branches[index].phoneNumber,
-                    ),
-                  );
-                }),
-          );
-        }
-        return const SizedBox();
-      },
+  Padding _buildBranchItem(
+      BuildContext context, AllBranchesLoaded state, int index) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: 12,
+      ),
+      child: BranchInfoContainer(
+        onTap: () {
+          _branchInfoEvent(context, state, index);
+
+          _navigateBranchInfoScreen(context, state, index);
+        },
+        name: state.branches[index].branchName,
+        address: state.branches[index].adress,
+        phoneNumber: state.branches[index].phoneNumber,
+      ),
     );
   }
 

@@ -38,6 +38,59 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  List<BottomNavigationBarItem> get items => <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Image.asset(AppImages.homeTap),
+          activeIcon: Image.asset(
+            AppImages.selectedHomeTap,
+            color: AppColors.orange,
+          ),
+          label: 'Главня',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            AppImages.cartTap,
+          ),
+          activeIcon: Image.asset(
+            AppImages.selectedCartTap,
+            color: AppColors.orange,
+          ),
+          label: 'Корзина',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(AppImages.branchTap),
+          activeIcon: Image.asset(
+            AppImages.selectedBranchTap,
+            color: AppColors.orange,
+          ),
+          label: 'Филиалы',
+        ),
+        BottomNavigationBarItem(
+          activeIcon: Image.asset(
+            AppImages.selectedProfileTap,
+            color: AppColors.orange,
+          ),
+          icon: Image.asset(
+            AppImages.profileTap,
+          ),
+          label: 'Профиль',
+        ),
+      ];
+  List<BoxShadow> get shadows => const [
+        BoxShadow(
+          color: Color(0x14000000),
+          blurRadius: 4,
+          offset: Offset(0, -2),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x05000000),
+          blurRadius: 6,
+          offset: Offset(0, 0),
+          spreadRadius: 0,
+        )
+      ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,20 +100,7 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x14000000),
-              blurRadius: 4,
-              offset: Offset(0, -2),
-              spreadRadius: 0,
-            ),
-            BoxShadow(
-              color: Color(0x05000000),
-              blurRadius: 6,
-              offset: Offset(0, 0),
-              spreadRadius: 0,
-            )
-          ],
+          boxShadow: shadows,
           borderRadius: BorderRadius.circular(40),
         ),
         child: ClipRRect(
@@ -71,44 +111,7 @@ class _HomePageState extends State<HomePage> {
             selectedIconTheme: const IconThemeData(
               color: AppColors.orange,
             ),
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Image.asset(AppImages.homeTap),
-                activeIcon: Image.asset(
-                  AppImages.selectedHomeTap,
-                  color: AppColors.orange,
-                ),
-                label: 'Главня',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  AppImages.cartTap,
-                ),
-                activeIcon: Image.asset(
-                  AppImages.selectedCartTap,
-                  color: AppColors.orange,
-                ),
-                label: 'Корзина',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(AppImages.branchTap),
-                activeIcon: Image.asset(
-                  AppImages.selectedBranchTap,
-                  color: AppColors.orange,
-                ),
-                label: 'Филиалы',
-              ),
-              BottomNavigationBarItem(
-                activeIcon: Image.asset(
-                  AppImages.selectedProfileTap,
-                  color: AppColors.orange,
-                ),
-                icon: Image.asset(
-                  AppImages.profileTap,
-                ),
-                label: 'Профиль',
-              ),
-            ],
+            items: items,
             currentIndex: _selectedIndex,
             onTap: _onItemTapped,
           ),

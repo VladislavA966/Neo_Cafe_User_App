@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/features/order_history/presentation/view/order_info_screen.dart';
-import 'package:neo_cafe_24/features/profile/presentation/view/profile_screen.dart';
+import 'package:neo_cafe_24/features/profile/presentation/widgets/order_container.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 
@@ -101,5 +101,3 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
     );
   }
 }
-
-

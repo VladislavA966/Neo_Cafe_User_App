@@ -37,6 +37,15 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  void _itemInfoScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ItemInfoScreen(id: 1),
+      ),
+    );
+  }
+
   Future<void> checkAndShowModal() async {
     var branchLocalData = getIt<BranchLocalData>();
 
@@ -167,12 +176,7 @@ class _MainScreenState extends State<MainScreen> {
                         }),
                   ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ItemInfoScreen(id: 1),
-                ),
-              );
+              _itemInfoScreen(context);
             },
           ),
         ),

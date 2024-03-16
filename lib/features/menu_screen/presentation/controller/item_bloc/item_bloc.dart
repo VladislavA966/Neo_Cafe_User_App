@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/entity/item_entity.dart';
@@ -9,11 +10,10 @@ part 'item_state.dart';
 class ItemBloc extends Bloc<ItemEvent, ItemState> {
   final ItemUseCase getItem;
   ItemBloc(this.getItem) : super(ItemInitial()) {
-    _getItemInfoEvent();
+    on<GetItemEvent>(_getItemEvent);
   }
 
-  void _getItemInfoEvent() {
-    return on<GetItemEvent>((event, emit) async {
+  FutureOr<void> _getItemEvent(event, emit) async {
     emit(ItemLoading());
     try {
       final item = await getItem(
@@ -29,6 +29,5 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
         ),
       );
     }
-  });
   }
 }

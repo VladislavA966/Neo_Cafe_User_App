@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/entity/item_entity.dart';
@@ -11,25 +12,23 @@ class MenuItemBloc extends Bloc<MenuItemEvent, MenuItemState> {
   final AllItemsUseCase getAllitems;
   final CartUseCase cartUseCase;
   MenuItemBloc(this.getAllitems, this.cartUseCase) : super(MenuItemInitial()) {
-    getAllItemsEvent();
-  }
-
-  void getAllItemsEvent() {
-    return on<GetAllItemsEvent>(
-      (event, emit) async {
-        emit(MenuItemLoading());
-        try {
-          final items = await getAllitems(CategoryParams(id: event.id));
-
-          emit(MenuItemLoaded(model: items));
-        } catch (e) {
-          emit(
-            MenuItemError(
-              errorText: e.toString(),
-            ),
-          );
-        }
-      },
+    on<GetAllItemsEvent>(
+      _getAllItemsEvent,
     );
   }
+
+  FutureOr<void> _getAllItemsEvent(event, emit) async {
+      emit(MenuItemLoading());
+      try {
+        final items = await getAllitems(CategoryParams(id: event.id));
+  
+        emit(MenuItemLoaded(model: items));
+      } catch (e) {
+        emit(
+          MenuItemError(
+            errorText: e.toString(),
+          ),
+        );
+      }
+    }
 }

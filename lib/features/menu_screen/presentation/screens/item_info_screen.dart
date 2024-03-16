@@ -35,6 +35,21 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
     updateCounterFromCart();
   }
 
+  void _addItemToCart(BuildContext context, int itemId, String itemName,
+      String itemImage, int itemPrice) {
+    context.read<CartBloc>().add(
+          CartItemAdded(
+            CartItemEntity(
+              id: itemId,
+              name: itemName,
+              image: itemImage,
+              price: itemPrice,
+              quantity: 1,
+            ),
+          ),
+        );
+  }
+
   void updateCounterFromCart() {
     final currentState = cartBloc.state;
     if (currentState is CartLoadSuccess) {
@@ -270,17 +285,13 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
       color: AppColors.orange,
       icon: Icons.add,
       onTap: () {
-        context.read<CartBloc>().add(
-              CartItemAdded(
-                CartItemEntity(
-                  id: itemId,
-                  name: itemName,
-                  image: itemImage,
-                  price: itemPrice,
-                  quantity: 1,
-                ),
-              ),
-            );
+        _addItemToCart(
+          context,
+          itemId,
+          itemName,
+          itemImage,
+          itemPrice,
+        );
       },
     );
   }

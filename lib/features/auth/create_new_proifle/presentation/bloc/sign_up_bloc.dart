@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:neo_cafe_24/core/services/validation.dart';
@@ -12,51 +13,44 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState>
   final LocalDataSource localDataSource;
   final SignUpUseCase useCase;
   SignUpBloc(this.useCase, this.localDataSource) : super(SignUpInitial()) {
-    sendNewUserDataEvent();
-    sendSignUpCode();
+    on<SendNewUserDataEvent>(_sendNewUserData);
+    on<SendSignUpCodeEvent>(_sendSignUpCodeEvent);
   }
 
-  void sendNewUserDataEvent() {
-    return on<SendNewUserDataEvent>(
-      (event, emit) async {
-        if (!isValidEmail(event.email)) {
-          emit(
-            ValidationError(errorText: 'Неверный формат почты'),
-          );
-          return;
-        }
-        emit(SignUpLoading());
-        try {
-          await useCase.sendNewUserDataCall(event.email);
-          emit(SignUpLoaded());
-        } catch (e) {
-          emit(
-            SignUpError(
-                errorText: 'Пользователь с такой почтой уже зарегистрирован'),
-          );
-        }
-      },
-    );
+  FutureOr<void> _sendNewUserData(
+      SendNewUserDataEvent event, Emitter emit) async {
+    if (!isValidEmail(event.email)) {
+      emit(
+        ValidationError(errorText: 'Неверный формат почты'),
+      );
+      return;
+    }
+    emit(SignUpLoading());
+    try {
+      await useCase.sendNewUserDataCall(event.email);
+      emit(SignUpLoaded());
+    } catch (e) {
+      emit(
+        SignUpError(
+            errorText: 'Пользователь с такой почтой уже зарегистрирован'),
+      );
+    }
   }
 
-  void sendSignUpCode() {
-    return on<SendSignUpCodeEvent>(
-      (event, emit) async {
-        emit(SignUpLoading());
-        try {
-          await useCase.sendSignUpCode(event.email, event.code);
+  FutureOr<void> _sendSignUpCodeEvent(event, emit) async {
+    emit(SignUpLoading());
+    try {
+      await useCase.sendSignUpCode(event.email, event.code);
 
-          emit(
-            CodeSended(),
-          );
-        } catch (e) {
-          emit(
-            SignUpError(
-              errorText: e.toString(),
-            ),
-          );
-        }
-      },
-    );
+      emit(
+        CodeSended(),
+      );
+    } catch (e) {
+      emit(
+        SignUpError(
+          errorText: e.toString(),
+        ),
+      );
+    }
   }
 }

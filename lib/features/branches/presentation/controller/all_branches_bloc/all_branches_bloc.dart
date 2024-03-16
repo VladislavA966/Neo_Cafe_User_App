@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:neo_cafe_24/features/branches/domain/entity/branch_entity.dart';
@@ -9,11 +10,10 @@ part 'all_branches_state.dart';
 class AllBranchesBloc extends Bloc<AllBranchesEvent, AllBranchesState> {
   final GetAllBranchesUseCase useCase;
   AllBranchesBloc(this.useCase) : super(AllBranchesInitial()) {
-    _getAllBranches();
+    on<GetAllBranchesEvent>(_allBranchesEvent);
   }
 
-  void _getAllBranches() {
-    return on<GetAllBranchesEvent>((event, emit) async {
+  FutureOr<void> _allBranchesEvent(event, emit) async {
     emit(AllBranchesLoading());
     try {
       final model = await useCase.call(NoParams());
@@ -23,6 +23,5 @@ class AllBranchesBloc extends Bloc<AllBranchesEvent, AllBranchesState> {
     } catch (e) {
       emit(AllBranchesError(errorText: e.toString()));
     }
-  });
   }
 }

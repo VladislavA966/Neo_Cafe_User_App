@@ -32,34 +32,46 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: AppBar(
-                automaticallyImplyLeading: false,
-                leading: leading,
-                backgroundColor: AppColors.mainColors,
-                elevation: 0,
-                title: Text(
-                  title,
-                  style: AppFonts.s32w600.copyWith(
-                    color: AppColors.textWhite,
-                  ),
-                ),
-                centerTitle: centerTitle,
-                actions: actions,
-              ),
+              child: _buildAppBar(),
             ),
-            Positioned(
-              right: 10,
-              child: Image.asset(AppImages.appBarBeanTop),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 10,
-              child: Image.asset(AppImages.appBarBeanBottom),
-            ),
+            _buildCofeeImage(),
+            _buildSecondCoffeeImage(),
           ],
         ),
       ),
     );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+              automaticallyImplyLeading: false,
+              leading: leading,
+              backgroundColor: AppColors.mainColors,
+              elevation: 0,
+              title: Text(
+                title,
+                style: AppFonts.s32w600.copyWith(
+                  color: AppColors.textWhite,
+                ),
+              ),
+              centerTitle: centerTitle,
+              actions: actions,
+            );
+  }
+
+  Positioned _buildSecondCoffeeImage() {
+    return Positioned(
+            bottom: 0,
+            right: 10,
+            child: Image.asset(AppImages.appBarBeanBottom),
+          );
+  }
+
+  Positioned _buildCofeeImage() {
+    return Positioned(
+            right: 10,
+            child: Image.asset(AppImages.appBarBeanTop),
+          );
   }
 
   @override

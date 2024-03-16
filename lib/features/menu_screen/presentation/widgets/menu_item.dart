@@ -17,7 +17,14 @@ class MenuItem extends StatelessWidget {
     required this.name,
     required this.price,
   });
-
+  List<BoxShadow> get shadows => [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 1,
+          blurRadius: 5,
+          offset: const Offset(0, 3),
+        ),
+      ];
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -26,14 +33,7 @@ class MenuItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
+          boxShadow: shadows,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

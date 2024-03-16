@@ -49,23 +49,27 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
                 },
               ),
             ),
-            Positioned(
-              top: 40,
-              left: 3,
-              child: AppBarButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            )
+            _buildArrowBackButton(context)
           ],
         ),
       ),
     );
+  }
+
+  Positioned _buildArrowBackButton(BuildContext context) {
+    return Positioned(
+            top: 40,
+            left: 3,
+            child: AppBarButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          );
   }
 
   @override
