@@ -13,10 +13,11 @@ class AllBranchesBloc extends Bloc<AllBranchesEvent, AllBranchesState> {
     on<GetAllBranchesEvent>(_allBranchesEvent);
   }
 
-  FutureOr<void> _allBranchesEvent(event, emit) async {
+  FutureOr<void> _allBranchesEvent(
+      GetAllBranchesEvent event, Emitter<AllBranchesState> emit) async {
     emit(AllBranchesLoading());
     try {
-      final model = await useCase.call(NoParams());
+      final model = await useCase(NoParams());
       emit(
         AllBranchesLoaded(branches: model),
       );

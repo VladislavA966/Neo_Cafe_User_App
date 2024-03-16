@@ -15,7 +15,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     );
   }
 
-  FutureOr<void> _getAllCategories(event, emit) async {
+  FutureOr<void> _getAllCategories(
+      GetAllCategoriesEvent event, Emitter<CategoryState> emit) async {
     emit(CategoryAllLoading());
     try {
       final model = await getAllCategories.call(

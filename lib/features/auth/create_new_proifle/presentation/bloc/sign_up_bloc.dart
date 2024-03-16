@@ -18,7 +18,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState>
   }
 
   FutureOr<void> _sendNewUserData(
-      SendNewUserDataEvent event, Emitter emit) async {
+      SendNewUserDataEvent event, Emitter<SignUpState> emit) async {
     if (!isValidEmail(event.email)) {
       emit(
         ValidationError(errorText: 'Неверный формат почты'),
@@ -37,7 +37,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState>
     }
   }
 
-  FutureOr<void> _sendSignUpCodeEvent(event, emit) async {
+  FutureOr<void> _sendSignUpCodeEvent(
+      SendSignUpCodeEvent event, Emitter<SignUpState> emit) async {
     emit(SignUpLoading());
     try {
       await useCase.sendSignUpCode(event.email, event.code);

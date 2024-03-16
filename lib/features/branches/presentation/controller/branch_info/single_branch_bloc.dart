@@ -13,7 +13,8 @@ class SingleBranchBloc extends Bloc<SingleBranchEvent, SingleBranchState> {
     on<GetSingleBranchEvent>(_branchInfoEvent);
   }
 
-  FutureOr<void> _branchInfoEvent(event, emit) async {
+  FutureOr<void> _branchInfoEvent(
+      GetSingleBranchEvent event, Emitter<SingleBranchState> emit) async {
     emit(SingleBranchLoading());
     try {
       final branch = await useCase.call(BranchParams(id: event.id));

@@ -13,7 +13,8 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
     on<GetItemEvent>(_getItemEvent);
   }
 
-  FutureOr<void> _getItemEvent(event, emit) async {
+  FutureOr<void> _getItemEvent(
+      GetItemEvent event, Emitter<ItemState> emit) async {
     emit(ItemLoading());
     try {
       final item = await getItem(

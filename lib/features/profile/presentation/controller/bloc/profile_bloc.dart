@@ -16,7 +16,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     );
   }
 
-  FutureOr<void> _getProfileInfo(event, emit) async {
+  FutureOr<void> _getProfileInfo(
+      ProfileInfoEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoading());
     try {
       final model = await profileUseCase(

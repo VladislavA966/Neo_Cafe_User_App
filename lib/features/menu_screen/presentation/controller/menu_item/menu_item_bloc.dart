@@ -17,18 +17,19 @@ class MenuItemBloc extends Bloc<MenuItemEvent, MenuItemState> {
     );
   }
 
-  FutureOr<void> _getAllItemsEvent(event, emit) async {
-      emit(MenuItemLoading());
-      try {
-        final items = await getAllitems(CategoryParams(id: event.id));
-  
-        emit(MenuItemLoaded(model: items));
-      } catch (e) {
-        emit(
-          MenuItemError(
-            errorText: e.toString(),
-          ),
-        );
-      }
+  FutureOr<void> _getAllItemsEvent(
+      GetAllItemsEvent event, Emitter<MenuItemState> emit) async {
+    emit(MenuItemLoading());
+    try {
+      final items = await getAllitems(CategoryParams(id: event.id));
+
+      emit(MenuItemLoaded(model: items));
+    } catch (e) {
+      emit(
+        MenuItemError(
+          errorText: e.toString(),
+        ),
+      );
     }
+  }
 }

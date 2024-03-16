@@ -17,7 +17,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState>
     on<SendCodeForSingInEvent>(_sendCodeForSignInEvent);
   }
 
-  FutureOr<void> _sendEmailForSignIn(event, emit) async {
+  FutureOr<void> _sendEmailForSignIn(
+      SendEmailForSingInEvent event, Emitter<SignInState> emit) async {
     if (!isValidEmail(event.email)) {
       emit(SignInValidationError(errorText: 'Неверный формат почты'));
       return;
@@ -35,7 +36,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState>
     }
   }
 
-  FutureOr<void> _sendCodeForSignInEvent(event, emit) async {
+  FutureOr<void> _sendCodeForSignInEvent(
+      SendCodeForSingInEvent event, Emitter<SignInState> emit) async {
     emit(
       SignInLoading(),
     );
