@@ -12,9 +12,14 @@ import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/repo/sign_up
 import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/use_case/sign_up_use_case.dart';
 import 'package:neo_cafe_24/features/branches/data/data_source/local/branch_local_data.dart';
 import 'package:neo_cafe_24/features/branches/data/data_source/remote/branch_remote_data_source.dart';
+import 'package:neo_cafe_24/features/branches/data/mapper/branch_to_entity.dart';
+import 'package:neo_cafe_24/features/branches/data/mapper/branches_to_entity_mapper.dart';
+import 'package:neo_cafe_24/features/branches/data/mapper/schedules_to_entity_mapper.dart';
 import 'package:neo_cafe_24/features/branches/data/repository_impl/branch_repository_impl.dart';
 import 'package:neo_cafe_24/features/branches/domain/use_case/get_all_branches_use_case.dart';
 import 'package:neo_cafe_24/features/branches/domain/use_case/get_branch.dart';
+import 'package:neo_cafe_24/features/branches/domain/use_case/get_branch_favourite_items.dart';
+import 'package:neo_cafe_24/features/branches/domain/use_case/new_order_use_case.dart';
 import 'package:neo_cafe_24/features/branches/presentation/controller/all_branches_bloc/all_branches_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/data/data_source/menu_remote_data_dource.dart';
 import 'package:neo_cafe_24/features/menu_screen/data/repository_impl/category_repository_impl.dart';
@@ -29,8 +34,11 @@ import 'package:neo_cafe_24/features/profile/data/mapper/table_mappre.dart';
 import 'package:neo_cafe_24/features/profile/data/repository_impl/profile_repository_impl.dart';
 import 'package:neo_cafe_24/features/profile/domain/use_case/profile_use_case.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/data/data_source/local/cart_local_data_source.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/data/data_source/remote/new_order_remote.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/data/mapper/item_order_to_model_mapper.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/data/model/cart_model/cart_model.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/data/repository_impl/cart_repository_impl.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/data/repository_impl/new_order_repo_impl.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/domain/use_case/cart_use_case.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/bloc/cart_bloc.dart';
 
@@ -58,6 +66,7 @@ void setupDependensies() {
   blocDependencies();
 
   profileDependency();
+  newOrderDependency();
 }
 
 //SignUp
@@ -151,11 +160,27 @@ void branchesDependency() {
     ),
   );
   getIt.registerSingleton<BranchRepositoryImpl>(
-      BranchRepositoryImpl(remote: getIt<BranchRemoteImpl>()));
+    BranchRepositoryImpl(
+      remote: getIt<BranchRemoteImpl>(),
+      branchesMapper: getIt<BranchesToEnityMapper>(),
+      branchMapper: getIt<BranchToEntityMapper>(),
+    ),
+  );
   getIt.registerSingleton<GetAllBranchesUseCase>(
-      GetAllBranchesUseCase(repo: getIt<BranchRepositoryImpl>()));
+    GetAllBranchesUseCase(
+      repo: getIt<BranchRepositoryImpl>(),
+    ),
+  );
   getIt.registerSingleton<BranchUseCase>(
-      BranchUseCase(repo: getIt<BranchRepositoryImpl>()));
+    BranchUseCase(
+      repo: getIt<BranchRepositoryImpl>(),
+    ),
+  );
+  getIt.registerSingleton<GetFavouriteItemsUseCase>(
+    GetFavouriteItemsUseCase(
+      repo: getIt<BranchRepositoryImpl>(),
+    ),
+  );
 }
 
 //Blocs
@@ -193,6 +218,28 @@ void profileDependency() {
   );
 }
 
+//NewOrder
+void newOrderDependency() {
+  getIt.registerSingleton<NewOrderRemoteImpl>(
+    NewOrderRemoteImpl(
+      dio: getIt<DioSettings>().dio,
+    ),
+  );
+  getIt.registerSingleton<NewOrderRepoImpl>(
+    NewOrderRepoImpl(
+      newOrderRemote: getIt<NewOrderRemoteImpl>(),
+      cartLocal: getIt<CartLocalDataSourceImpl>(),
+      branchLocal: getIt<BranchLocalData>(),
+      itemMapper: getIt<ItemOrderToModelMapper>(),
+    ),
+  );
+  getIt.registerSingleton<NewOrderUseCase>(
+    NewOrderUseCase(
+      repo: getIt<NewOrderRepoImpl>(),
+    ),
+  );
+}
+
 //Mappers
 void mappers() {
   getIt.registerSingleton<TableMapper>(
@@ -210,6 +257,20 @@ void mappers() {
   getIt.registerSingleton<ProfileMapper>(
     ProfileMapper(
       orderMapper: getIt<OrderMapper>(),
+    ),
+  );
+  getIt.registerSingleton<ItemOrderToModelMapper>(
+    ItemOrderToModelMapper(),
+  );
+  getIt.registerSingleton<ScheDulesToEntityMapper>(ScheDulesToEntityMapper());
+  getIt.registerSingleton<BranchToEntityMapper>(
+    BranchToEntityMapper(
+      schedulesMapper: getIt<ScheDulesToEntityMapper>(),
+    ),
+  );
+  getIt.registerSingleton<BranchesToEnityMapper>(
+    BranchesToEnityMapper(
+      scheduleMapper: getIt<ScheDulesToEntityMapper>(),
     ),
   );
 }

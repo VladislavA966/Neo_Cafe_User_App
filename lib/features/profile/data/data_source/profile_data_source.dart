@@ -14,7 +14,9 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   @override
   Future<ProfileModel> getProfileInfo() async {
     final customerId = await local.getCustomerId();
-    final responce = await dio.get('/profile/customer/$customerId/');
+    final responce = await dio.get(
+      '/profile/customer/$customerId/',
+    );
     return ProfileModel.fromJson(responce.data);
   }
 }

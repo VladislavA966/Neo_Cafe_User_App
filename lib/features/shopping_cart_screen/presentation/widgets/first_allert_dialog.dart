@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/new_order_bloc/new_order_bloc.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/view/cart_screen.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/widgets/secons_allert_dialog.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/widgets/third_dialog.dart';
 
 class FirstBonusDialog extends StatelessWidget {
   const FirstBonusDialog({
@@ -40,14 +43,29 @@ class FirstBonusDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Expanded(
-                  child: OpacityButton(
-                    title: 'Нет',
-                    borderColor: AppColors.black,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                BlocConsumer<NewOrderBloc, NewOrderState>(
+                  listener: (context, state) {
+                    if (state is NewOrderLoaded) {
+                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (context) => const ThirdDialog(),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return Expanded(
+                      child: OpacityButton(
+                        title: 'Нет',
+                        borderColor: AppColors.black,
+                        onPressed: () {
+                          BlocProvider.of<NewOrderBloc>(context).add(
+                            SendNewOrderEvent(bonusPoints: 0),
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(width: 16),
                 Expanded(

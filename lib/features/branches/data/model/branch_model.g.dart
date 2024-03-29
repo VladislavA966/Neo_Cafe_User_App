@@ -6,11 +6,29 @@ part of 'branch_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+BranchesModel _$BranchesModelFromJson(Map<String, dynamic> json) =>
+    BranchesModel(
+      count: json['count'] as int?,
+      next: json['next'] as String?,
+      previous: json['previous'] as String?,
+      results: (json['results'] as List<dynamic>)
+          .map((e) => BranchModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$BranchesModelToJson(BranchesModel instance) =>
+    <String, dynamic>{
+      'count': instance.count,
+      'next': instance.next,
+      'previous': instance.previous,
+      'results': instance.results,
+    };
+
 BranchModel _$BranchModelFromJson(Map<String, dynamic> json) => BranchModel(
       json['phone_number'] as String?,
       id: json['id'] as int?,
-      schedules: (json['schedules'] as List<dynamic>?)
-          ?.map((e) => SchedulesModel.fromJson(e as Map<String, dynamic>))
+      schedules: (json['schedules'] as List<dynamic>)
+          .map((e) => SchedulesModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       branchName: json['branch_name'] as String?,
       adress: json['address'] as String?,
@@ -23,14 +41,14 @@ BranchModel _$BranchModelFromJson(Map<String, dynamic> json) => BranchModel(
 Map<String, dynamic> _$BranchModelToJson(BranchModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'schedules': instance.schedules,
       'branch_name': instance.branchName,
       'address': instance.adress,
       'phone_number': instance.phoneNumber,
-      'image': instance.image,
-      'description': instance.description,
       'link_2gis': instance.link2gis,
       'table_quantity': instance.tableQuantity,
+      'image': instance.image,
+      'description': instance.description,
+      'schedules': instance.schedules,
     };
 
 SchedulesModel _$SchedulesModelFromJson(Map<String, dynamic> json) =>

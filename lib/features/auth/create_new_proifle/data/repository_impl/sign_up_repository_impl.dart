@@ -13,6 +13,8 @@ class SignUpRepoImpl implements SignUpRepo {
 
   @override
   Future<void> sendSignUpCode(String email, String code) async {
-    await remote.sendSignUpCode({"email": email, "confirmation_code": code});
+    await remote.sendSignUpCode(
+      {"email": email, "confirmation_code": code, "csrfmiddlewaretoken": ""},
+    );
   }
 }

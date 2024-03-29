@@ -1,4 +1,6 @@
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_data_source/local_data_source.dart';
 
@@ -22,7 +24,8 @@ class DioSettings {
     final interceptors = dio.interceptors;
 
     interceptors.clear();
-
+    final cookieJar = CookieJar();
+    interceptors.add(CookieManager(cookieJar));
     final logInterceptor = LogInterceptor(
       requestBody: true,
       responseBody: true,
@@ -49,8 +52,8 @@ class DioSettings {
           final refreshToken = await _storage.getRefreshToken();
           if (refreshToken != null) {
             try {
-              final response = await dio.post('/token/refresh/',
-                  data: {'refresh': refreshToken});
+              final response = await dio
+                  .post('/token/refresh/', data: {'refresh': refreshToken});
               final newAccessToken = response.data['access'];
               final newRefreshToken = response.data['refresh'];
 

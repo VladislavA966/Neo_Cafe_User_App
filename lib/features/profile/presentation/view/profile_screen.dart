@@ -66,6 +66,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildNameContainer(context, state)
             ],
           );
+        } else if (state is ProfileError) {
+          return Center(
+            child: Text(state.errorText),
+          );
         }
         return const SizedBox();
       },

@@ -2,25 +2,47 @@ import 'package:json_annotation/json_annotation.dart';
 part 'branch_model.g.dart';
 
 @JsonSerializable()
+class BranchesModel {
+  @JsonKey(name: "count")
+  final int? count;
+  @JsonKey(name: "next")
+  final String? next;
+  @JsonKey(name: "previous")
+  final String? previous;
+  @JsonKey(name: "results")
+  final List<BranchModel> results;
+
+  BranchesModel(
+      {required this.count,
+      required this.next,
+      required this.previous,
+      required this.results});
+
+  factory BranchesModel.fromJson(Map<String, dynamic> json) =>
+      _$BranchesModelFromJson(json);
+}
+
+@JsonSerializable()
 class BranchModel {
   @JsonKey(name: 'id')
   final int? id;
-  @JsonKey(name: 'schedules')
-  final List<SchedulesModel>? schedules;
   @JsonKey(name: 'branch_name')
   final String? branchName;
   @JsonKey(name: "address")
   final String? adress;
   @JsonKey(name: 'phone_number')
   final String? phoneNumber;
-  @JsonKey(name: 'image')
-  final String? image;
-  @JsonKey(name: 'description')
-  final String? description;
   @JsonKey(name: 'link_2gis')
   final String? link2gis;
   @JsonKey(name: 'table_quantity')
   final int? tableQuantity;
+  @JsonKey(name: 'image')
+  final String? image;
+  @JsonKey(name: 'description')
+  final String? description;
+
+  @JsonKey(name: 'schedules')
+  final List<SchedulesModel> schedules;
 
   BranchModel(this.phoneNumber,
       {required this.id,

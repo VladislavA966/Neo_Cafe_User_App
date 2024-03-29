@@ -14,7 +14,6 @@ class ProfileMapper extends Mapper<ProfileModel, ProfileEntity> {
       firstName: model.firstName ?? '',
       bonusPoints: model.bonusPoints ?? 0,
       email: model.email ?? '',
-      orders: model.orders?.map(orderMapper.mapper).toList() ?? [],
     );
   }
 }

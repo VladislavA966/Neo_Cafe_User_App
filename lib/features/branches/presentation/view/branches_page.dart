@@ -65,6 +65,10 @@ class _BranchesScreenState extends State<BranchesScreen> {
                 );
               } else if (state is AllBranchesLoaded) {
                 return _buildBranchesList(state);
+              } else if (state is AllBranchesError) {
+                return Center(
+                  child: Text(state.errorText),
+                );
               }
               return const SizedBox();
             },

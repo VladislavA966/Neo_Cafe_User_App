@@ -9,7 +9,10 @@ import 'package:neo_cafe_24/features/auth/create_new_proifle/domain/use_case/sig
 import 'package:neo_cafe_24/features/auth/create_new_proifle/presentation/bloc/sign_up_bloc.dart';
 import 'package:neo_cafe_24/features/branches/domain/use_case/get_all_branches_use_case.dart';
 import 'package:neo_cafe_24/features/branches/domain/use_case/get_branch.dart';
+import 'package:neo_cafe_24/features/branches/domain/use_case/get_branch_favourite_items.dart';
+import 'package:neo_cafe_24/features/branches/domain/use_case/new_order_use_case.dart';
 import 'package:neo_cafe_24/features/branches/presentation/controller/all_branches_bloc/all_branches_bloc.dart';
+import 'package:neo_cafe_24/features/branches/presentation/controller/branch_favourite_items/branch_favourite_items_bloc.dart';
 import 'package:neo_cafe_24/features/branches/presentation/controller/branch_info/single_branch_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/category_use_case.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/item_use_case.dart';
@@ -21,6 +24,7 @@ import 'package:neo_cafe_24/features/profile/domain/use_case/profile_use_case.da
 import 'package:neo_cafe_24/features/profile/presentation/controller/bloc/profile_bloc.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/domain/use_case/cart_use_case.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/bloc/cart_bloc.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/new_order_bloc/new_order_bloc.dart';
 import 'package:neo_cafe_24/features/welcom_screen/welcome_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -76,6 +80,16 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ProfileBloc(
             getIt<ProfileUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => BranchFavouriteItemsBloc(
+            getIt<GetFavouriteItemsUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => NewOrderBloc(
+            getIt<NewOrderUseCase>(),
           ),
         ),
       ],

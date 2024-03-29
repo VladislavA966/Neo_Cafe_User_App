@@ -61,20 +61,19 @@ class _MenuScreenState extends State<MenuScreen> {
     double itemHeight = 250.0;
 
     double childAspectRatio = itemWidth / itemHeight;
-    bool isGrid = false;
 
     return Stack(
       children: [
         Scaffold(
           appBar: _buildAppBar(),
-          body: _buildBody(childAspectRatio, isGrid),
+          body: _buildBody(childAspectRatio),
         ),
         SearchField(controller: controller)
       ],
     );
   }
 
-  BlocBuilder _buildBody(double childAspectRatio, bool isGrid) {
+  BlocBuilder _buildBody(double childAspectRatio) {
     return BlocBuilder<MenuItemBloc, MenuItemState>(
       builder: (context, state) {
         if (state is MenuItemLoaded) {

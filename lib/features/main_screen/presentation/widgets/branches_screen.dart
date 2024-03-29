@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/features/branches/presentation/controller/all_branches_bloc/all_branches_bloc.dart';
+import 'package:neo_cafe_24/features/branches/presentation/controller/branch_favourite_items/branch_favourite_items_bloc.dart';
 import 'package:neo_cafe_24/features/branches/presentation/controller/branch_info/single_branch_bloc.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/branch_container.dart';
 
@@ -89,32 +90,55 @@ class BranchesWindow extends StatelessWidget {
 
   Expanded _buildBranchesList() {
     return Expanded(
-      child: BlocBuilder<AllBranchesBloc, AllBranchesState>(
+      child: BlocConsumer<AllBranchesBloc, AllBranchesState>(
+        listener: (context, state) {
+          _getFavouriteItems(state, context);
+        },
         builder: (context, state) {
           if (state is AllBranchesLoaded) {
-            return ListView.builder(
-              itemCount: state.branches.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: BranchContainer(
-                  onTap: () {
-                    getBranchInfoEvent(context, state, index);
-                    Navigator.pop(context);
-                  },
-                  name: state.branches[index].branchName,
-                ),
-              ),
-            );
+            return _branchesBuilder(state);
           } else if (state is AllBranchesLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return _branchesLoadingBuilder();
           }
           return const SizedBox();
         },
       ),
     );
+  }
+
+  Center _branchesLoadingBuilder() {
+     return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  ListView _branchesBuilder(AllBranchesLoaded state) {
+       return ListView.builder(
+      itemCount: state.branches.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) => _buildBranchContainer(context, state, index),
+    );
+  }
+
+  Padding _buildBranchContainer(BuildContext context, AllBranchesLoaded state, int index) {
+    return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: BranchContainer(
+                onTap: () {
+                  getBranchInfoEvent(context, state, index);
+                  Navigator.pop(context);
+                },
+                name: state.branches[index].branchName,
+              ),
+            );
+  }
+
+  void _getFavouriteItems(AllBranchesState state, BuildContext context) {
+     if (state is AllBranchesLoaded) {
+      BlocProvider.of<BranchFavouriteItemsBloc>(context).add(
+        GetFavouriteItemsEvent(),
+      );
+    }
   }
 
   Text _buildTitle() {

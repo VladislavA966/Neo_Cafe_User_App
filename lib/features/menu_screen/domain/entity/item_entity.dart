@@ -24,19 +24,4 @@ class ItemEntity {
     required this.ingredient,
     this.isInCart = false,
   });
-
-  ItemEntity copyWith({bool? isInCart}) {
-    return ItemEntity(
-      id: id,
-      name: name,
-      description: description,
-      categoryId: categoryId,
-      categoryName: categoryName,
-      itemImage: itemImage,
-      pricePerUnit: pricePerUnit,
-      branch: branch,
-      ingredient: ingredient,
-      isInCart: isInCart ?? this.isInCart,
-    );
-  }
 }
