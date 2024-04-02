@@ -21,7 +21,10 @@ import 'package:neo_cafe_24/features/menu_screen/presentation/controller/categor
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/item_bloc/item_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/menu_item/menu_item_bloc.dart';
 import 'package:neo_cafe_24/features/order_history/domain/use_case/order_history_use_case.dart';
+import 'package:neo_cafe_24/features/order_history/domain/use_case/order_info_use_case.dart';
 import 'package:neo_cafe_24/features/order_history/presentation/controller/bloc/order_history_bloc.dart';
+import 'package:neo_cafe_24/features/order_history/presentation/view/order_info_screen/bloc/order_info_bloc.dart';
+import 'package:neo_cafe_24/features/profile/domain/use_case/edit_profile_use_case.dart';
 import 'package:neo_cafe_24/features/profile/domain/use_case/profile_use_case.dart';
 import 'package:neo_cafe_24/features/profile/presentation/controller/bloc/profile_bloc.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/domain/use_case/cart_use_case.dart';
@@ -82,6 +85,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ProfileBloc(
             getIt<ProfileUseCase>(),
+            getIt<EditProfileUseCase>(),
           ),
         ),
         BlocProvider(
@@ -97,6 +101,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => OrderHistoryBloc(
             getIt<OrderHistoryUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => OrderInfoBloc(
+            getIt<OrderInfoUseCase>(),
           ),
         ),
       ],

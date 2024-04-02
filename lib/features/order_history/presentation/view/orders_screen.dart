@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/features/order_history/presentation/controller/bloc/order_history_bloc.dart';
+import 'package:neo_cafe_24/features/order_history/presentation/view/order_info_screen/order_info_screen.dart';
 import 'package:neo_cafe_24/features/profile/presentation/widgets/order_container.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
@@ -67,12 +68,8 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
                 const SizedBox(height: 16),
                 _buildOpenOrderList(context, state),
                 const SizedBox(height: 32),
-                // _buildClosedOrderTitle(),
-                // const SizedBox(height: 16),
-                // const OrderContainer(),
-                // const SizedBox(height: 12),
-                // const OrderContainer(),
-                // const SizedBox(height: 12),
+                _buildClosedOrderTitle(),
+                const SizedBox(height: 16),
                 const OrderContainer(),
               ],
             );
@@ -96,15 +93,34 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
 
   Widget _buildOpenOrderList(BuildContext context, OrderHistoryLoaded state) {
     return ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: state.orders.length,
-        itemBuilder: (context, index) {
-          return const Padding(
-            padding: EdgeInsets.only(bottom: 16),
-            child: OrderContainer(),
-          );
-        });
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: state.orders.length,
+      itemBuilder: (context, index) =>
+          _buildOrderContainer(context, state, index),
+    );
+  }
+
+  Padding _buildOrderContainer(
+      BuildContext context, OrderHistoryLoaded state, int index) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: OrderContainer(
+        onPressed: () => _goToOrderInfoScreen(context, state, index),
+      ),
+    );
+  }
+
+  void _goToOrderInfoScreen(
+      BuildContext context, OrderHistoryLoaded state, int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OrderInfoScreen(
+          id: state.orders[index].id,
+        ),
+      ),
+    );
   }
 
   Text _buildOpenOrderTitle() {

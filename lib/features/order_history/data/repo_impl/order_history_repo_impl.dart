@@ -20,4 +20,11 @@ class OrderHistoryRepoImpl implements OrderHistoryRepo {
         .toList();
     return orderEnityData;
   }
+
+  @override
+  Future<OrderEntity> getOrderInfo(int id) async {
+    final orderInfoRemote = await remoteData.getOrderInfo(id);
+    final orderInfoEntity = orderMapper.mapper(orderInfoRemote);
+    return orderInfoEntity;
+  }
 }

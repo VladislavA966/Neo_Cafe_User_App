@@ -29,12 +29,13 @@ import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/menu_items_use
 import 'package:neo_cafe_24/features/order_history/data/remote_data/order_history_remote.dart';
 import 'package:neo_cafe_24/features/order_history/data/repo_impl/order_history_repo_impl.dart';
 import 'package:neo_cafe_24/features/order_history/domain/use_case/order_history_use_case.dart';
+import 'package:neo_cafe_24/features/order_history/domain/use_case/order_info_use_case.dart';
 import 'package:neo_cafe_24/features/profile/data/data_source/profile_data_source.dart';
 import 'package:neo_cafe_24/features/order_history/data/mappers/ito_mapper.dart';
 import 'package:neo_cafe_24/features/order_history/data/mappers/order_mapper.dart';
 import 'package:neo_cafe_24/features/profile/data/mapper/profile_mapper.dart';
-import 'package:neo_cafe_24/features/profile/data/mapper/table_mappre.dart';
 import 'package:neo_cafe_24/features/profile/data/repository_impl/profile_repository_impl.dart';
+import 'package:neo_cafe_24/features/profile/domain/use_case/edit_profile_use_case.dart';
 import 'package:neo_cafe_24/features/profile/domain/use_case/profile_use_case.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/data/data_source/local/cart_local_data_source.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/data/data_source/remote/new_order_remote.dart';
@@ -219,6 +220,11 @@ void profileDependency() {
       repo: getIt<ProfileRepositoryImpl>(),
     ),
   );
+  getIt.registerSingleton<EditProfileUseCase>(
+    EditProfileUseCase(
+      repo: getIt<ProfileRepositoryImpl>(),
+    ),
+  );
 }
 
 //NewOrder
@@ -261,13 +267,15 @@ void orderHistoryDependencies() {
       repo: getIt<OrderHistoryRepoImpl>(),
     ),
   );
+  getIt.registerSingleton<OrderInfoUseCase>(
+    OrderInfoUseCase(
+      repo: getIt<OrderHistoryRepoImpl>(),
+    ),
+  );
 }
 
 //Mappers
 void mappers() {
-  getIt.registerSingleton<TableMapper>(
-    TableMapper(),
-  );
   getIt.registerSingleton<ItoMapper>(
     ItoMapper(),
   );

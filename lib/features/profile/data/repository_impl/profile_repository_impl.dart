@@ -14,4 +14,11 @@ class ProfileRepositoryImpl implements ProfileRepo {
     final profileEnity = profileMapper.mapper(remoteData);
     return profileEnity;
   }
+
+  @override
+  Future<ProfileEntity> editProfileInfo(String firstName) async {
+    final remoteData = await remote.editProfileInfo(firstName);
+    final profileEntity = profileMapper.mapper(remoteData);
+    return profileEntity;
+  }
 }

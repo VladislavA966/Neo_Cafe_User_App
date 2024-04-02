@@ -1,4 +1,4 @@
-import 'package:neo_cafe_24/features/profile/domain/entity/table_entity.dart';
+import 'package:neo_cafe_24/features/order_history/domain/entity/itro_entity.dart';
 
 class OrderEntity {
   final int id;
@@ -8,7 +8,6 @@ class OrderEntity {
   final String createdAt;
   final String updatedAt;
   final String completedAt;
-
   final int totalSum;
   final List<ItoEntity> iTO;
 
