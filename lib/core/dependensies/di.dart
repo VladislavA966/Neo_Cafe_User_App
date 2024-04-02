@@ -26,9 +26,12 @@ import 'package:neo_cafe_24/features/menu_screen/data/repository_impl/category_r
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/category_use_case.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/item_use_case.dart';
 import 'package:neo_cafe_24/features/menu_screen/domain/use_cases/menu_items_use_case.dart';
+import 'package:neo_cafe_24/features/order_history/data/remote_data/order_history_remote.dart';
+import 'package:neo_cafe_24/features/order_history/data/repo_impl/order_history_repo_impl.dart';
+import 'package:neo_cafe_24/features/order_history/domain/use_case/order_history_use_case.dart';
 import 'package:neo_cafe_24/features/profile/data/data_source/profile_data_source.dart';
-import 'package:neo_cafe_24/features/profile/data/mapper/ito_mapper.dart';
-import 'package:neo_cafe_24/features/profile/data/mapper/order_mapper.dart';
+import 'package:neo_cafe_24/features/order_history/data/mappers/ito_mapper.dart';
+import 'package:neo_cafe_24/features/order_history/data/mappers/order_mapper.dart';
 import 'package:neo_cafe_24/features/profile/data/mapper/profile_mapper.dart';
 import 'package:neo_cafe_24/features/profile/data/mapper/table_mappre.dart';
 import 'package:neo_cafe_24/features/profile/data/repository_impl/profile_repository_impl.dart';
@@ -64,9 +67,9 @@ void setupDependensies() {
   cartDependency();
   branchesDependency();
   blocDependencies();
-
   profileDependency();
   newOrderDependency();
+  orderHistoryDependencies();
 }
 
 //SignUp
@@ -240,6 +243,26 @@ void newOrderDependency() {
   );
 }
 
+//OrderHistory
+void orderHistoryDependencies() {
+  getIt.registerSingleton<OrderHistoryRemoteDataImpl>(
+    OrderHistoryRemoteDataImpl(
+      dio: getIt<DioSettings>().dio,
+    ),
+  );
+  getIt.registerSingleton<OrderHistoryRepoImpl>(
+    OrderHistoryRepoImpl(
+      orderMapper: getIt<OrderMapper>(),
+      remoteData: getIt<OrderHistoryRemoteDataImpl>(),
+    ),
+  );
+  getIt.registerSingleton<OrderHistoryUseCase>(
+    OrderHistoryUseCase(
+      repo: getIt<OrderHistoryRepoImpl>(),
+    ),
+  );
+}
+
 //Mappers
 void mappers() {
   getIt.registerSingleton<TableMapper>(
@@ -250,7 +273,6 @@ void mappers() {
   );
   getIt.registerSingleton<OrderMapper>(
     OrderMapper(
-      tableMapper: getIt<TableMapper>(),
       itoMapper: getIt<ItoMapper>(),
     ),
   );

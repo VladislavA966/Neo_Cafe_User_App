@@ -16,7 +16,7 @@ class SignInRepositotyImpl implements SignInRepo {
       tokenRemote.refreshToken,
     );
     await local.saveId(
-      tokenRemote.customerProfile.customerId.toString(),
+      tokenRemote.customerProfile.userId.toString(),
     );
   }
 

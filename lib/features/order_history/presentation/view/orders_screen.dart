@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
-import 'package:neo_cafe_24/features/order_history/presentation/view/order_info_screen.dart';
+import 'package:neo_cafe_24/features/order_history/presentation/controller/bloc/order_history_bloc.dart';
 import 'package:neo_cafe_24/features/profile/presentation/widgets/order_container.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
@@ -14,6 +15,14 @@ class OrdersHistoryScreen extends StatefulWidget {
 }
 
 class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
+  @override
+  void initState() {
+    BlocProvider.of<OrderHistoryBloc>(context).add(
+      GetOrderHistoryEvent(),
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -47,23 +56,33 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 24),
-            _buildOpenOrderTitle(),
-            const SizedBox(height: 16),
-            _buildOpenOrderList(context),
-            const SizedBox(height: 32),
-            _buildClosedOrderTitle(),
-            const SizedBox(height: 16),
-            const OrderContainer(),
-            const SizedBox(height: 12),
-            const OrderContainer(),
-            const SizedBox(height: 12),
-            const OrderContainer(),
-          ],
-        ),
+        child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
+            builder: (context, state) {
+          if (state is OrderHistoryLoaded) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 24),
+                _buildOpenOrderTitle(),
+                const SizedBox(height: 16),
+                _buildOpenOrderList(context, state),
+                const SizedBox(height: 32),
+                // _buildClosedOrderTitle(),
+                // const SizedBox(height: 16),
+                // const OrderContainer(),
+                // const SizedBox(height: 12),
+                // const OrderContainer(),
+                // const SizedBox(height: 12),
+                const OrderContainer(),
+              ],
+            );
+          } else if (state is OrderHistoryLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return const SizedBox();
+        }),
       ),
     );
   }
@@ -75,17 +94,17 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
     );
   }
 
-  OrderContainer _buildOpenOrderList(BuildContext context) {
-    return OrderContainer(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const OrderInfoScreen(),
-          ),
-        );
-      },
-    );
+  Widget _buildOpenOrderList(BuildContext context, OrderHistoryLoaded state) {
+    return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: state.orders.length,
+        itemBuilder: (context, index) {
+          return const Padding(
+            padding: EdgeInsets.only(bottom: 16),
+            child: OrderContainer(),
+          );
+        });
   }
 
   Text _buildOpenOrderTitle() {

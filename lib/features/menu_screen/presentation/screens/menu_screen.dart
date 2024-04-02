@@ -49,8 +49,7 @@ class _MenuScreenState extends State<MenuScreen> {
     BlocProvider.of<MenuItemBloc>(context).add(GetAllItemsEvent(id: id));
   }
 
-  @override
-  Widget build(BuildContext context) {
+  double get childAspectRatio {
     double screenWidth = MediaQuery.of(context).size.width;
     double padding = 16.0 * 2;
     double spacing = 10.0;
@@ -61,7 +60,11 @@ class _MenuScreenState extends State<MenuScreen> {
     double itemHeight = 250.0;
 
     double childAspectRatio = itemWidth / itemHeight;
+    return childAspectRatio;
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         Scaffold(
@@ -73,78 +76,75 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  BlocBuilder _buildBody(double childAspectRatio) {
-    return BlocBuilder<MenuItemBloc, MenuItemState>(
+  Widget _buildBody(double childAspectRatio) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 48,
+          ),
+          _buildTitle(),
+          const SizedBox(
+            height: 12,
+          ),
+          _buildToggleButtonsList(),
+          const SizedBox(
+            height: 20,
+          ),
+          _buildMenuGrid(childAspectRatio)
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuGrid(double childAspectRatio) {
+    return BlocConsumer<MenuItemBloc, MenuItemState>(
+      listener: (context, state) {},
       builder: (context, state) {
         if (state is MenuItemLoaded) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 48,
-                ),
-                _buildTitle(),
-                const SizedBox(
-                  height: 12,
-                ),
-                _buildToggleButtonsList(),
-                const SizedBox(
-                  height: 20,
-                ),
-                _buildMenuGrid(childAspectRatio, state)
-              ],
+          return Expanded(
+            child: GridView.builder(
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(8),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: childAspectRatio,
+              ),
+              itemCount: state.model.length,
+              itemBuilder: (BuildContext context, int index) {
+                return MenuItem(
+                  button: _buildAddButton(
+                    state,
+                    index,
+                    context,
+                    state.model[index].id,
+                    state.model[index].itemImage,
+                    state.model[index].name,
+                    state.model[index].pricePerUnit,
+                  ),
+                  name: state.model[index].name,
+                  price: state.model[index].pricePerUnit.toString(),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ItemInfoScreen(
+                          id: state.model[index].id,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
-          );
-        } else if (state is MenuItemLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
           );
         }
         return const SizedBox();
       },
-    );
-  }
-
-  Expanded _buildMenuGrid(double childAspectRatio, MenuItemLoaded state) {
-    return Expanded(
-      child: GridView.builder(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(8),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: (childAspectRatio),
-        ),
-        itemCount: state.model.length,
-        itemBuilder: (BuildContext context, int index) {
-          return MenuItem(
-            button: _buildAddButton(
-              state,
-              index,
-              context,
-              state.model[index].id,
-              state.model[index].itemImage,
-              state.model[index].name,
-              state.model[index].pricePerUnit,
-            ),
-            name: state.model[index].name,
-            price: state.model[index].pricePerUnit.toString(),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ItemInfoScreen(
-                    id: state.model[index].id,
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ),
     );
   }
 

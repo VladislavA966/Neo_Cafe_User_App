@@ -1,4 +1,3 @@
-import 'package:neo_cafe_24/features/profile/domain/entity/order_entity.dart';
 
 class ProfileEntity {
   final int customerId;

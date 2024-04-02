@@ -1,5 +1,5 @@
 import 'package:neo_cafe_24/core/mapper/mapper.dart';
-import 'package:neo_cafe_24/features/profile/data/models/ito_model.dart/ito_model.dart';
+import 'package:neo_cafe_24/features/order_history/data/models/ito_model.dart/ito_model.dart';
 import 'package:neo_cafe_24/features/profile/domain/entity/table_entity.dart';
 
 class ItoMapper extends Mapper<ItoModel, ItoEntity> {

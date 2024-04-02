@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
+import 'package:neo_cafe_24/features/profile/presentation/controller/bloc/profile_bloc.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/new_order_bloc/new_order_bloc.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/view/cart_screen.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/widgets/third_dialog.dart';
 
@@ -12,6 +15,12 @@ class SecondBonusDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bonusController = TextEditingController();
+    final profileState = context.read<ProfileBloc>().state;
+    int bonusPoints = 0;
+    if (profileState is ProfileLoaded) {
+      bonusPoints = profileState.model.bonusPoints;
+    }
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Container(
@@ -26,7 +35,7 @@ class SecondBonusDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Ваши бонусы: 100',
+              'Ваши бонусы: $bonusPoints',
               style: AppFonts.s24w600.copyWith(color: AppColors.black),
               textAlign: TextAlign.center,
             ),
@@ -41,6 +50,7 @@ class SecondBonusDialog extends StatelessWidget {
               width: double.infinity,
               height: 40,
               child: TextField(
+                controller: bonusController,
                 decoration: InputDecoration(
                   focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: AppColors.black)),
@@ -70,16 +80,31 @@ class SecondBonusDialog extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: CustomButton(
-                    title: 'Списать',
-                    onPressed: () {
-                      Navigator.pop(context);
-                      showDialog(
-                        context: context,
-                        builder: (context) => const ThirdDialog(),
-                      );
+                  child: BlocListener<NewOrderBloc, NewOrderState>(
+                    listener: (context, state) {
+                      if (state is NewOrderLoaded) {
+                        Navigator.pop(context);
+                        showDialog(
+                          context: context,
+                          builder: (context) => const ThirdDialog(),
+                        );
+                        BlocProvider.of<ProfileBloc>(context).add(
+                          ProfileInfoEvent(),
+                        );
+                      }
                     },
-                    height: 54,
+                    child: CustomButton(
+                      title: 'Списать',
+                      onPressed: () {
+                        BlocProvider.of<NewOrderBloc>(context).add(
+                          SendNewOrderEvent(
+                            bonusPoints:
+                                int.tryParse(bonusController.text) ?? 0,
+                          ),
+                        );
+                      },
+                      height: 54,
+                    ),
                   ),
                 ),
               ],

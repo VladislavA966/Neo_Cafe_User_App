@@ -8,35 +8,32 @@ part of 'order_model.dart';
 
 OrdersModel _$OrdersModelFromJson(Map<String, dynamic> json) => OrdersModel(
       id: json['id'] as int?,
-      totalPrice: json['total_price'] as int?,
-      table: TableModel.fromJson(json['table'] as Map<String, dynamic>),
-      status: json['status'] as String?,
+      orderNumber: json['order_number'] as int?,
+      status: json['order_status'] as String?,
+      orderType: json['order_type'] as String?,
       createdAt: json['created_at'] as String?,
-      customer: json['customer'] as int?,
       updatedAt: json['updated_at'] as String?,
       completedAt: json['completed_at'] as String?,
-      branch: json['branch'] as int?,
-      orderType: json['order_type'] as String?,
-      totalSum: json['total_sum'] as String?,
-      employee: json['employee'] as int?,
-      iTO: (json['ITO'] as List<dynamic>?)
-          ?.map((e) => ItoModel.fromJson(e as Map<String, dynamic>))
+      profile: json['customer_profile'] == null
+          ? null
+          : ProfileModel.fromJson(
+              json['customer_profile'] as Map<String, dynamic>),
+      totalSum: json['total_sum'] as int?,
+      iTO: (json['ITO'] as List<dynamic>)
+          .map((e) => ItoModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$OrdersModelToJson(OrdersModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'total_price': instance.totalPrice,
-      'table': instance.table,
-      'status': instance.status,
+      'order_number': instance.orderNumber,
+      'order_status': instance.status,
+      'order_type': instance.orderType,
       'created_at': instance.createdAt,
-      'customer': instance.customer,
       'updated_at': instance.updatedAt,
       'completed_at': instance.completedAt,
-      'branch': instance.branch,
-      'order_type': instance.orderType,
+      'customer_profile': instance.profile,
       'total_sum': instance.totalSum,
-      'employee': instance.employee,
       'ITO': instance.iTO,
     };

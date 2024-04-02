@@ -72,29 +72,29 @@ class OrderContainer extends StatelessWidget {
 
   Column _buildInfoColumn() {
     return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Neo Cafe Derzinka,',
-                  style: AppFonts.s14w600.copyWith(
-                    color: AppColors.black,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Латте, капучино, Багров...,',
-                  style: AppFonts.s12w400.copyWith(
-                    color: AppColors.black,
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  'Сейчас',
-                  style: AppFonts.s14w600.copyWith(
-                    color: AppColors.orange,
-                  ),
-                ),
-              ],
-            );
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Neo Cafe Derzinka,',
+          style: AppFonts.s14w600.copyWith(
+            color: AppColors.black,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          'Латте, капучино, Багров...,',
+          style: AppFonts.s12w400.copyWith(
+            color: AppColors.black,
+          ),
+        ),
+        const Spacer(),
+        Text(
+          'Сейчас',
+          style: AppFonts.s14w600.copyWith(
+            color: AppColors.orange,
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
+import 'package:neo_cafe_24/features/profile/presentation/controller/bloc/profile_bloc.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/new_order_bloc/new_order_bloc.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/view/cart_screen.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/widgets/secons_allert_dialog.dart';
@@ -15,6 +16,11 @@ class FirstBonusDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final profileState = context.read<ProfileBloc>().state;
+    int bonusPoints = 0;
+    if (profileState is ProfileLoaded) {
+      bonusPoints = profileState.model.bonusPoints;
+    }
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Container(
@@ -35,7 +41,7 @@ class FirstBonusDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'У вас есть 100 бонусов, хотите\nих списать?',
+              'У вас есть $bonusPoints бонусов, хотите\nих списать?',
               textAlign: TextAlign.center,
               style: AppFonts.s14w600.copyWith(color: AppColors.black),
             ),

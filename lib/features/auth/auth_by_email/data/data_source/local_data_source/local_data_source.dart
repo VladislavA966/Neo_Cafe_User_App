@@ -10,8 +10,8 @@ class LocalDataSource {
     await _storage.write(key: 'refresh_token', value: refreshToken);
   }
 
-  Future<void> saveId(String id) async {
-    await _storage.write(key: 'customerId', value: id);
+  Future<void> saveId(String userId) async {
+    await _storage.write(key: 'user_id', value: userId);
   }
 
   Future<String?> getAccessToken() async {
@@ -27,14 +27,6 @@ class LocalDataSource {
   }
 
   Future<String?> getCustomerId() async {
-    return await _storage.read(key: 'customerId');
+    return await _storage.read(key: 'user_id');
   }
-  // Future<void> saveCustomerId(int customerId) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  // }
-
-  // Future<int?> getCustomerId() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   return prefs.getInt('customerIdey');
-  // }
 }

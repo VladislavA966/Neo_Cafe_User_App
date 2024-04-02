@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
+import 'package:neo_cafe_24/features/auth/auth_screen.dart';
 import 'package:neo_cafe_24/features/auth/create_new_proifle/presentation/bloc/sign_up_bloc.dart';
-import 'package:neo_cafe_24/features/main_screen/presentation/screens/main_screen.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
@@ -89,16 +89,14 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
             ),
             BlocListener<SignUpBloc, SignUpState>(
               listener: (context, state) {
-                if (state is SignUpLoaded) {
+                if (state is CodeSended) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const MainScreen(),
+                      builder: (context) => const AuthScreen(),
                     ),
                   );
-                } else if (state is CodeError) {
-                  print(state);
-                }
+                } else if (state is CodeError) {}
               },
               child: CustomButton(
                 title: 'Подтвердить',
