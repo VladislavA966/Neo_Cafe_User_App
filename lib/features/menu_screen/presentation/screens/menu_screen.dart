@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
+import 'package:neo_cafe_24/features/branches/presentation/controller/branch_info/single_branch_bloc.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/screens/item_info_screen.dart';
 import 'package:neo_cafe_24/features/main_screen/presentation/widgets/main_screen_text_field.dart';
 import 'package:neo_cafe_24/features/menu_screen/presentation/controller/category_bloc/category_bloc.dart';
@@ -63,12 +64,18 @@ class _MenuScreenState extends State<MenuScreen> {
     return childAspectRatio;
   }
 
+  String? branchName;
+
   @override
   Widget build(BuildContext context) {
+    final branchState = context.read<SingleBranchBloc>().state;
+    if (branchState is SingleBranchLoaded) {
+      branchName = branchState.branch.branchName;
+    }
     return Stack(
       children: [
         Scaffold(
-          appBar: _buildAppBar(),
+          appBar: _buildAppBar(branchName),
           body: _buildBody(childAspectRatio),
         ),
         SearchField(controller: controller)
@@ -245,7 +252,7 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  MyAppBar _buildAppBar() {
+  MyAppBar _buildAppBar(String? branchName) {
     return MyAppBar(
       leading: AppBarButton(
           icon: const Icon(
@@ -255,7 +262,8 @@ class _MenuScreenState extends State<MenuScreen> {
           onPressed: () {
             Navigator.pop(context);
           }),
-      title: 'Меню: Держинка',
+      title: 'Меню: ',
+      secondTitle: branchName,
     );
   }
 }

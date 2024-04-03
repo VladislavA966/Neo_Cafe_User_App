@@ -131,7 +131,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
   }
 
   MyAppBar _buildAppBar() {
-    return const MyAppBar(
+    return  MyAppBar(
       title: 'История заказов',
     );
   }

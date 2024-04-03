@@ -236,10 +236,8 @@ class _CartScreenState extends State<CartScreen> {
   }
 }
 
-
-
 MyAppBar _buildAppBar(BuildContext context) {
-  return const MyAppBar(
+  return MyAppBar(
     title: 'Корзина',
     centerTitle: false,
   );

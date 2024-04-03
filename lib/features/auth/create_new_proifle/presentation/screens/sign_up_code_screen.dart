@@ -64,7 +64,10 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
   }
 
   MyAppBar _buildAppBar() {
-    return const MyAppBar(title: 'Регистрация');
+    return MyAppBar(
+      title: 'Регистрация',
+      style: AppFonts.s32w600,
+    );
   }
 
   Padding _buildBody(PinTheme defaultPinTheme, PinTheme focusedPinTheme,
@@ -100,13 +103,7 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
               },
               child: CustomButton(
                 title: 'Подтвердить',
-                onPressed: () async {
-                  BlocProvider.of<SignUpBloc>(context).add(
-                    SendSignUpCodeEvent(
-                        email: widget.emailController,
-                        code: controllerPin.text),
-                  );
-                },
+                onPressed: () => _confirmCodeForSignUp(),
                 height: 48,
               ),
             ),
@@ -138,28 +135,44 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
     );
   }
 
+  void _confirmCodeForSignUp() {
+    BlocProvider.of<SignUpBloc>(context).add(
+      SendSignUpCodeEvent(
+          email: widget.emailController, code: controllerPin.text),
+    );
+  }
+
   BlocBuilder _buildTextInfo() {
     return BlocBuilder<SignUpBloc, SignUpState>(
       builder: (context, state) {
         if (state is SignUpError) {
-          return Text(
-            'Код введен неверно,\n попробуйте еще раз',
-            textAlign: TextAlign.center,
-            style: AppFonts.s16w600.copyWith(color: Colors.red),
-          );
+          return _buildErrorTitle();
         }
-        return Text(
-          'Введите 4-х значный код,\n отправленный на ${widget.emailController}',
-          textAlign: TextAlign.center,
-          style: AppFonts.s16w600,
-        );
+        return _buildDefaultTitlle();
       },
+    );
+  }
+
+  Text _buildDefaultTitlle() {
+    return Text(
+      'Введите 4-х значный код,\n отправленный на ${widget.emailController}',
+      textAlign: TextAlign.center,
+      style: AppFonts.s16w600,
+    );
+  }
+
+  Text _buildErrorTitle() {
+    return Text(
+      'Код введен неверно,\n попробуйте еще раз',
+      textAlign: TextAlign.center,
+      style: AppFonts.s16w600.copyWith(color: Colors.red),
     );
   }
 
   Pinput _buildPinPut(PinTheme defaultPinTheme, PinTheme focusedPinTheme,
       PinTheme submittedPinTheme) {
     return Pinput(
+      keyboardType: TextInputType.number,
       controller: controllerPin,
       cursor: Container(
         width: 20,
@@ -172,7 +185,7 @@ class _SingUpCodeScreenState extends State<SingUpCodeScreen> {
       submittedPinTheme: submittedPinTheme,
       pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
       showCursor: true,
-      onCompleted: (pin) => print(pin),
+      onCompleted: (pin) => _confirmCodeForSignUp(),
     );
   }
 

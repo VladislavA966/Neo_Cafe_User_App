@@ -5,9 +5,11 @@ class RegistrationTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final String? errorText;
+  final TextInputType? keyboardType;
   const RegistrationTextField(
       {super.key,
       this.errorText,
+      this.keyboardType,
       required this.hintText,
       required this.prefixImage,
       required this.controller});
@@ -17,6 +19,7 @@ class RegistrationTextField extends StatelessWidget {
     return SizedBox(
       height: 80,
       child: TextField(
+        keyboardType: keyboardType,
         controller: controller,
         decoration: InputDecoration(
           contentPadding:

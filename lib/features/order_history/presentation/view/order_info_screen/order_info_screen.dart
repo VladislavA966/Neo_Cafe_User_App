@@ -42,9 +42,9 @@ class _OrderInfoScreenState extends State<OrderInfoScreen> {
           ],
         );
       } else if (state is OrderInfoLoading) {
-        return const Scaffold(
+        return  Scaffold(
           appBar: MyAppBar(title: 'Заказ #'),
-          body: Center(
+          body: const Center(
             child: CircularProgressIndicator(),
           ),
         );

@@ -85,9 +85,10 @@ class _SignUpBodyState extends State<SignUpBody> {
 
   RegistrationTextField _buildEmailTextField() {
     return RegistrationTextField(
+      keyboardType: TextInputType.emailAddress,
       errorText: _errorText,
       controller: controller,
-      hintText: _errorText == null ? 'example@gmail.com' : 'Неверная почта',
+      hintText: _errorText == null ? 'Введите почту' : 'Неверная почта',
       prefixImage: AppImages.emailSymbol,
     );
   }

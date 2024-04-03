@@ -69,7 +69,10 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
   }
 
   MyAppBar _buildAppBar() {
-    return const MyAppBar(title: 'Вход');
+    return MyAppBar(
+      title: 'Вход',
+      style: AppFonts.s32w600,
+    );
   }
 
   Padding _buildBody(PinTheme defaultPinTheme, PinTheme focusedPinTheme,
@@ -101,8 +104,6 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
                       builder: (context) => const HomePage(),
                     ),
                   );
-                } else if (state is SignInError) {
-                  print(state.errorText);
                 }
               },
               builder: (context, state) {
@@ -111,12 +112,7 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
                 }
                 return CustomButton(
                   title: 'Подтвердить',
-                  onPressed: () {
-                    BlocProvider.of<SignInBloc>(context).add(
-                      SendCodeForSingInEvent(widget.email,
-                          code: controller.text),
-                    );
-                  },
+                  onPressed: () => _sendCodeEvent(context),
                   height: 48,
                 );
               },
@@ -125,6 +121,12 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _sendCodeEvent(BuildContext context) {
+    BlocProvider.of<SignInBloc>(context).add(
+      SendCodeForSingInEvent(widget.email, code: controller.text),
     );
   }
 
@@ -156,13 +158,14 @@ class _SingInCodeScreenState extends State<SingInCodeScreen> {
         color: Colors.black,
         margin: const EdgeInsets.only(top: 30),
       ),
+      keyboardType: TextInputType.number,
       defaultPinTheme: defaultPinTheme,
       focusedPinTheme: focusedPinTheme,
       submittedPinTheme: submittedPinTheme,
       controller: controller,
       pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
       showCursor: true,
-      onCompleted: (pin) => print(pin),
+      onCompleted: (pin) => _sendCodeEvent(context),
     );
   }
 

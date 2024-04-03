@@ -42,14 +42,7 @@ class _SignInBodyState extends State<SignInBody> {
     return BlocConsumer<SignInBloc, SignInState>(
       listener: (context, state) {
         if (state is SignInLoaded) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SingInCodeScreen(
-                email: controller.text,
-              ),
-            ),
-          );
+          _goToSendCodeScreen(context);
         } else if (state is SignInError) {
           _errorText = state.errorText;
           controller.text = '';
@@ -69,9 +62,7 @@ class _SignInBodyState extends State<SignInBody> {
           height: 48,
           title: 'Получить код',
           onPressed: () {
-            BlocProvider.of<SignInBloc>(context).add(
-              SendEmailForSingInEvent(email: controller.text),
-            );
+            _sendCodeForAuth(context);
             setState(() {});
           },
         );
@@ -79,8 +70,26 @@ class _SignInBodyState extends State<SignInBody> {
     );
   }
 
+  void _goToSendCodeScreen(BuildContext context) {
+     Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SingInCodeScreen(
+          email: controller.text,
+        ),
+      ),
+    );
+  }
+
+  void _sendCodeForAuth(BuildContext context) {
+    BlocProvider.of<SignInBloc>(context).add(
+      SendEmailForSingInEvent(email: controller.text),
+    );
+  }
+
   RegistrationTextField _buildRegistrationTextField() {
     return RegistrationTextField(
+      keyboardType: TextInputType.emailAddress,
       errorText: _errorText,
       controller: controller,
       hintText: _hintText,

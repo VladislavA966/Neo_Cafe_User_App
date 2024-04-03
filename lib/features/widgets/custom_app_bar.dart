@@ -5,17 +5,20 @@ import 'package:neo_cafe_24/core/recources/app_images.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final String? secondTitle;
   final List<Widget>? actions;
   final Widget? leading;
   final bool centerTitle;
+  final TextStyle style;
 
-  const MyAppBar({
-    super.key,
-    required this.title,
-    this.actions,
-    this.leading,
-    this.centerTitle = true,
-  });
+  MyAppBar(
+      {super.key,
+      required this.title,
+      this.actions,
+      this.leading,
+      this.style = AppFonts.s24w600,
+      this.centerTitle = true,
+      this.secondTitle = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,30 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: _buildAppBar(),
+              child: AppBar(
+                automaticallyImplyLeading: false,
+                leading: leading,
+                backgroundColor: AppColors.mainColors,
+                elevation: 0,
+                title: RichText(
+                  text: TextSpan(
+                    text: title,
+                    style: style.copyWith(
+                      color: AppColors.pink,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: secondTitle,
+                        style: AppFonts.s14w600.copyWith(
+                          color: AppColors.pink,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                centerTitle: centerTitle,
+                actions: actions,
+              ),
             ),
             _buildCofeeImage(),
             _buildSecondCoffeeImage(),
@@ -42,36 +68,19 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  AppBar _buildAppBar() {
-    return AppBar(
-              automaticallyImplyLeading: false,
-              leading: leading,
-              backgroundColor: AppColors.mainColors,
-              elevation: 0,
-              title: Text(
-                title,
-                style: AppFonts.s32w600.copyWith(
-                  color: AppColors.textWhite,
-                ),
-              ),
-              centerTitle: centerTitle,
-              actions: actions,
-            );
-  }
-
   Positioned _buildSecondCoffeeImage() {
     return Positioned(
-            bottom: 0,
-            right: 10,
-            child: Image.asset(AppImages.appBarBeanBottom),
-          );
+      bottom: 0,
+      right: 10,
+      child: Image.asset(AppImages.appBarBeanBottom),
+    );
   }
 
   Positioned _buildCofeeImage() {
     return Positioned(
-            right: 10,
-            child: Image.asset(AppImages.appBarBeanTop),
-          );
+      right: 10,
+      child: Image.asset(AppImages.appBarBeanTop),
+    );
   }
 
   @override

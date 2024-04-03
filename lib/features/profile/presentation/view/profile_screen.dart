@@ -192,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   MyAppBar _buildAppBar() {
-    return const MyAppBar(
+    return MyAppBar(
       title: 'Профиль',
       centerTitle: false,
     );
