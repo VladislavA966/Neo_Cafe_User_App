@@ -10,9 +10,9 @@ import 'package:neo_cafe_24/features/menu_screen/presentation/screens/menu_scree
 import 'package:neo_cafe_24/features/order_history/presentation/view/orders_screen.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/bloc/cart_bloc.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/widgets/first_allert_dialog.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/widgets/opacity_button.dart';
 import 'package:neo_cafe_24/features/widgets/app_bar_button.dart';
 import 'package:neo_cafe_24/features/widgets/custom_app_bar.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -60,50 +60,27 @@ class _CartScreenState extends State<CartScreen> {
             },
           ),
         ),
-        Positioned(
-          top: 60,
-          right: 0,
-          child: AppBarButton(
-            icon: Image.asset(AppImages.clipBoard),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const OrdersHistoryScreen(),
-                ),
-              );
-            },
-          ),
-        )
+        _buildAppBarButto(context)
       ],
     );
   }
 
-  Positioned _buildToggleButtons() {
+  Positioned _buildAppBarButto(BuildContext context) {
     return Positioned(
-      top: 156,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ToggleSwitch(
-          minWidth: double.infinity,
-          minHeight: 48,
-          cornerRadius: 100,
-          activeBgColors: const [
-            [AppColors.orange],
-            [AppColors.orange]
-          ],
-          activeFgColor: Colors.white,
-          inactiveBgColor: AppColors.grey,
-          inactiveFgColor: Colors.black,
-          initialLabelIndex: currentIndex,
-          totalSwitches: 2,
-          labels: const ['Возьму с собой', 'В заведении'],
-          radiusStyle: true,
-          onToggle: (index) {
-            currentIndex = index;
-            setState(() {});
-          },
-        ),
+      top: 60,
+      right: 0,
+      child: AppBarButton(
+        icon: Image.asset(AppImages.clipBoard),
+        onPressed: () => _goToOrderHistory(context),
+      ),
+    );
+  }
+
+  void _goToOrderHistory(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const OrdersHistoryScreen(),
       ),
     );
   }
@@ -125,18 +102,20 @@ class _CartScreenState extends State<CartScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: CustomButton(
               title: 'В меню',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (counter) => const MenuScreen(),
-                  ),
-                );
-              },
+              onPressed: () => _goToMenu(),
               height: 54,
             ),
           )
         ],
+      ),
+    );
+  }
+
+  void _goToMenu() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (counter) => const MenuScreen(),
       ),
     );
   }
@@ -207,7 +186,7 @@ class _CartScreenState extends State<CartScreen> {
   OpacityButton _buildAddMoreButton() {
     return OpacityButton(
       title: 'Добавить еще',
-      onPressed: () {},
+      onPressed: () => _goToMenu(),
       borderColor: AppColors.orange,
     );
   }
@@ -224,23 +203,17 @@ class _CartScreenState extends State<CartScreen> {
               bottom: 5,
               right: 0,
               child: ButtonsRow(
-                  counter: state.items[index].quantity,
-                  onMinusTap: () {
-                    setState(() {
-                      BlocProvider.of<CartBloc>(context)
-                          .add(CartItemRemoved(state.items[index].id));
-                    });
-                  },
-                  onPlusTap: () {
-                    state.items[index].quantity++;
-                    setState(() {
-                      BlocProvider.of<CartBloc>(context).add(
-                        CartItemAdded(
-                          state.items[index],
-                        ),
-                      );
-                    });
-                  }),
+                counter: state.items[index].quantity,
+                onMinusTap: () =>
+                    _removeItemFromCartEvent(context, state, index),
+                onPlusTap: () {
+                  BlocProvider.of<CartBloc>(context).add(
+                    CartItemAdded(
+                      state.items[index],
+                    ),
+                  );
+                },
+              ),
             ),
             onTap: () {},
             name: state.items[index].name,
@@ -251,46 +224,19 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
-}
 
-class OpacityButton extends StatelessWidget {
-  final Color borderColor;
-  final String title;
-  final Function() onPressed;
-  const OpacityButton(
-      {super.key,
-      required this.borderColor,
-      required this.title,
-      required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              color: borderColor,
-            ),
-            borderRadius: BorderRadius.circular(
-              16,
-            ),
-          ),
-          backgroundColor: Colors.white,
-        ),
-        onPressed: onPressed,
-        child: Text(
-          title,
-          style: AppFonts.s16w600.copyWith(
-            color: borderColor,
-          ),
-        ),
-      ),
+  void _removeItemFromCartEvent(
+      BuildContext context, CartLoadSuccess state, int index) {
+    setState(
+      () {
+        BlocProvider.of<CartBloc>(context)
+            .add(CartItemRemoved(state.items[index].id));
+      },
     );
   }
 }
+
+
 
 MyAppBar _buildAppBar(BuildContext context) {
   return const MyAppBar(

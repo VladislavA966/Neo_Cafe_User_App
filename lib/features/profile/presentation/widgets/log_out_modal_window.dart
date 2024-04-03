@@ -5,7 +5,7 @@ import 'package:neo_cafe_24/features/auth/auth_by_email/data/data_source/local_d
 import 'package:neo_cafe_24/features/auth/auth_screen.dart';
 import 'package:neo_cafe_24/features/auth/widgets/custom_button.dart';
 import 'package:neo_cafe_24/features/branches/data/data_source/local/branch_local_data.dart';
-import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/view/cart_screen.dart';
+import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/widgets/opacity_button.dart';
 
 class LogountModalWindow extends StatelessWidget {
   const LogountModalWindow({

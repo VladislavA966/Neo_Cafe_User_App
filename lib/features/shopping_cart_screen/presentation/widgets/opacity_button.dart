@@ -1,39 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:neo_cafe_24/core/recources/app_colors.dart';
 import 'package:neo_cafe_24/core/recources/app_fonts.dart';
 
-class CustomButton extends StatelessWidget {
-  final double height;
-  final double? width;
-  final Function()? onPressed;
+class OpacityButton extends StatelessWidget {
+  final Color borderColor;
   final String title;
-  const CustomButton({
-    super.key,
-    required this.title,
-    required this.onPressed,
-    required this.height,
-    this.width,
-  });
+  final Function() onPressed;
+  const OpacityButton(
+      {super.key,
+      required this.borderColor,
+      required this.title,
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height,
+      height: 50,
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: borderColor,
+            ),
             borderRadius: BorderRadius.circular(
               16,
             ),
           ),
-          backgroundColor: AppColors.black,
+          backgroundColor: Colors.white,
         ),
         onPressed: onPressed,
         child: Text(
           title,
           style: AppFonts.s16w600.copyWith(
-            color: Colors.white,
+            color: borderColor,
           ),
         ),
       ),
