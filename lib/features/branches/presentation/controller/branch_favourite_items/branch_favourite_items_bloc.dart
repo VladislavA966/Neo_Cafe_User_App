@@ -12,7 +12,7 @@ class BranchFavouriteItemsBloc
   final GetFavouriteItemsUseCase useCase;
   BranchFavouriteItemsBloc(this.useCase)
       : super(BranchFavouriteItemsInitial()) {
-    on<BranchFavouriteItemsEvent>(
+    on<GetFavouriteItemsEvent>(
       (event, emit) async {
         emit(BranchFavouriteItemsLoading());
         try {

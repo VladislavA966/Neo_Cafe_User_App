@@ -4,19 +4,28 @@ part 'ito_model.g.dart';
 @JsonSerializable()
 class ItoModel {
   @JsonKey(name: "id")
-  int? id;
+  final int? id;
   @JsonKey(name: "item")
-  int? item;
+  final int? item;
   @JsonKey(name: "item_name")
-  String? name;
+  final String? name;
   @JsonKey(name: 'quantity')
-  int? quantity;
+  final int? quantity;
   @JsonKey(name: "total_price")
-  int? totalPrice;
+  final int? totalPrice;
+  @JsonKey(name: "item_price")
+  final int? itemPrice;
 
-  ItoModel({this.id, this.item, this.quantity});
   factory ItoModel.fromJson(Map<String, dynamic> json) =>
       _$ItoModelFromJson(json);
+
+  ItoModel(
+      {required this.id,
+      required this.item,
+      required this.name,
+      required this.quantity,
+      required this.totalPrice,
+      required this.itemPrice});
 
   Map<String, dynamic> toJson() => _$ItoModelToJson(this);
 }

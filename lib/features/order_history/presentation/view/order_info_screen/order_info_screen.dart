@@ -42,7 +42,7 @@ class _OrderInfoScreenState extends State<OrderInfoScreen> {
           ],
         );
       } else if (state is OrderInfoLoading) {
-        return  Scaffold(
+        return Scaffold(
           appBar: MyAppBar(title: 'Заказ #'),
           body: const Center(
             child: CircularProgressIndicator(),
@@ -100,13 +100,14 @@ class _OrderInfoScreenState extends State<OrderInfoScreen> {
       CustomText(firstText: 'Итого: ', secondText: '${state.order.totalSum} c');
 
   CustomText _buildBonusTitle(OrderInfoLoaded state) {
-    return  CustomText(
-        firstText: 'Бонусы к списанию: ', secondText: '${state.order.createdAt} c');
+    return CustomText(
+        firstText: 'Бонусы к списанию: ',
+        secondText: '${state.order.bonusPointsToSubstract} c');
   }
 
   Text _buildTitle(OrderInfoLoaded state) {
     return Text(
-      'NeoCafe Derzhinka, ${state.order.createdAt}',
+      '${state.order.branchName}, ${state.order.createdAt}',
       style: AppFonts.s16w600.copyWith(color: AppColors.black),
     );
   }

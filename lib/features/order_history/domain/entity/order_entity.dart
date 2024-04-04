@@ -8,8 +8,10 @@ class OrderEntity {
   final String createdAt;
   final String updatedAt;
   final String completedAt;
+  final String branchName;
   final int totalSum;
   final List<ItoEntity> iTO;
+  final int bonusPointsToSubstract;
 
   OrderEntity(
       {required this.id,
@@ -19,6 +21,8 @@ class OrderEntity {
       required this.createdAt,
       required this.updatedAt,
       required this.completedAt,
+      required this.branchName,
       required this.totalSum,
-      required this.iTO});
+      required this.iTO,
+      required this.bonusPointsToSubstract});
 }

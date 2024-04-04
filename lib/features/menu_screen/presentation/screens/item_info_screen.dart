@@ -91,37 +91,42 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
         if (state is ItemLoaded) {
           return Scaffold(
             appBar: _buildAppBar(),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  _buildTitle(),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  _buildDescreption(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _buildSecondTitle(),
-                  const SizedBox(height: 16),
-                  _buildFirstPopular(),
-                  const SizedBox(height: 12),
-                  _buildSecondPopular(),
-                  const SizedBox(height: 16),
-                  _buildThirdPopular(),
-                  const SizedBox(height: 12),
-                  _buildTotalPrice(),
-                  const SizedBox(
-                    height: 11,
-                  ),
-                  _buildButtons(context, state.item.id, state.item.name,
-                      state.item.itemImage, state.item.pricePerUnit),
-                ],
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    _buildTitle(),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    _buildDescreption(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _buildSecondTitle(),
+                    const SizedBox(height: 16),
+                    _buildFirstPopular(),
+                    const SizedBox(height: 12),
+                    _buildSecondPopular(),
+                    const SizedBox(height: 16),
+                    _buildThirdPopular(),
+                    const SizedBox(height: 12),
+                    _buildTotalPrice(),
+                    const SizedBox(
+                      height: 11,
+                    ),
+                    _buildButtons(context, state.item.id, state.item.name,
+                        state.item.itemImage, state.item.pricePerUnit),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
               ),
             ),
           );

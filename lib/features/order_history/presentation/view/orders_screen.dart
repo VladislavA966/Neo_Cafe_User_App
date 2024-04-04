@@ -70,7 +70,6 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
                 const SizedBox(height: 32),
                 _buildClosedOrderTitle(),
                 const SizedBox(height: 16),
-                const OrderContainer(),
               ],
             );
           } else if (state is OrderHistoryLoading) {
@@ -103,10 +102,15 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
 
   Padding _buildOrderContainer(
       BuildContext context, OrderHistoryLoaded state, int index) {
+    List<String> orderItems =
+        state.orders[index].iTO.take(3).map((e) => e.name).toList();
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: OrderContainer(
         onPressed: () => _goToOrderInfoScreen(context, state, index),
+        branchName: state.orders[index].branchName,
+        status: state.orders[index].status,
+        items: orderItems,
       ),
     );
   }
@@ -131,7 +135,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
   }
 
   MyAppBar _buildAppBar() {
-    return  MyAppBar(
+    return MyAppBar(
       title: 'История заказов',
     );
   }

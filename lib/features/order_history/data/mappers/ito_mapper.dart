@@ -6,10 +6,12 @@ class ItoMapper extends Mapper<ItoModel, ItoEntity> {
   @override
   ItoEntity mapper(ItoModel model) {
     return ItoEntity(
-        id: model.id ?? 0,
-        item: model.item ?? 0,
-        quantity: model.quantity ?? 0,
-        name: model.name ?? '',
-        totalPrice: model.totalPrice ?? 0);
+      id: model.id ?? 0,
+      item: model.item ?? 0,
+      quantity: model.quantity ?? 0,
+      name: model.name ?? '',
+      totalPrice: model.totalPrice ?? 0,
+      itemPrice: model.itemPrice ?? 0,
+    );
   }
 }

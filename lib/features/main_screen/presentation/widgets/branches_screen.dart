@@ -18,6 +18,7 @@ class BranchesWindow extends StatelessWidget {
         id: state.branches[index].id,
       ),
     );
+    Navigator.pop(context);
   }
 
   @override
@@ -107,34 +108,43 @@ class BranchesWindow extends StatelessWidget {
   }
 
   Center _branchesLoadingBuilder() {
-     return const Center(
+    return const Center(
       child: CircularProgressIndicator(),
     );
   }
 
   ListView _branchesBuilder(AllBranchesLoaded state) {
-       return ListView.builder(
+    return ListView.builder(
       itemCount: state.branches.length,
       shrinkWrap: true,
-      itemBuilder: (context, index) => _buildBranchContainer(context, state, index),
+      itemBuilder: (context, index) =>
+          _buildBranchContainer(context, state, index),
     );
   }
 
-  Padding _buildBranchContainer(BuildContext context, AllBranchesLoaded state, int index) {
-    return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: BranchContainer(
-                onTap: () {
-                  getBranchInfoEvent(context, state, index);
-                  Navigator.pop(context);
-                },
-                name: state.branches[index].branchName,
-              ),
-            );
+  Widget _buildBranchContainer(
+      BuildContext context, AllBranchesLoaded allBranches, int index) {
+    return BlocListener<SingleBranchBloc, SingleBranchState>(
+      listener: (context, state) {
+        if (state is SingleBranchLoaded) {
+          // BlocProvider.of<BranchFavouriteItemsBloc>(context).add(
+          //   GetFavouriteItemsEvent(),
+          // );
+          // Navigator.pop(context);
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: BranchContainer(
+          onTap: () => getBranchInfoEvent(context, allBranches, index),
+          name: allBranches.branches[index].branchName,
+        ),
+      ),
+    );
   }
 
   void _getFavouriteItems(AllBranchesState state, BuildContext context) {
-     if (state is AllBranchesLoaded) {
+    if (state is AllBranchesLoaded) {
       BlocProvider.of<BranchFavouriteItemsBloc>(context).add(
         GetFavouriteItemsEvent(),
       );

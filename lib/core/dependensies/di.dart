@@ -61,7 +61,6 @@ void setupDependensies() {
     ),
   );
   mappers();
-
   signInDependensy();
   signUpDependency();
   manuDependency();
@@ -71,6 +70,7 @@ void setupDependensies() {
   profileDependency();
   newOrderDependency();
   orderHistoryDependencies();
+
 }
 
 //SignUp

@@ -11,14 +11,17 @@ class OrderMapper extends Mapper<OrdersModel, OrderEntity> {
   @override
   OrderEntity mapper(OrdersModel model) {
     return OrderEntity(
-        id: model.id ?? 0,
-        orderNumber: model.orderNumber ?? 0,
-        status: model.status ?? "",
-        orderType: model.orderType ?? '',
-        createdAt: model.createdAt ?? '',
-        updatedAt: model.updatedAt ?? '',
-        completedAt: model.completedAt ?? '',
-        totalSum: model.totalSum ?? 0,
-        iTO: model.iTO.map((ito) => itoMapper.mapper(ito)).toList());
+      id: model.id ?? 0,
+      orderNumber: model.orderNumber ?? 0,
+      status: model.status ?? "",
+      orderType: model.orderType ?? '',
+      createdAt: model.createdAt ?? '',
+      updatedAt: model.updatedAt ?? '',
+      completedAt: model.completedAt ?? '',
+      branchName: model.branchName ?? '',
+      totalSum: model.totalSum ?? 0,
+      iTO: model.iTO.map((ito) => itoMapper.mapper(ito)).toList(),
+      bonusPointsToSubstract: model.bonusPointsToSubstract,
+    );
   }
 }

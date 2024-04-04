@@ -30,85 +30,93 @@ import 'package:neo_cafe_24/features/profile/presentation/controller/bloc/profil
 import 'package:neo_cafe_24/features/shopping_cart_screen/domain/use_case/cart_use_case.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/bloc/cart_bloc.dart';
 import 'package:neo_cafe_24/features/shopping_cart_screen/presentation/controller/new_order_bloc/new_order_bloc.dart';
-import 'package:neo_cafe_24/features/welcom_screen/welcome_screen.dart';
+import 'package:neo_cafe_24/features/welcom_screen/presentation/welcome_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final blocs = [
+      BlocProvider(
+        create: (context) => SignInBloc(
+          getIt<SignInUseCase>(),
+          getIt<LocalDataSource>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => SignUpBloc(
+          getIt<SignUpUseCase>(),
+          getIt<LocalDataSource>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => CategoryBloc(
+          getIt<CategoryUseCase>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => MenuItemBloc(
+          getIt<AllItemsUseCase>(),
+          getIt<CartUseCase>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => ItemBloc(
+          getIt<ItemUseCase>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => CartBloc(
+          cartUseCase: getIt<CartUseCase>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => AllBranchesBloc(
+          getIt<GetAllBranchesUseCase>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => SingleBranchBloc(
+          getIt<BranchUseCase>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => ProfileBloc(
+          getIt<ProfileUseCase>(),
+          getIt<EditProfileUseCase>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => BranchFavouriteItemsBloc(
+          getIt<GetFavouriteItemsUseCase>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => NewOrderBloc(
+          getIt<NewOrderUseCase>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => OrderHistoryBloc(
+          getIt<OrderHistoryUseCase>(),
+        ),
+      ),
+      BlocProvider(
+        create: (context) => OrderInfoBloc(
+          getIt<OrderInfoUseCase>(),
+        ),
+      ),
+    ];
+
+
+
+
+
+
+    
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => SignInBloc(
-            getIt<SignInUseCase>(),
-            getIt<LocalDataSource>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => SignUpBloc(
-            getIt<SignUpUseCase>(),
-            getIt<LocalDataSource>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => CategoryBloc(
-            getIt<CategoryUseCase>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => MenuItemBloc(
-            getIt<AllItemsUseCase>(),
-            getIt<CartUseCase>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => ItemBloc(
-            getIt<ItemUseCase>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => CartBloc(
-            cartUseCase: getIt<CartUseCase>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => AllBranchesBloc(
-            getIt<GetAllBranchesUseCase>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => SingleBranchBloc(
-            getIt<BranchUseCase>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => ProfileBloc(
-            getIt<ProfileUseCase>(),
-            getIt<EditProfileUseCase>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => BranchFavouriteItemsBloc(
-            getIt<GetFavouriteItemsUseCase>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => NewOrderBloc(
-            getIt<NewOrderUseCase>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => OrderHistoryBloc(
-            getIt<OrderHistoryUseCase>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => OrderInfoBloc(
-            getIt<OrderInfoUseCase>(),
-          ),
-        ),
-      ],
+      providers: blocs,
       child: MaterialApp(
         theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme(

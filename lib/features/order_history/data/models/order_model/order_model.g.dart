@@ -14,6 +14,8 @@ OrdersModel _$OrdersModelFromJson(Map<String, dynamic> json) => OrdersModel(
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
       completedAt: json['completed_at'] as String?,
+      branch: json['branch'] as int?,
+      branchName: json['branch_name'] as String?,
       profile: json['customer_profile'] == null
           ? null
           : ProfileModel.fromJson(
@@ -22,6 +24,7 @@ OrdersModel _$OrdersModelFromJson(Map<String, dynamic> json) => OrdersModel(
       iTO: (json['ITO'] as List<dynamic>)
           .map((e) => ItoModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      bonusPointsToSubstract: json['bonus_points_to_subtract'] as int,
     );
 
 Map<String, dynamic> _$OrdersModelToJson(OrdersModel instance) =>
@@ -33,7 +36,10 @@ Map<String, dynamic> _$OrdersModelToJson(OrdersModel instance) =>
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
       'completed_at': instance.completedAt,
+      'branch': instance.branch,
+      'branch_name': instance.branchName,
       'customer_profile': instance.profile,
       'total_sum': instance.totalSum,
       'ITO': instance.iTO,
+      'bonus_points_to_subtract': instance.bonusPointsToSubstract,
     };

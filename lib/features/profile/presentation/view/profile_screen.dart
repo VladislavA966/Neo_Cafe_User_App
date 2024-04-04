@@ -126,67 +126,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Padding _buildBody(ProfileLoaded state) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 62,
-          ),
-          Container(
-            width: double.infinity,
-            height: 110,
-            decoration: BoxDecoration(
-              color: AppColors.pink,
-              borderRadius: BorderRadius.circular(
-                24,
-              ),
+  Widget _buildBody(ProfileLoaded state) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 62,
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Бонусы',
-                        style: AppFonts.s24w600.copyWith(
-                          color: AppColors.black,
+            Container(
+              width: double.infinity,
+              height: 110,
+              decoration: BoxDecoration(
+                color: AppColors.pink,
+                borderRadius: BorderRadius.circular(
+                  24,
+                ),
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Бонусы',
+                          style: AppFonts.s24w600.copyWith(
+                            color: AppColors.black,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '${state.model.bonusPoints}',
-                        style:
-                            AppFonts.s24w600.copyWith(color: AppColors.black),
-                      )
-                    ],
-                  ),
-                  Image.asset(AppImages.bonusImage),
-                ],
+                        Text(
+                          '${state.model.bonusPoints}',
+                          style:
+                              AppFonts.s24w600.copyWith(color: AppColors.black),
+                        )
+                      ],
+                    ),
+                    Image.asset(AppImages.bonusImage),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            'Актуальный заказ',
-            style: AppFonts.s16w600.copyWith(color: AppColors.black),
-          ),
-          const SizedBox(height: 16),
-          const OrderContainer(),
-          const SizedBox(height: 32),
-          Text(
-            'Завершенные',
-            style: AppFonts.s16w600.copyWith(color: AppColors.black),
-          ),
-          const SizedBox(height: 16),
-          const OrderContainer(),
-          const SizedBox(height: 12),
-          const OrderContainer(),
-        ],
+            const SizedBox(height: 24),
+            Text(
+              'Актуальный заказ',
+              style: AppFonts.s16w600.copyWith(color: AppColors.black),
+            ),
+          ],
+        ),
       ),
     );
   }

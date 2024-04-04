@@ -94,7 +94,7 @@ class _MainScreenState extends State<MainScreen> {
       padding: const EdgeInsets.all(16),
       child: SingleChildScrollView(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.75,
+          height: MediaQuery.of(context).size.height * 0.85,
           child: BlocBuilder<CategoryBloc, CategoryState>(
             builder: (context, state) {
               if (state is CategoryAllLoaded) {

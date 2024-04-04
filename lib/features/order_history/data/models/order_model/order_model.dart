@@ -19,12 +19,18 @@ class OrdersModel {
   final String? updatedAt;
   @JsonKey(name: "completed_at")
   final String? completedAt;
+  @JsonKey(name: "branch")
+  final int? branch;
+  @JsonKey(name: "branch_name")
+  final String? branchName;
   @JsonKey(name: "customer_profile")
   final ProfileModel? profile;
   @JsonKey(name: "total_sum")
   final int? totalSum;
   @JsonKey(name: "ITO")
   final List<ItoModel> iTO;
+  @JsonKey(name: "bonus_points_to_subtract")
+  final int bonusPointsToSubstract;
 
   factory OrdersModel.fromJson(Map<String, dynamic> json) =>
       _$OrdersModelFromJson(json);
@@ -37,9 +43,12 @@ class OrdersModel {
       required this.createdAt,
       required this.updatedAt,
       required this.completedAt,
+      required this.branch,
+      required this.branchName,
       required this.profile,
       required this.totalSum,
-      required this.iTO});
+      required this.iTO,
+      required this.bonusPointsToSubstract});
 
   Map<String, dynamic> toJson() => _$OrdersModelToJson(this);
 }

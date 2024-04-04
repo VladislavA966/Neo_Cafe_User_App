@@ -5,10 +5,15 @@ import 'package:neo_cafe_24/core/recources/app_images.dart';
 
 class OrderContainer extends StatelessWidget {
   final Function()? onPressed;
-  const OrderContainer({
-    super.key,
-    this.onPressed,
-  });
+  final String branchName;
+  final String status;
+  final List<String> items;
+  const OrderContainer(
+      {super.key,
+      this.onPressed,
+      required this.branchName,
+      required this.status,
+      required this.items});
   List<BoxShadow> get shadows => const [
         BoxShadow(
           color: Color(0x14000000),
@@ -75,21 +80,21 @@ class OrderContainer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Neo Cafe Derzinka,',
+          branchName,
           style: AppFonts.s14w600.copyWith(
             color: AppColors.black,
           ),
         ),
         const SizedBox(height: 6),
         Text(
-          'Латте, капучино, Багров...,',
+          items.join(", "),
           style: AppFonts.s12w400.copyWith(
             color: AppColors.black,
           ),
         ),
         const Spacer(),
         Text(
-          'Сейчас',
+          status,
           style: AppFonts.s14w600.copyWith(
             color: AppColors.orange,
           ),
