@@ -12,26 +12,26 @@ class BranchFavouriteItemsBloc
   final GetFavouriteItemsUseCase useCase;
   BranchFavouriteItemsBloc(this.useCase)
       : super(BranchFavouriteItemsInitial()) {
-    on<GetFavouriteItemsEvent>(
-      (event, emit) async {
-        emit(BranchFavouriteItemsLoading());
-        try {
-          final items = await useCase(
-            NoParams(),
-          );
-          emit(
-            BranchFavouriteItemsLoaded(
-              items: items,
-            ),
-          );
-        } catch (e) {
-          emit(
-            BranchFavouriteItemsError(
-              errorText: e.toString(),
-            ),
-          );
-        }
-      },
-    );
+    on<GetFavouriteItemsEvent>(getFavouriteItemsEvent);
+  }
+  void getFavouriteItemsEvent(GetFavouriteItemsEvent event,
+      Emitter<BranchFavouriteItemsState> emit) async {
+    emit(BranchFavouriteItemsLoading());
+    try {
+      final items = await useCase(
+        NoParams(),
+      );
+      emit(
+        BranchFavouriteItemsLoaded(
+          items: items,
+        ),
+      );
+    } catch (e) {
+      emit(
+        BranchFavouriteItemsError(
+          errorText: e.toString(),
+        ),
+      );
+    }
   }
 }

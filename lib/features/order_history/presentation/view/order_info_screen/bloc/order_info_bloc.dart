@@ -9,24 +9,26 @@ part 'order_info_state.dart';
 class OrderInfoBloc extends Bloc<OrderInfoEvent, OrderInfoState> {
   final OrderInfoUseCase orderUseCase;
   OrderInfoBloc(this.orderUseCase) : super(OrderInfoInitial()) {
-    on<GetOrderInfoEvent>((event, emit) async {
+    on<GetOrderInfoEvent>(getOrderInfoEvent);
+  }
+  void getOrderInfoEvent(
+      GetOrderInfoEvent event, Emitter<OrderInfoState> emit) async {
+    emit(
+      OrderInfoLoading(),
+    );
+    try {
+      final order = await orderUseCase(event.id);
       emit(
-        OrderInfoLoading(),
+        OrderInfoLoaded(
+          order: order,
+        ),
       );
-      try {
-        final order = await orderUseCase(event.id);
-        emit(
-          OrderInfoLoaded(
-            order: order,
-          ),
-        );
-      } catch (e) {
-        emit(
-          OrderInfoError(
-            errorText: e.toString(),
-          ),
-        );
-      }
-    });
+    } catch (e) {
+      emit(
+        OrderInfoError(
+          errorText: e.toString(),
+        ),
+      );
+    }
   }
 }

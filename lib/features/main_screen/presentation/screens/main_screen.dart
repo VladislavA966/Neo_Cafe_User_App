@@ -26,7 +26,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   @override
-  @override
   void initState() {
     super.initState();
 

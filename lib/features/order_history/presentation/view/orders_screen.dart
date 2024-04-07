@@ -42,14 +42,11 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
       left: 8,
       top: 63,
       child: AppBarButton(
-        icon: const Icon(
-          Icons.arrow_back_ios_new,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+          ),
+          onPressed: () => Navigator.pop(context)),
     );
   }
 
@@ -60,18 +57,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
         child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
             builder: (context, state) {
           if (state is OrderHistoryLoaded) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 24),
-                _buildOpenOrderTitle(),
-                const SizedBox(height: 16),
-                _buildOpenOrderList(context, state),
-                const SizedBox(height: 32),
-                _buildClosedOrderTitle(),
-                const SizedBox(height: 16),
-              ],
-            );
+            return _historyOrderLoaded(context, state);
           } else if (state is OrderHistoryLoading) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -80,6 +66,21 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
           return const SizedBox();
         }),
       ),
+    );
+  }
+
+  Column _historyOrderLoaded(BuildContext context, OrderHistoryLoaded state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 24),
+        _buildOpenOrderTitle(),
+        const SizedBox(height: 16),
+        _buildOpenOrderList(context, state),
+        const SizedBox(height: 32),
+        _buildClosedOrderTitle(),
+        const SizedBox(height: 16),
+      ],
     );
   }
 
@@ -107,10 +108,10 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: OrderContainer(
-        onPressed: () => _goToOrderInfoScreen(context, state, index),
         branchName: state.orders[index].branchName,
         status: state.orders[index].status,
         items: orderItems,
+        onPressed: () => _goToOrderInfoScreen(context, state, index),
       ),
     );
   }

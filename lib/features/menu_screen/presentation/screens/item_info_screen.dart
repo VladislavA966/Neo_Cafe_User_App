@@ -89,47 +89,7 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
     return BlocBuilder<ItemBloc, ItemState>(
       builder: (context, state) {
         if (state is ItemLoaded) {
-          return Scaffold(
-            appBar: _buildAppBar(),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    _buildTitle(),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    _buildDescreption(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    _buildSecondTitle(),
-                    const SizedBox(height: 16),
-                    _buildFirstPopular(),
-                    const SizedBox(height: 12),
-                    _buildSecondPopular(),
-                    const SizedBox(height: 16),
-                    _buildThirdPopular(),
-                    const SizedBox(height: 12),
-                    _buildTotalPrice(),
-                    const SizedBox(
-                      height: 11,
-                    ),
-                    _buildButtons(context, state.item.id, state.item.name,
-                        state.item.itemImage, state.item.pricePerUnit),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
+          return _buildItemInfoLoadedState(context, state);
         } else if (state is ItemLoading) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
@@ -137,6 +97,50 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
         }
         return const SizedBox();
       },
+    );
+  }
+
+  Scaffold _buildItemInfoLoadedState(BuildContext context, ItemLoaded state) {
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 24,
+              ),
+              _buildTitle(),
+              const SizedBox(
+                height: 24,
+              ),
+              _buildDescreption(),
+              const SizedBox(
+                height: 20,
+              ),
+              _buildSecondTitle(),
+              const SizedBox(height: 16),
+              _buildFirstPopular(),
+              const SizedBox(height: 12),
+              _buildSecondPopular(),
+              const SizedBox(height: 16),
+              _buildThirdPopular(),
+              const SizedBox(height: 12),
+              _buildTotalPrice(),
+              const SizedBox(
+                height: 11,
+              ),
+              _buildButtons(context, state.item.id, state.item.name,
+                  state.item.itemImage, state.item.pricePerUnit),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -306,9 +310,11 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
       height: 40,
       width: 40,
       iconSize: 24,
-      onTap: () {
-        context.read<CartBloc>().add(CartItemRemoved(itemId));
-      },
+      onTap: () => context.read<CartBloc>().add(
+            CartItemRemoved(
+              itemId,
+            ),
+          ),
       color: AppColors.grey,
       icon: Icons.remove,
     );
@@ -318,15 +324,17 @@ class _ItemInfoScreenState extends State<ItemInfoScreen> {
     return Expanded(
       child: CustomButton(
         title: 'В корзину',
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomePage(initialIndex: 1),
-            ),
-          );
-        },
+        onPressed: () => _goToCartButton(context),
         height: 55,
+      ),
+    );
+  }
+
+  void _goToCartButton(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomePage(initialIndex: 1),
       ),
     );
   }

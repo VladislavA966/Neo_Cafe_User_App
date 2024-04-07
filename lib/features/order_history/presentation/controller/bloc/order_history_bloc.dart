@@ -10,27 +10,26 @@ part 'order_history_state.dart';
 class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState> {
   final OrderHistoryUseCase orderHistoryUseCase;
   OrderHistoryBloc(this.orderHistoryUseCase) : super(OrderHistoryInitial()) {
-    on<GetOrderHistoryEvent>((event, emit) async {
-      emit(OrderHistoryLoading());
-      try {
-        final orders = await orderHistoryUseCase(
-          const NoBody(),
-        );
-        emit(
-          OrderHistoryLoaded(
-            orders: orders,
-          ),
-        );
-      } catch (e) {
-        emit(
-          OrderHistoryError(
-            errorText: e.toString(),
-          ),
-        );
-        print(
-          e.toString(),
-        );
-      }
-    });
+    on<GetOrderHistoryEvent>(getOrderHistoryEvent);
+  }
+  void getOrderHistoryEvent(
+      GetOrderHistoryEvent event, Emitter<OrderHistoryState> emit) async {
+    emit(OrderHistoryLoading());
+    try {
+      final orders = await orderHistoryUseCase(
+        const NoBody(),
+      );
+      emit(
+        OrderHistoryLoaded(
+          orders: orders,
+        ),
+      );
+    } catch (e) {
+      emit(
+        OrderHistoryError(
+          errorText: e.toString(),
+        ),
+      );
+    }
   }
 }

@@ -72,67 +72,78 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
     return BlocBuilder<SingleBranchBloc, SingleBranchState>(
       builder: (context, state) {
         if (state is SingleBranchLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return _buildSingleBranchLodingState();
         } else if (state is SingleBranchLoaded) {
           phone = state.branch.phoneNumber;
           url = state.branch.link2gis;
-          return SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      _buildName(state),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      _buildAdress(state),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      _buildPhoneAnd2GisLingButtons(),
-                      const SizedBox(
-                        height: 26,
-                      ),
-                      _buildScheduleTitle(),
-                      _buildScheduleContainer(state),
-                      const SizedBox(height: 32),
-                      _buildPopularItemsTitle(),
-                      const SizedBox(height: 16),
-                      _buildPopularItemsList(),
-                      const SizedBox(height: 48),
-                      _buildMenuButton(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
+          return _buildSingleBranchLoadedState(context, state);
         }
         return const SizedBox();
       },
     );
   }
 
+  Center _buildSingleBranchLodingState() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  SingleChildScrollView _buildSingleBranchLoadedState(
+      BuildContext context, SingleBranchLoaded state) {
+    return SingleChildScrollView(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 24,
+                ),
+                _buildName(state),
+                const SizedBox(
+                  height: 12,
+                ),
+                _buildAdress(state),
+                const SizedBox(
+                  height: 24,
+                ),
+                _buildPhoneAnd2GisLingButtons(),
+                const SizedBox(
+                  height: 26,
+                ),
+                _buildScheduleTitle(),
+                _buildScheduleContainer(state),
+                const SizedBox(height: 32),
+                _buildPopularItemsTitle(),
+                const SizedBox(height: 16),
+                _buildPopularItemsList(),
+                const SizedBox(height: 48),
+                _buildMenuButton(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   CustomButton _buildMenuButton() {
     return CustomButton(
       title: 'Перейти в меню',
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MenuScreen(),
-          ),
-        );
-      },
+      onPressed: () => _goToMenuScreen(),
       height: 54,
+    );
+  }
+
+  void _goToMenuScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MenuScreen(),
+      ),
     );
   }
 
@@ -171,15 +182,17 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
         child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           itemCount: isExpanded ? state.branch.schedules.length : 0,
-          itemBuilder: (context, index) {
-            return Text(
-              '${state.branch.schedules[index].day}: ${state.branch.schedules[index].startTime} - ${state.branch.schedules[index].endTime}',
-              style: AppFonts.s16w400.copyWith(
-                color: AppColors.black,
-              ),
-            );
-          },
+          itemBuilder: (context, index) => _buildBranchSchedules(state, index),
         ),
+      ),
+    );
+  }
+
+  Text _buildBranchSchedules(SingleBranchLoaded state, int index) {
+    return Text(
+      '${state.branch.schedules[index].day}: ${state.branch.schedules[index].startTime} - ${state.branch.schedules[index].endTime}',
+      style: AppFonts.s16w400.copyWith(
+        color: AppColors.black,
       ),
     );
   }
@@ -211,16 +224,12 @@ class _BranchInfoScreenState extends State<BranchInfoScreen> {
           icon: Image.asset(
             'assets/images/mdi_phone-outline.png',
           ),
-          onPressed: () {
-            _makePhoneCall(phone);
-          },
+          onPressed: () => _makePhoneCall(phone),
         ),
         AppBarButton(
           color: AppColors.orange,
           icon: Image.asset('assets/images/mdi_map-marker-outline.png'),
-          onPressed: () {
-            _launchURL(url);
-          },
+          onPressed: () => _launchURL(url),
         ),
         const SizedBox(height: 24),
       ],

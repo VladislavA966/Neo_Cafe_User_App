@@ -20,41 +20,51 @@ class _AuthScreenState extends State<AuthScreen> {
     return Stack(
       children: [
         Scaffold(
-          appBar: MyAppBar(
-            title: currentIndex == 0 ? 'Вход' : 'Регистрация',
-          ),
+          appBar: _buildAppBar(),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: currentIndex == 0 ? const SignInBody() : const SignUpBody(),
           ),
         ),
-        Positioned(
-          top: 156,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: ToggleSwitch(
-              minWidth: double.infinity,
-              minHeight: 48,
-              cornerRadius: 100,
-              activeBgColors: const [
-                [AppColors.orange],
-                [AppColors.orange]
-              ],
-              activeFgColor: Colors.white,
-              inactiveBgColor: AppColors.grey,
-              inactiveFgColor: Colors.black,
-              initialLabelIndex: currentIndex,
-              totalSwitches: 2,
-              labels: const ['Войти', 'Регистрация'],
-              radiusStyle: true,
-              onToggle: (index) {
-                currentIndex = index;
-                setState(() {});
-              },
-            ),
-          ),
-        ),
+        _buildToggleButtons(),
       ],
+    );
+  }
+
+  Positioned _buildToggleButtons() {
+    return Positioned(
+      top: 156,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ToggleSwitch(
+          minWidth: double.infinity,
+          minHeight: 48,
+          cornerRadius: 100,
+          activeBgColors: const [
+            [AppColors.orange],
+            [AppColors.orange]
+          ],
+          activeFgColor: Colors.white,
+          inactiveBgColor: AppColors.grey,
+          inactiveFgColor: Colors.black,
+          initialLabelIndex: currentIndex,
+          totalSwitches: 2,
+          labels: const ['Войти', 'Регистрация'],
+          radiusStyle: true,
+          onToggle: (index) => _shwitchTap(index),
+        ),
+      ),
+    );
+  }
+
+  void _shwitchTap(int? index) {
+    currentIndex = index;
+    setState(() {});
+  }
+
+  MyAppBar _buildAppBar() {
+    return MyAppBar(
+      title: currentIndex == 0 ? 'Вход' : 'Регистрация',
     );
   }
 }
